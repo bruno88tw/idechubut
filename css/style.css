@@ -1,0 +1,123 @@
+/* 
+    Document   : style
+    Created on : 11/04/2013, 09:36:44 AM
+    Author     : bruno
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.layertree {
+   background-color: #e7e7e7;
+   padding: 5px 5px 5px 8px;
+}
+
+.ayudaIcon{
+   background:transparent url(../img/question.png) no-repeat 0 0;
+}
+
+.acercaDeIcon{
+   background:transparent url(../img/star.png) no-repeat 0 0;
+}
+
+.informacionIcon{
+   background:transparent url(../img/information-italic.png) no-repeat 0 0;
+}
+
+.distanciaIcon{
+   background:transparent url(../img/rulerline.png) no-repeat 0 0;
+}
+
+.superficieIcon{
+   background:transparent url(../img/rulerarea.png) no-repeat 0 0;
+}
+
+.imprimirIcon{
+   background:transparent url(../img/printer.png) no-repeat 0 0;
+}
+
+.mapIcon{
+   background:transparent url(../img/map.png) no-repeat 0 0;
+}
+
+.configuracionIcon{
+   background:transparent url(../img/gear.png) no-repeat 0 0;
+}
+
+.enlaceIcon{
+   background:transparent url(../img/chain.png) no-repeat 0 0;
+}
+
+.agregarIcon{
+   background:transparent url(../img/mas.png) no-repeat 0 0;
+}
+
+.layerIcon{
+   background:transparent url(../img/layers.png) no-repeat 0 0;
+} 
+
+.dibujoIcon{
+   background:transparent url(../img/pencil.png) no-repeat 0 0;
+}
+
+.scalebox{
+   position:absolute; 
+   z-index:100000; 
+   left:166px; 
+   bottom:35px; 
+   margin-left: -155px; 
+   width: 210px; 
+   height: 30px; 
+   font-size: 10px;
+}
+
+.scalecombobox{
+   position:absolute; 
+   z-index:100000; 
+   left:165px; 
+   bottom:10px; 
+   margin-left: -155px; 
+   width: 210px; 
+   height: 21px; 
+}            
+
+.latlong{
+   position:absolute; 
+   z-index:100000; 
+   right:45%; 
+   bottom:10px; 
+   margin-left: -155px; 
+   height: 16px; 
+   font-family:Arial,Helvetica,sans-serif;
+   font-size: 14px
+}
+
+.minimap{
+   position:absolute; 
+   z-index:100000; 
+   right:10px; 
+   bottom:10px; 
+   margin-left: -155px; 
+   background-color:#FFFFFF; 
+   width: 180px; 
+   height: 155px; 
+   border-style: solid; 
+   border-width: 1px; 
+   border-color: #D0D0D0;
+   padding: 5px;
+   font-size: 14px
+}
+
+.rosa{
+   position:absolute; 
+   z-index:100000; 
+   right:0px; 
+   top:10px
+}
+
+.mapBackground{
+   background-color:#A5BFDD; 
+   position:absolute; 
+   z-index:0;                 
+   width:100%; 
+   height:100%
+}
