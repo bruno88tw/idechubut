@@ -41,15 +41,16 @@ else:
 
 try:
     host = url.split("/")[2]
-    if allowedHosts and not host in allowedHosts:
-        print "Status: 502 Bad Gateway"
-        print "Content-Type: text/plain"
-        print
-        print "This proxy does not allow you to access that location (%s)." % (host,)
-        print
-        print os.environ
-  
-    elif url.startswith("http://") or url.startswith("https://"):
+#    if allowedHosts and not host in allowedHosts:
+#        print "Status: 502 Bad Gateway"
+#        print "Content-Type: text/plain"
+#        print
+#        print "This proxy does not allow you to access that location (%s)." % (host,)
+#        print
+#        print os.environ
+#  
+#    elif url.startswith("http://") or url.startswith("https://"):
+    if url.startswith("http://") or url.startswith("https://"):
     
         if method == "POST":
             length = int(os.environ["CONTENT_LENGTH"])

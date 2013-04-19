@@ -59,6 +59,10 @@
    background:transparent url(../img/pencil.png) no-repeat 0 0;
 }
 
+.serverIcon{
+   background:transparent url(../img/server.png) no-repeat 0 0;
+}
+
 .scalebox{
    position:absolute; 
    z-index:100000; 

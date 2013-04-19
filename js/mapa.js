@@ -5,12 +5,13 @@
  * 
  */
 
-var map, permalinkProvider, vectors, removeFeature, tbar = [], bbar = [], ovmWindow, drag, disableAgregar;
+var map, permalinkProvider, vectors, removeFeature, tbar = [], bbar = [], drag, disableAgregar;
+var savetree;
 var mapPanel, layerTreePanel, legendPanel;
 var navegador = true, escala = true, minimapa = true, norte = true, posicion = true, grilla = false; 
 var max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38); // (west, south, east, north)
 var projection4326 = new OpenLayers.Projection("EPSG:4326");
-var projectionMercator = new OpenLayers.Projection("EPSG:900913");   
+var projectionMercator = new OpenLayers.Projection("EPSG:900913"); 
 //var servidoresWMS = {
 //    "Local":"/geoserver/wms",
 //    "OpenGeo":"http://suite.opengeo.org/geoserver/wms",
@@ -19,7 +20,17 @@ var projectionMercator = new OpenLayers.Projection("EPSG:900913");
 //    "Secretaría de Energía":"http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"    
 //};
 
-var wmsServersJson = [];
+var servidoresWMS = [
+    ["Local","/geoserver/wms"],
+    ["OpenGeo","http://suite.opengeo.org/geoserver/wms"],
+    ["IGN","http://sdi.ign.gob.ar/geoserver2/ows?version=1.1.1"],
+    ["Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"]
+];
+
+var wmsServerStore = new Ext.data.ArrayStore({
+    fields: ['nombre', 'url'],
+    idIndex: 0 // id for each record will be the first element (in this case, 'nombre')
+});
 
 var tree = [    
     {"type":"folder","name":"DGEyC","children":[               
@@ -35,8 +46,8 @@ var tree = [
                     {"type":"leaf","server":"/geoserver/wms", "name":"urbano:Barrios","title":"Barrios"}
             ]},
             {"type":"folder","name":"Rural","children":[
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:parcelas","title":"Parcelas"},
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_parcelas_cna2008","title":"CNA 2008"}
+                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:parcelas","title":"Censo Nac. Agropecuario 2002"},
+                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_parcelas_cna2008","title":"Censo Nac. Agropecuario 2008"}
             ]},
             {"type":"folder","name":"Mapas temáticos","children":[
                     {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_departamentos3pob2010","title":"Población total 2010"},
@@ -63,37 +74,9 @@ function getCapabilitiesUrl(wms_url){
     
 }
 
-
-function getWmsServer(property, value){   
-    
-    for(var i = 0; i < wmsServersJson.length; i++){
-        if(wmsServersJson[i][property] == value){
-            return wmsServersJson[i];
-        }
-    }
-    
-    return null;
-    
-}
-
-function addWmsServer(name, wms_url){
-    
-    if(getWmsServer("name",name) == null){  
-        wmsServersJson.push({"name":name,"wms_url":wms_url,"cap_url":getCapabilitiesUrl(wms_url)});         
-    }else{
-        alert("El servidor con el nombre " + name + " ya existe");
-    }    
-    
-}
-
 Ext.onReady(function() {
     
-    addWmsServer("Local","/geoserver/wms");
-    addWmsServer("OpenGeo","http://suite.opengeo.org/geoserver/wms");
-    addWmsServer("IGN","http://sdi.ign.gob.ar/geoserver2/ows?version=1.1.1");
-    addWmsServer("SCTeI","http://200.63.163.47/geoserver/wms");
-    addWmsServer("Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map");    
-    
+    wmsServerStore.loadData(servidoresWMS);           
     Ext.QuickTips.init();  //initialize quick tips      
     createMap();      
     generateViewport();   
@@ -228,15 +211,35 @@ function getTopBar(){
     );
     map.addControl(select);
     
-    
+     tbar.push(new Ext.Toolbar.Button({
+         tooltip: 'Abrir',
+         icon: 'img/open.png',
+         handler: function(){
+
+             var rootnode = Ext.getCmp("myTreePanel").getRootNode();
+             alert("root");
+             
+         }
+     }));
+     
+     tbar.push(new Ext.Toolbar.Button({
+         tooltip: 'Guardar',
+         icon: 'img/disk.png',
+         handler: function(){
+
+             var rootnode = Ext.getCmp("myTreePanel").getRootNode();
+             alert("root");
+             
+         }
+     }));     
+     
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Agregar capa',
          icon: 'img/mas.png',
-         id:"agregarButton",
          handler: function(){
              agregarCapas(null);
          }
-     }));        
+     }));     
      
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Agregar carpeta',
@@ -922,46 +925,14 @@ function numerarNombre(nombre){
 
 function agregarCapas(node){
 
-    var mask;
-    var data = [];
+   var mask, capStore, capabilitiesGrid, capabilitiesCombo, window;
     
-    for (var i = 0; i < wmsServersJson.length; i++){
-        data.push([wmsServersJson[i]["name"],wmsServersJson[i]["cap_url"]])
-    }   
-
-    capabilitiesCombo = new Ext.form.ComboBox({
-        store: new Ext.data.ArrayStore({
-            fields: [
-                'nombre',
-                'url'
-            ],
-            data: data
-        }),
-        width: 330,
-        valueField: 'url',
-        displayField: 'nombre', 
-        editable: false,
-        triggerAction: 'all', // needed so that the combo box doesn't filter by its current content
-        mode: 'local', // keep the combo box from forcing a lot of unneeded data refreshes
-        listeners: {
-            select: function() {  
-                var store = Ext.getCmp("myGrid").getStore();
-                store.proxy.conn.url = capabilitiesCombo.getValue();
-                store.load();
-            }
-        }
-    });
-    
-    var capabilitiescombostore = capabilitiesCombo.getStore();
-    var record = capabilitiescombostore.getAt(0);
-    capabilitiesCombo.setValue(record.data.nombre);
-    
-    var capStore = new GeoExt.data.WMSCapabilitiesStore({  
-        url: "/geoserver/wms?service=wms&version=1.3.0&request=GetCapabilities",
-        autoLoad: true,
+   capStore = new GeoExt.data.WMSCapabilitiesStore({  
+        url: "asdf",
+        autoLoad: false,
         listeners:{
             beforeload: function(){
-                mask = new Ext.LoadMask(Ext.getCmp("capWindow").el, {msg:"Conectando..."});
+                mask = new Ext.LoadMask(window.el, {msg:"Conectando..."});
                 mask.show();
             },
             load: function(){
@@ -972,10 +943,48 @@ function agregarCapas(node){
                 Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
             }
         }
+    });    
+
+   capabilitiesGrid = new Ext.grid.GridPanel({
+        border: false,
+        viewConfig: {
+          forceFit: true
+        },
+        store: capStore,
+        columns: [
+        {
+          header: "Nombre",
+          dataIndex: "name",
+          sortable: true},
+        {
+          header: "Título",
+          dataIndex: "title",
+          sortable: true},
+        {
+          header: "Resumen",
+          dataIndex: "abstract"}
+        ]
     });
 
-    var window = new Ext.Window({
-        id: "capWindow",
+
+    capabilitiesCombo = new Ext.form.ComboBox({
+        store: wmsServerStore,
+        width: 350,
+        valueField: 'url',
+        displayField: 'nombre', 
+        editable: false,
+        triggerAction: 'all', // needed so that the combo box doesn't filter by its current content
+        mode: 'local', // keep the combo box from forcing a lot of unneeded data refreshes
+        listeners: {
+            select: function() {  
+                var store = capabilitiesGrid.getStore();
+                store.proxy.conn.url = getCapabilitiesUrl(capabilitiesCombo.getValue());
+                store.load();
+            }
+        }
+    });
+     
+    window = new Ext.Window({
         title: "Agregar nuevas capas",
         iconCls: 'agregarIcon',
         layout: "fit",
@@ -986,43 +995,88 @@ function agregarCapas(node){
         tbar: [            
             {html: "&nbspServidores WMS&nbsp&nbsp"},
             capabilitiesCombo,
-            "->",
+            "->",            
             new Ext.Toolbar.Button({
-                tooltip: 'Agregar servidor',
-                icon: 'img/server-plus.png',
-                handler: function(){
-                    var nombre, wms_url;
-                    Ext.MessageBox.prompt('Agregar servidor WMS', 'Nombre del servidor', function(btn, text){
-                        if (btn == "ok"){
-                            nombre = text;
-                            if(getWmsServer("name",nombre) == null){
-                                Ext.MessageBox.prompt('Agregar servidor WMS', 'URL del servidor', function(btn, text){
-                                    if (btn == "ok"){
-                                        wms_url = text;
-                                        addWmsServer(nombre, wms_url);
-                                        var wmsservernew = getWmsServer("name",nombre);
-                                        capabilitiesCombo.getStore().add([nombre, wmsservernew["cap_url"]]);
-                                        capabilitiesCombo.getStore().laod();
-                                    }
-                                })
-                            }else{
-                                Ext.MessageBox.alert('Error', 'Ya existe un servido con ese nombre');
-                            }
-                        }
-                    });
-                }
-            }),
-            new Ext.Toolbar.Button({
-                tooltip: 'Eliminar servidor',
-                icon: 'img/server-minus.png',
-                handler: function(){
-                    Ext.MessageBox.prompt('URL del servidor WMS', '', function(btn, text){
-                        if (btn == "ok"){
-                            folder.setText(text);
-                        }
-                    });
-                }
-            })            
+                 tooltip: 'Servidores WMS',
+                 icon: 'img/server.png',
+                 handler: function(){
+
+                    var wmsServersGridPanel = new Ext.grid.GridPanel({
+                        border: false,
+                        viewConfig: {
+                          forceFit: false
+                        },
+                        store: wmsServerStore,
+                        columns: [
+                            {
+                              header: "Nombre",
+                              dataIndex: "nombre",
+                              sortable: true,
+                              width: 150
+                            },
+                            {
+                              header: "Url",
+                              dataIndex: "url",
+                              sortable: true,
+                              width: 334
+                            } 
+                        ]
+                    }); 
+
+                    new Ext.Window({
+                        title: "Servidores WMS",
+                        iconCls: 'serverIcon',
+                        layout: "fit",
+                        width: 500,
+                        height:300,
+                        resizable: false,
+                        autoScroll: true,  
+                        bbar: [
+                            "->",
+                            new Ext.Toolbar.Button({
+                                tooltip: 'Agregar servidor WMS',
+                                text: "Agregar",
+                                icon: 'img/server-plus.png',
+                                handler: function(){
+
+                                    var nombre, wms_url;
+                                    Ext.MessageBox.prompt('Agregar servidor WMS', 'Nombre del servidor', function(btn, text){
+                                        if (btn == "ok"){
+                                            nombre = text;
+                                            if(wmsServerStore.getById(nombre) == null){
+                                                Ext.MessageBox.prompt('Agregar servidor WMS', 'URL del servidor', function(btn, text){
+                                                    if (btn == "ok"){
+                                                        wms_url = text;
+                                                        wmsServerStore.loadData([[nombre,wms_url]],true);
+                                                    }
+                                                })
+                                            }else{
+                                                Ext.MessageBox.alert('Error', 'Ya existe un servido con ese nombre');
+                                            }
+                                        }
+                                    });                            
+
+                                }
+                            }),
+                            new Ext.Toolbar.Button({
+                                tooltip: 'Eliminar servidor WMS',
+                                text: "Eliminar",
+                                icon: 'img/server-minus.png',
+                                handler: function(){
+
+                                    wmsServersGridPanel.getSelectionModel().each(function(record){
+
+                                            wmsServerStore.remove(wmsServerStore.getById(record.id));
+
+                                    });                            
+
+                                }
+                            })
+                        ],
+                        items: [wmsServersGridPanel]                
+                    }).show();
+                 }
+             })                        
         ],
         bbar: [
             "->",
@@ -1032,16 +1086,16 @@ function agregarCapas(node){
                 icon: 'img/mas.png',
                 handler: function(){
 
-                    Ext.getCmp("myGrid").getSelectionModel().each(function(record){
+                    capabilitiesGrid.getSelectionModel().each(function(record){
 
                             var nombrecapa = record.data.title;
-                            var servidorWMS = getWmsServer("name",capabilitiesCombo.lastSelectionText);
+                            var servidorWMS = capabilitiesCombo.getValue();
 
                             if (existeNombreCapa(nombrecapa) == true){
                                 nombrecapa = numerarNombre(nombrecapa)                            
                             }
                             
-                            var newLeaf = createLeaf(nombrecapa, servidorWMS["wms_url"], record.data.name);
+                            var newLeaf = createLeaf(nombrecapa, servidorWMS, record.data.name);
                             if (node == null){
                                 Ext.getCmp("myTreePanel").getRootNode().appendChild(newLeaf);  
                             }else{
@@ -1052,41 +1106,8 @@ function agregarCapas(node){
                 }
             })
         ],
-        items: [
-            new Ext.grid.GridPanel({
-                id: "myGrid",
-                border: false,
-                viewConfig: {
-                  forceFit: true
-                },
-                store: capStore,
-                columns: [
-                {
-                  header: "Nombre",
-                  dataIndex: "name",
-                  sortable: true},
-                {
-                  header: "Título",
-                  dataIndex: "title",
-                  sortable: true},
-                {
-                  header: "Resumen",
-                  dataIndex: "abstract"}
-                ]
-            })
-        ],
-        listeners:{
-            show: function(){                
-                Ext.getCmp("agregarButton").disable();
-                disableAgregar = true;
-            },
-            close: function(){
-                Ext.getCmp("agregarButton").enable();
-                disableAgregar = false;
-            }            
-        }
-    });
-    window.show(); 
+        items: [capabilitiesGrid]
+    }).show(); 
  }
 
 function expandAll(node){
