@@ -63,6 +63,14 @@
    background:transparent url(../img/server.png) no-repeat 0 0;
 }
 
+.guardarIcon{
+   background:transparent url(../img/disk.png) no-repeat 0 0;
+}
+
+.abrirIcon{
+   background:transparent url(../img/open.png) no-repeat 0 0;
+}
+
 .scalebox{
    position:absolute; 
    z-index:100000; 

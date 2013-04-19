@@ -6,7 +6,7 @@
  */
 
 var map, permalinkProvider, vectors, removeFeature, tbar = [], bbar = [], drag, disableAgregar;
-var savetree;
+var savetree = [];
 var mapPanel, layerTreePanel, legendPanel;
 var navegador = true, escala = true, minimapa = true, norte = true, posicion = true, grilla = false; 
 var max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38); // (west, south, east, north)
@@ -165,6 +165,22 @@ function createMap(){
     
 }
 
+function saveLayerTree(father, children){
+    
+    for(var i = 0; i < children.length; i++){
+        if(children[i].isLeaf()){
+            var layer = map.getLayersByName(children[i].attributes.layer)[0];
+            father.push({"type":"leaf","server":layer.url, "name":layer.params.LAYERS,"title":children[i].attributes.text});
+        }else{
+            var grandchildren = [];
+            saveLayerTree(grandchildren,children[i].childNodes);
+            father.push({"type":"folder","name":children[i].attributes.text,"children":grandchildren});
+            
+        }
+    }    
+    
+}
+
 function getTopBar(){           
 
     removeFeature = new DeleteFeature(vectors);
@@ -212,23 +228,115 @@ function getTopBar(){
     map.addControl(select);
     
      tbar.push(new Ext.Toolbar.Button({
-         tooltip: 'Abrir',
+         tooltip: 'Importar capas',
          icon: 'img/open.png',
          handler: function(){
 
-             var rootnode = Ext.getCmp("myTreePanel").getRootNode();
-             alert("root");
+            var inputTextArea = new Ext.form.TextArea({
+                width: 276,
+                height: 231,
+                readOnly: false,
+                emptyText: "Copie el contenido del archivo de exportación y haga click en 'Importar'"
+            });
+
+             var window = new Ext.Window({
+                 title: "Importar capas",
+                 iconCls: 'abrirIcon',
+                 layout: "anchor",
+                 width: 300,
+                 height:300,
+                 resizable: false,
+                 items: [                     
+                     new Ext.Panel({
+                         bodyStyle: 'padding:5px',
+                         border: false,
+                         autoScroll: true,
+                         width: "100%",
+                         heigth: "100%",
+                         items:[inputTextArea]
+                     })
+                 ],
+                 bbar:[
+                    "->", 
+                    new Ext.Toolbar.Button({
+                        tooltip: 'Importar',
+                        text: "Importar",
+                        icon: 'img/open.png',
+                        handler: function(){
+                            
+                            try {
+                                
+                                var loadtree = JSON.parse(inputTextArea.getValue());
+                            
+                                removeLayers(Ext.getCmp("myTreePanel").getRootNode());
+                                for(var i = 0; i < Ext.getCmp("myTreePanel").getRootNode().childNodes.length; i++){
+                                    Ext.getCmp("myTreePanel").getRootNode().childNodes[i].remove();
+                                }
+                                agregarDescendencia(Ext.getCmp("myTreePanel").getRootNode(),loadtree);                              
+                                window.close();
+                                
+                            }catch (e){
+                                Ext.MessageBox.alert('Error', 'Ha ocurrido un error. Compruebe que el archivo no esté vacío ni corrupto.');
+                            }
+                            
+                            
+                        }
+                    })                  
+                 ]
+             });
+             window.show();                         
              
          }
      }));
      
      tbar.push(new Ext.Toolbar.Button({
-         tooltip: 'Guardar',
+         tooltip: 'Exportar capas',
          icon: 'img/disk.png',
          handler: function(){
+             
+             savetree = [];
+             saveLayerTree(savetree,Ext.getCmp("myTreePanel").getRootNode().childNodes); 
+             var jsonobject = JSON.stringify(savetree);
 
-             var rootnode = Ext.getCmp("myTreePanel").getRootNode();
-             alert("root");
+            var inputTextArea = new Ext.form.TextArea({
+                width: 276,
+                height: 231,
+                readOnly: true,
+                emptyText: "Haga click en 'Exportar' para generar el archivo de exportación, luego haga triple click sobre el contenido y copie y pegue en un archivo local."
+            });             
+             
+             var window = new Ext.Window({
+                 title: "Guardar",
+                 iconCls: 'guardarIcon',
+                 layout: "anchor",
+                 width: 300,
+                 height:300,
+                 resizable: false,
+                 items: [                     
+                     new Ext.Panel({
+                         bodyStyle: 'padding:5px',
+                         border: false,
+                         autoScroll: true,
+                         width: "100%",
+                         heigth: "100%",
+                         items:[inputTextArea]
+                     })
+                 ],
+                 bbar:[
+                    "->", 
+                    new Ext.Toolbar.Button({
+                        tooltip: 'Exportar capas',
+                        text: "Exportar",
+                        icon: 'img/disk.png',
+                        handler: function(){                            
+                            
+                            inputTextArea.setValue(jsonobject);
+                            
+                        }
+                    })                  
+                 ]
+             });
+             window.show();             
              
          }
      }));     
@@ -682,25 +790,69 @@ function getTopBar(){
          tooltip: 'Enlace',
          icon: 'img/chain.png',
          handler: function(){
+     
+                var inputTextArea = new Ext.form.TextArea({
+                width: 276,
+                height: 231,
+                readOnly: true,
+                emptyText: "Haga click en 'Generar' para generar el enlace permanente, luego haga triple click sobre el contenido y copie y pegue en una nueva ventana."
+            });             
+             
              var window = new Ext.Window({
                  title: "Enlace permanente",
                  iconCls: 'enlaceIcon',
-                 layout: "fit",
+                 layout: "anchor",
                  width: 300,
                  height:300,
                  resizable: false,
-                 items: [
+                 items: [                     
                      new Ext.Panel({
                          bodyStyle: 'padding:5px',
                          border: false,
                          autoScroll: true,
                          width: "100%",
                          heigth: "100%",
-                         html: permalinkProvider.getLink()
+                         items:[inputTextArea]
                      })
+                 ],
+                 bbar:[
+                    "->", 
+                    new Ext.Toolbar.Button({
+                        tooltip: 'Generar enlace permanente',
+                        text: "Generar",
+                        icon: 'img/chain.png',
+                        handler: function(){                            
+                            
+                            inputTextArea.setValue(permalinkProvider.getLink());
+                            
+                        }
+                    })                  
                  ]
              });
-             window.show();
+             window.show(); 
+     
+     
+     
+     
+//             var window = new Ext.Window({
+//                 title: "Enlace permanente",
+//                 iconCls: 'enlaceIcon',
+//                 layout: "fit",
+//                 width: 300,
+//                 height:300,
+//                 resizable: false,
+//                 items: [
+//                     new Ext.Panel({
+//                         bodyStyle: 'padding:5px',
+//                         border: false,
+//                         autoScroll: true,
+//                         width: "100%",
+//                         heigth: "100%",
+//                         html: permalinkProvider.getLink()
+//                     })
+//                 ]
+//             });
+//             window.show();
          }
      }));
 
@@ -1234,7 +1386,7 @@ function createLeaf(titulo, servidor, capa){
         titulo, 
         servidor, 
         {layers: capa, transparent: 'true', format: 'image/png'}, 
-        {isBaseLayer: false, visibility: false, singleTile: false}
+        {isBaseLayer: false, visibility: false, singleTile: true}
     ));          
     
     var leaf = new GeoExt.tree.LayerNode({
