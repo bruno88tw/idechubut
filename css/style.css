@@ -73,6 +73,7 @@
 
 .scalebox{
    position:absolute; 
+   display: block;
    z-index:100000; 
    left:166px; 
    bottom:35px; 
@@ -80,6 +81,8 @@
    width: 210px; 
    height: 30px; 
    font-size: 10px;
+   -moz-user-select: none;
+   -khtml-user-select: none;   
 }
 
 .scalecombobox{

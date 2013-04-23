@@ -24,6 +24,7 @@ var servidoresWMS = [
     ["Local","/geoserver/wms"],
     ["OpenGeo","http://suite.opengeo.org/geoserver/wms"],
     ["IGN","http://sdi.ign.gob.ar/geoserver2/ows?version=1.1.1"],
+    ["SCTeI","http://200.63.163.47/geoserver/wms"],
     ["Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"]
 ];
 
@@ -34,29 +35,31 @@ var wmsServerStore = new Ext.data.ArrayStore({
 
 var tree = [    
     {"type":"folder","name":"DGEyC","children":[               
-            {"type":"leaf","server":"/geoserver/wms", "name":"rural:Comarcas","title":"Comarcas"},
-            {"type":"leaf","server":"/geoserver/wms", "name":"rural:Departamentos","title":"Departamentos"},
-            {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_fracciones","title":"Fracciones"},
-            {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_radios","title":"Radios"},
-            {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_localidades","title":"Localidades"},
-            {"type":"leaf","server":"/geoserver/wms", "name":"urbano:ejidos_catastro_completos","title":"Ejidos"},
-            {"type":"folder","name":"Urbano","children":[
-                    {"type":"leaf","server":"/geoserver/wms", "name":"urbano:calles","title":"Calles"},
-                    {"type":"leaf","server":"/geoserver/wms", "name":"urbano:manzanas","title":"Manzanas"},
-                    {"type":"leaf","server":"/geoserver/wms", "name":"urbano:Barrios","title":"Barrios"}
+            {"type":"leaf", "title":"Comarcas", "server":"/geoserver/wms", "params":{layers: "rural:Comarcas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Departamentos", "server":"/geoserver/wms", "params":{layers: "rural:Departamentos", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Fracciones", "server":"/geoserver/wms", "params":{layers: "rural:v_fracciones", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Radios", "server":"/geoserver/wms", "params":{layers: "rural:v_radios", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Localidades", "server":"/geoserver/wms", "params":{layers: "rural:v_localidades", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Ejidos", "server":"/geoserver/wms", "params":{layers: "urbano:ejidos_catastro_completos", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"folder", "name":"Urbano", "children":[
+                    {"type":"leaf", "title":"Calles", "server":"/geoserver/wms", "params":{layers: "urbano:calles", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Manzanas", "server":"/geoserver/wms", "params":{layers: "urbano:manzanas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Barrios", "server":"/geoserver/wms", "params":{layers: "urbano:Barrios", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
             ]},
-            {"type":"folder","name":"Rural","children":[
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:parcelas","title":"Censo Nac. Agropecuario 2002"},
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_parcelas_cna2008","title":"Censo Nac. Agropecuario 2008"}
+            {"type":"folder", "name":"Rural", "children":[
+                    {"type":"leaf", "title":"Censo Nac. Agropecuario 2002", "server":"/geoserver/wms", "params":{layers: "rural:parcelas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Censo Nac. Agropecuario 2008", "server":"/geoserver/wms", "params":{layers: "rural:v_parcelas_cna2008", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
             ]},
-            {"type":"folder","name":"Mapas temáticos","children":[
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_departamentos3pob2010","title":"Población total 2010"},
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_debilidad_social","title":"Índice de debilidad social"},
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_delincuencia","title":"Índice de delincuencia"},
-                    {"type":"leaf","server":"/geoserver/wms", "name":"rural:v_poblacion_extranjera","title":"Porcentaje de población extranjera"}
+            {"type":"folder", "name":"Mapas temáticos", "children":[
+                    {"type":"leaf", "title":"Población total 2010", "server":"/geoserver/wms", "params":{layers: "rural:v_departamentos3pob2010", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Índice de debilidad social", "server":"/geoserver/wms", "params":{layers: "rural:v_debilidad_social", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Índice de delincuencia", "server":"/geoserver/wms", "params":{layers: "rural:v_delincuencia", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Porcentaje de población extranjera", "server":"/geoserver/wms", "params":{layers: "rural:v_poblacion_extranjera", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
             ]}            
     ]}    
 ];
+
+var index = ["Cloudmade","Vectores","Población total 2010","Índice de debilidad social","Índice de delincuencia","Porcentaje de población extranjera","Ejidos","Censo Nac. Agropecuario 2002","Censo Nac. Agropecuario 2008","Radios","Fracciones","Departamentos","Comarcas","Localidades","Manzanas","Calles","Barrios"]
 
 OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
@@ -170,7 +173,7 @@ function saveLayerTree(father, children){
     for(var i = 0; i < children.length; i++){
         if(children[i].isLeaf()){
             var layer = map.getLayersByName(children[i].attributes.layer)[0];
-            father.push({"type":"leaf","server":layer.url, "name":layer.params.LAYERS,"title":children[i].attributes.text});
+            father.push({"type":"leaf", "title":children[i].attributes.text, "server":layer.url, "options":layer.options, "params":layer.params});
         }else{
             var grandchildren = [];
             saveLayerTree(grandchildren,children[i].childNodes);
@@ -178,6 +181,28 @@ function saveLayerTree(father, children){
             
         }
     }    
+    
+}
+
+function saveLayerIndex(){
+    
+    var index = [];
+    
+    for(var i = 0; i < map.layers.length; i++){
+        index[i] = map.layers[i].name;
+    }    
+    
+    return index;
+    
+}
+
+function restoreIndex(index){
+    
+    var layer;
+    for(var i = 0; i < index.length; i++){
+        layer = map.getLayersByName(index[i])[0];
+        map.setLayerIndex(layer,i);
+    }      
     
 }
 
@@ -272,7 +297,8 @@ function getTopBar(){
                                 for(var i = 0; i < Ext.getCmp("myTreePanel").getRootNode().childNodes.length; i++){
                                     Ext.getCmp("myTreePanel").getRootNode().childNodes[i].remove();
                                 }
-                                agregarDescendencia(Ext.getCmp("myTreePanel").getRootNode(),loadtree);                              
+                                agregarDescendencia(Ext.getCmp("myTreePanel").getRootNode(),loadtree[0]);   
+                                restoreIndex(loadtree[1]);
                                 window.close();
                                 
                             }catch (e){
@@ -290,23 +316,25 @@ function getTopBar(){
      }));
      
      tbar.push(new Ext.Toolbar.Button({
-         tooltip: 'Exportar capas',
+         tooltip: 'Guardar capas',
          icon: 'img/disk.png',
          handler: function(){
              
              savetree = [];
+             index = [];
              saveLayerTree(savetree,Ext.getCmp("myTreePanel").getRootNode().childNodes); 
-             var jsonobject = JSON.stringify(savetree);
+             index = saveLayerIndex();
+             var jsonobject = JSON.stringify([savetree,index]);
 
             var inputTextArea = new Ext.form.TextArea({
                 width: 276,
                 height: 231,
                 readOnly: true,
-                emptyText: "Haga click en 'Exportar' para generar el archivo de exportación, luego haga triple click sobre el contenido y copie y pegue en un archivo local."
+                emptyText: "Haga click en 'Generar' para generar el archivo de exportación, luego haga triple click sobre el contenido y copie y pegue en un archivo local."
             });             
              
              var window = new Ext.Window({
-                 title: "Guardar",
+                 title: "Guardar capas",
                  iconCls: 'guardarIcon',
                  layout: "anchor",
                  width: 300,
@@ -325,8 +353,8 @@ function getTopBar(){
                  bbar:[
                     "->", 
                     new Ext.Toolbar.Button({
-                        tooltip: 'Exportar capas',
-                        text: "Exportar",
+                        tooltip: 'Guardar capas',
+                        text: "Generar",
                         icon: 'img/disk.png',
                         handler: function(){                            
                             
@@ -339,7 +367,7 @@ function getTopBar(){
              window.show();             
              
          }
-     }));     
+     }));          
      
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Agregar capa',
@@ -347,7 +375,7 @@ function getTopBar(){
          handler: function(){
              agregarCapas(null);
          }
-     }));     
+     }));       
      
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Agregar carpeta',
@@ -486,14 +514,13 @@ function getTopBar(){
                  title: "Dibujo",
                  iconCls: 'dibujoIcon',
                  layout: "fit",
+                 width: 440,
+//                 height:300,
                  resizable: false,
-                 x: mapPanel.getPosition()[0] + 5,
-                 y: mapPanel.getPosition()[1] + 32,
-                 shadow: false,
-                 tbar: [{
-                    xtype: 'buttongroup',
-                    columns: 3,
-                    items: [
+                 x: mapPanel.getPosition()[0] + (mapPanel.getWidth()/2) - 237,
+                 y: mapPanel.getPosition()[1] + 5,
+//                 shadow: false,
+                 tbar: [
                         new Ext.Toolbar.Button({
                              tooltip: 'Puntos',
                              icon: "img/draw_circle.png",
@@ -771,8 +798,7 @@ function getTopBar(){
                                  }
                              }
                          })      
-                    ]
-                 }]
+                 ]
              });
              window.show();
              window.on('close',function(){
@@ -830,29 +856,7 @@ function getTopBar(){
                  ]
              });
              window.show(); 
-     
-     
-     
-     
-//             var window = new Ext.Window({
-//                 title: "Enlace permanente",
-//                 iconCls: 'enlaceIcon',
-//                 layout: "fit",
-//                 width: 300,
-//                 height:300,
-//                 resizable: false,
-//                 items: [
-//                     new Ext.Panel({
-//                         bodyStyle: 'padding:5px',
-//                         border: false,
-//                         autoScroll: true,
-//                         width: "100%",
-//                         heigth: "100%",
-//                         html: permalinkProvider.getLink()
-//                     })
-//                 ]
-//             });
-//             window.show();
+                   
          }
      }));
 
@@ -866,127 +870,124 @@ function getTopBar(){
                  iconCls: 'configuracionIcon',
                  layout: "fit",
                  resizable: false,
-                 tbar: [{
-                    xtype: 'buttongroup',
-                    columns: 2,
-                    defaults: {
-                        scale: 'medium'
-                    },
-                    items: [
-                        {
-                            xtype:'button',
-                            icon: 'img/pan.png',
-                            text: 'Navegador',
-                            width: 80,
-                            height: 50,
-                            iconAlign: 'top',
-                            scale: 'small',
-                            handler: function(){
-                                if (!navegador){
-                                    navegador = true;
-                                    map.addControl(new OpenLayers.Control.PanZoomBar());
-                                }else{
-                                    navegador = false;
-                                    map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);
-                                }
-                            }
-                        },{
-                            xtype:'button',
-                            icon: 'img/scale.png',
-                            text: 'Escala',
-                            width: 80,
-                            height: 50,
-                            iconAlign: 'top',
-                            scale: 'small',
-                            handler: function(){
-                                var scalelinediv = document.getElementById("scalelinediv");
-                                var scalecombodiv = document.getElementById("scalecombodiv");
-                                if (!escala){
-                                    escala = true;
-                                    scalelinediv.style.display = "block";
-                                    scalecombodiv.style.display = "block";
-                                }else{
-                                    escala = false;
-                                    scalelinediv.style.display = "none";
-                                    scalecombodiv.style.display = "none";
-                                }
-                            }
-                        },{
-                            xtype:'button',
-                            icon: 'img/scale.png',
-                            text: 'Posición',
-                            width: 80,
-                            height: 50,
-                            iconAlign: 'top',
-                            scale: 'small',
-                            handler: function(){
-                                var posicioncontainer = document.getElementById("position");
-                                if (!posicion){
-                                    posicion = true;
-                                    posicioncontainer.style.display = "block";
-                                }else{
-                                    posicion = false;
-                                    posicioncontainer.style.display = "none";
-                                }
-                            }
-                        },{
-                            xtype:'button',
-                            icon: 'img/map.png',
-                            text: 'Minimapa',
-                            width: 80,
-                            height: 50,
-                            iconAlign: 'top',
-                            scale: 'small',
-                            handler: function(){
-                                var minimapcontainer = document.getElementById("minimapcontainer");
-                                if (!minimapa){
-                                    minimapa = true;
-                                    minimapcontainer.style.display = "block";
-                                }else{
-                                    minimapa = false;
-                                    minimapcontainer.style.display = "none";
-                                }
-                            }
-                        },{
-                            xtype:'button',
-                            icon: 'img/north.png',
-                            text: 'Norte',
-                            width: 80,
-                            height: 50,
-                            iconAlign: 'top',
-                            scale: 'small',
-                            handler: function(){
-                                var rosa;
-                                if (!norte){
-                                    norte = true;
-                                    rosa = document.getElementById("rosa");
-                                    rosa.style.display = "block";
-                                }else{
-                                    norte = false;
-                                    rosa = document.getElementById("rosa");
-                                    rosa.style.display = "none";
-                                }
-                            }
-                        },{
-                            xtype:'button',
-                            icon: 'img/grid.png',
-                            text: 'Grilla',
-                            width: 80,
-                            height: 50,
-                            iconAlign: 'top',
-                            scale: 'small',
-                            handler: function(){
-                                if (!grilla){
-                                    grilla = true;
-                                    map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false}));    
-                                }else{
-                                    grilla = false;
-                                    map.removeLayer(map.getLayersByName("Grilla")[0]);
-                                    map.removeControl(map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
-                                }
-                            }
-                        }]
-                 }]
+                 items:[
+                     
+                    new Ext.Panel({
+                        border: false,
+                        autoScroll: true,
+                        width: "100%",
+                        heigth: "100%",
+                        items: new Ext.FormPanel({
+                             labelWidth: 85, // label settings here cascade unless overridden
+                             frame:true,
+                             border: false,
+                             items: [
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Navegador',
+                                     checked: navegador,
+                                     listeners:{
+                                        check: function(){
+                                            if (this.getValue() == true){
+                                                navegador = true;
+                                                map.addControl(new OpenLayers.Control.PanZoomBar());
+                                            }else{
+                                                navegador = false;
+                                                map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);
+                                            }
+                                        }
+                                     }
+                                 }),
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Escala',
+                                     checked: escala,
+                                     listeners:{
+                                        check: function(){
+                                            var scalelinediv = document.getElementById("scalelinediv");
+                                            var scalecombodiv = document.getElementById("scalecombodiv");
+                                            if (this.getValue() == true){
+                                                escala = true;
+                                                scalelinediv.style.display = "block";
+                                                scalecombodiv.style.display = "block";
+                                            }else{
+                                                escala = false;
+                                                scalelinediv.style.display = "none";
+                                                scalecombodiv.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }),
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Posición',
+                                     checked: posicion,
+                                     listeners:{
+                                        check: function(){
+                                            var posicioncontainer = document.getElementById("position");
+                                            if (this.getValue() == true){
+                                                posicion = true;
+                                                posicioncontainer.style.display = "block";
+                                            }else{
+                                                posicion = false;
+                                                posicioncontainer.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }),
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Minimapa',
+                                     checked: minimapa,
+                                     listeners:{
+                                        check: function(){
+                                            var minimapcontainer = document.getElementById("minimapcontainer");
+                                            if (this.getValue() == true){
+                                                minimapa = true;
+                                                minimapcontainer.style.display = "block";
+                                            }else{
+                                                minimapa = false;
+                                                minimapcontainer.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }),
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Norte',
+                                     checked: norte,
+                                     listeners:{
+                                        check: function(){
+                                            var rosa = document.getElementById("rosa");;
+                                            if (this.getValue() == true){
+                                                norte = true;
+                                                rosa.style.display = "block";
+                                            }else{
+                                                norte = false;
+                                                rosa.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }),
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Grilla',
+                                     checked: grilla,
+                                     listeners:{
+                                        check: function(){
+                                            if (this.getValue() == true){
+                                                grilla = true;
+                                                map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false}));
+                                            }else{
+                                                grilla = false;
+                                                map.removeLayer(map.getLayersByName("Grilla")[0]);
+                                                map.removeControl(map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
+                                            }
+                                        }
+                                     }
+                                 })                                                           
+                             ]
+                         })
+                    })                     
+                     
+                     
+                     
+                 ]
+
              });
              window.show();
              window.on('close',function(){
@@ -995,6 +996,32 @@ function getTopBar(){
              Ext.getCmp("configuracion").disable();
          }
      }));
+
+     tbar.push(new Ext.Toolbar.Button({
+         tooltip: 'Imprimir',
+         icon: 'img/printer.png',
+         handler: function(){
+
+            var divmap = document.getElementById("mapPanel");
+            var mapp = Ext.getCmp("mapPanel");
+            var height = mapp.lastSize.height;
+            var width = mapp.lastSize.width;
+            var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, height='+ height + ',width=' + width);       
+            mywindow.document.write('<html><head><title>Imprimir mapa</title>');
+            mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
+            mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers-2.12/theme/default/style.css">');
+            mywindow.document.write('<style type="text/css">body {width: 1280px;height: 100px;}</style>');
+            mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
+            mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
+            mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
+            mywindow.document.write(divmap.innerHTML);
+            mywindow.document.write('</body></html>');
+            mywindow.document.close();
+            mywindow.focus();            
+
+
+         }
+     })); 
 
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Ayuda',
@@ -1247,7 +1274,7 @@ function agregarCapas(node){
                                 nombrecapa = numerarNombre(nombrecapa)                            
                             }
                             
-                            var newLeaf = createLeaf(nombrecapa, servidorWMS, record.data.name);
+                            var newLeaf = createLeaf(nombrecapa, servidorWMS, {layers: record.data.name, transparent: 'true', format: 'image/png'},{isBaseLayer: false, visibility: false, singleTile: false});
                             if (node == null){
                                 Ext.getCmp("myTreePanel").getRootNode().appendChild(newLeaf);  
                             }else{
@@ -1380,13 +1407,13 @@ function createNode(text){
     
 }
 
-function createLeaf(titulo, servidor, capa){    
+function createLeaf(titulo, servidor, params, options){    
     
     map.addLayer(new OpenLayers.Layer.WMS(
         titulo, 
         servidor, 
-        {layers: capa, transparent: 'true', format: 'image/png'}, 
-        {isBaseLayer: false, visibility: false, singleTile: true}
+        params, 
+        options
     ));          
     
     var leaf = new GeoExt.tree.LayerNode({
@@ -1482,7 +1509,7 @@ function createLeaf(titulo, servidor, capa){
                                     },
                                     load: function(){
                                         mask.hide();
-                                        var item = this.find('name', capa);
+                                        var item = this.find('name', params.layers);
                                         propiedades = this.data.items[item].data;
                                         estilos = propiedades.styles;
                                         for(var x = 0; x < estilos.length; x++){
@@ -1642,7 +1669,7 @@ function agregarDescendencia(father,children){
             father.appendChild(newNode);
             agregarDescendencia(newNode,children[x].children)
         }else{
-            newNode = createLeaf(children[x].title,children[x].server,children[x].name);
+            newNode = createLeaf(children[x].title,children[x].server,children[x].params,children[x].options);
             father.appendChild(newNode);
         }          
     }
@@ -1660,14 +1687,18 @@ function generateViewport(){
     
     mapPanel = new GeoExt.MapPanel({
         map: map,   
+        id: "mapPanel",
         extent: max_bounds.clone().transform(projection4326, projectionMercator),
         region: "center",
-        html:'<div id="scalelinediv" class="scalebox"></div>\n\
-              <div id="scalecombodiv" class="scalecombobox" align:"center" style="padding-top: 3px"></div>\n\
-              <div id="position" class="latlong" align:"center"></div>\n\
-              <div id="minimapcontainer" class="minimap" align:"center"><div id="minimap"></div></div>\n\
-              <div class="mapBackground"></div>\n\
-              <div id="rosa" class="rosa"><img src="img/windRose.png" alt="banner" align="rigth" style="height:75px; width:75px"></div>',
+//        html:'<div style="position: relative; overflow: hidden; width: 100%; height: 100%;">\n\
+//              <div id="scalelinediv" class="scalebox"></div>\n\
+//              </div>',        
+//        html:'<div id="scalelinediv" class="scalebox"></div>\n\
+//              <div id="scalecombodiv" class="scalecombobox" align:"center" style="padding-top: 3px"></div>\n\
+//              <div id="position" class="latlong" align:"center"></div>\n\
+//              <div id="minimapcontainer" class="minimap" align:"center"><div id="minimap"></div></div>\n\
+//              <div class="mapBackground"></div>\n\
+//              <div id="rosa" class="rosa"><img src="img/windRose.png" alt="banner" align="rigth" style="height:75px; width:75px"></div>',
         stateId: "map",
         border:false,
         prettyStateKeys: true // for pretty permalinks
@@ -1680,6 +1711,7 @@ function generateViewport(){
 //    }));
     
     agregarDescendencia(rootnode,tree);
+    restoreIndex(index);
     
     layerTreePanel = new Ext.tree.TreePanel({
         flex:1,
@@ -1690,7 +1722,7 @@ function generateViewport(){
         rootVisible: false,
         border: false,
         enableDD: true,
-        useArrows: true                                    
+        useArrows: true
     });
     
     legendPanel = new GeoExt.LegendPanel({
@@ -1761,6 +1793,14 @@ function generateViewport(){
 
 function finalConfig(){
 
+    var mapdiv = document.getElementById('mapPanel').firstChild.firstChild.firstChild;
+    mapdiv.appendChild(document.getElementById('scalelinediv'));
+    mapdiv.appendChild(document.getElementById('scalecombodiv'));
+    mapdiv.appendChild(document.getElementById('position'));
+    mapdiv.appendChild(document.getElementById('minimapcontainer'));
+    mapdiv.appendChild(document.getElementById('mapBackground'));
+    mapdiv.appendChild(document.getElementById('rosa'));
+
     permalinkProvider = new GeoExt.state.PermalinkProvider({encodeType: false}); // create permalink provider    
     Ext.state.Manager.setProvider(permalinkProvider); // set it in the state manager                   
     
@@ -1796,5 +1836,9 @@ function finalConfig(){
         size: new OpenLayers.Size(180, 155),
         div: document.getElementById('minimap')            
     }));   
+    
+
+
+    
     
 }
