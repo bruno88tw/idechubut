@@ -1209,15 +1209,15 @@ function agregarCapas(node){
                         icon: 'img/information.png',
                         handler: function(){
                             
+                           var url = wmsServersGridPanel.getSelectionModel().getSelected().data.url;                            
+                            
                            var service, name, title, abstract, contactPerson, contactOrganization, contactPosition;
                            var addressType, address, city, stateOrProvince, postCode, country, contactVoiceTelephone;
                            var contactFacsimileTelephone, contactElectronicMailAddress;
 
                            var infomask = new Ext.LoadMask(servidoresWindow.el, {msg:"Conectando..."});
                            infomask.show();
-
-                           var url = wmsServersGridPanel.getSelectionModel().getSelected().data.url;                           
-
+                          
                            Ext.Ajax.request({
                                url : getCapabilitiesUrl(url), 
                                method: 'GET',
@@ -1226,21 +1226,21 @@ function agregarCapas(node){
                                    infomask.hide();
                                    
                                    try{service = result.responseXML.getElementsByTagName("Service")[0];}catch(e){};
-                                   try{name = service.getElementsByTagName("Name")[0].innerHTML;}catch(e){};
-                                   try{title = service.getElementsByTagName("Title")[0].innerHTML;}catch(e){};
-                                   try{abstract = service.getElementsByTagName("Abstract")[0].innerHTML;}catch(e){};
-                                   try{contactPerson = service.getElementsByTagName("ContactPerson")[0].innerHTML;}catch(e){};
-                                   try{contactOrganization = service.getElementsByTagName("ContactOrganization")[0].innerHTML;}catch(e){};
-                                   try{contactPosition = service.getElementsByTagName("ContactPosition")[0].innerHTML;}catch(e){};
-                                   try{addressType = service.getElementsByTagName("AddressType")[0].innerHTML;}catch(e){};
-                                   try{address = service.getElementsByTagName("Address")[0].innerHTML;}catch(e){};
-                                   try{city = service.getElementsByTagName("City")[0].innerHTML;}catch(e){};
-                                   try{stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].innerHTML;}catch(e){};
-                                   try{postCode = service.getElementsByTagName("PostCode")[0].innerHTML;}catch(e){};
-                                   try{country = service.getElementsByTagName("Country")[0].innerHTML;}catch(e){};
-                                   try{contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].innerHTML;}catch(e){};
-                                   try{contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].innerHTML;}catch(e){};
-                                   try{contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].innerHTML;}catch(e){};
+                                   try{name = service.getElementsByTagName("Name")[0].textContent;}catch(e){};
+                                   try{title = service.getElementsByTagName("Title")[0].textContent;}catch(e){};
+                                   try{abstract = service.getElementsByTagName("Abstract")[0].textContent;}catch(e){};
+                                   try{contactPerson = service.getElementsByTagName("ContactPerson")[0].textContent;}catch(e){};
+                                   try{contactOrganization = service.getElementsByTagName("ContactOrganization")[0].textContent;}catch(e){};
+                                   try{contactPosition = service.getElementsByTagName("ContactPosition")[0].textContent;}catch(e){};
+                                   try{addressType = service.getElementsByTagName("AddressType")[0].textContent;}catch(e){};
+                                   try{address = service.getElementsByTagName("Address")[0].textContent;}catch(e){};
+                                   try{city = service.getElementsByTagName("City")[0].textContent;}catch(e){};
+                                   try{stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].textContent;}catch(e){};
+                                   try{postCode = service.getElementsByTagName("PostCode")[0].textContent;}catch(e){};
+                                   try{country = service.getElementsByTagName("Country")[0].textContent;}catch(e){};
+                                   try{contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].textContent;}catch(e){};
+                                   try{contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].textContent;}catch(e){};
+                                   try{contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].textContent;}catch(e){};
 
 
 
@@ -1373,6 +1373,12 @@ function agregarCapas(node){
                                failure: function(){
                                    infomask.hide();
                                    Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
+                               },
+                               listeners: {
+                                    requestexception: function(){
+                                         infomask.hide();
+                                         Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
+                                    }
                                }
                            });
 
