@@ -1225,7 +1225,10 @@ function agregarCapas(node){
                                { 
                                    infomask.hide();
                                    
-                                   try{service = result.responseXML.getElementsByTagName("Service")[0];}catch(e){};
+                                   var parser = new DOMParser();
+                                   var xmlDoc = parser.parseFromString(result.responseText,"text/xml");
+                                   
+                                   try{service = xmlDoc.getElementsByTagName("Service")[0];}catch(e){};
                                    try{name = service.getElementsByTagName("Name")[0].textContent;}catch(e){};
                                    try{title = service.getElementsByTagName("Title")[0].textContent;}catch(e){};
                                    try{abstract = service.getElementsByTagName("Abstract")[0].textContent;}catch(e){};
@@ -1242,10 +1245,6 @@ function agregarCapas(node){
                                    try{contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].textContent;}catch(e){};
                                    try{contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].textContent;}catch(e){};
 
-
-
-
-
                                    new Ext.Window({
                                        title: wmsServersGridPanel.getSelectionModel().getSelected().data.nombre,
                                        iconCls: 'configuracionIcon',
@@ -1261,26 +1260,26 @@ function agregarCapas(node){
                                                     labelWidth: 85, // label settings here cascade unless overridden
                                                     frame:true,
                                                     border: false,
-                                                    width: 335,
+                                                    width: 380,
                                                     items: [
                                                         new Ext.form.FieldSet({
                                                            title: "WMS",
                                                            items: [
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Nombre',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: name
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Título',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: title
                                                                }),   
                                                                new Ext.form.TextArea({
                                                                    fieldLabel: 'Descripción',
-                                                                   width: 210,
+                                                                   width: 255,
                                                                    readOnly: true,
                                                                    value: abstract
                                                                })                                                 
@@ -1291,73 +1290,73 @@ function agregarCapas(node){
                                                            items: [
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Nombre',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: contactPerson
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Organización',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: contactOrganization
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Posición',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: contactPosition
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Tipo de dirección',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: addressType
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Dirección',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: address
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Ciudad',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: city
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Provincia o estado',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: stateOrProvince
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Código Postal',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: postCode
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'País',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: country
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Teléfono',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: contactVoiceTelephone
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Fax',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: contactFacsimileTelephone
                                                                }),  
                                                                new Ext.form.TextField({
                                                                     fieldLabel: 'Email',
-                                                                    width: 210,
+                                                                    width: 255,
                                                                     readOnly: true,
                                                                     value: contactElectronicMailAddress
                                                                })
@@ -1800,7 +1799,33 @@ function createLeaf(titulo, servidor, params, options){
                                                                          plugins: new GeoExt.LayerOpacitySliderTip({template: '<div>Opacidad: {opacity}%</div>'})
                                                                      })                                                        
                                                                  ]
-                                                             }),                                                             
+                                                             }),
+                                                             new Ext.form.Checkbox({
+                                                                fieldLabel: 'Single Tile',
+                                                                checked: layer.singleTile,
+                                                                listeners:{
+                                                                   check: function(){
+                                                                       if (layer.singleTile == true){
+                                                                            layer.singleTile = false;
+                                                                            layer.addOptions({singleTile:false});
+                                                                       }else{
+                                                                            layer.singleTile = true;
+                                                                            layer.addOptions({singleTile:true});
+                                                                       }
+                                                                       layer.initResolutions();
+                                                                       layer.setTileSize();
+                                                                       layer.redraw();
+                                                                   }
+                                                                }
+                                                            }),
+                                                            new Ext.Toolbar.Button({
+                                                                fieldLabel: 'Refrescar',
+                                                                tooltip: 'Refrescar',
+                                                                icon: 'img/refresh.png',
+                                                                handler: function(){
+                                                                    layer.redraw();
+                                                                }
+                                                            })
                                                          ]
                                                      })
                                                 })
