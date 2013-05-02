@@ -7,6 +7,7 @@
 
 var map, permalinkProvider, vectors, removeFeature, tbar = [], bbar = [], drag, disableAgregar;
 var savetree = [];
+var featureGridpanel;
 var mapPanel, layerTreePanel, legendPanel;
 var navegador = true, escala = true, minimapa = true, norte = true, posicion = true, grilla = false; 
 var max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38); // (west, south, east, north)
@@ -132,7 +133,7 @@ function createMap(){
         new OpenLayers.Control.NavigationHistory(),
         new OpenLayers.Control.PanZoomBar(),
         new OpenLayers.Control.Navigation(),       
-        new OpenLayers.Control.KeyboardDefaults(),              
+//        new OpenLayers.Control.KeyboardDefaults(),              
         new OpenLayers.Control.WMSGetFeatureInfo(featureInfoOptions)
     ];    
 
@@ -162,7 +163,22 @@ function createMap(){
 //    map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,null,{isBaseLayer: true, maxZoomLevel: 20}));
     
     // create a vector layer that will contain features
-    vectors = new OpenLayers.Layer.Vector("Vectores", {displayInLayerSwitcher: false});  
+    vectors = new OpenLayers.Layer.Vector("Vectores", {displayInLayerSwitcher: false}); 
+//    vectors = new OpenLayers.Layer.Vector("Vectores"); 
+    
+//    vectors = new OpenLayers.Layer.Vector("Departamentos", {
+//                strategies: [new OpenLayers.Strategy.BBOX()],
+//                protocol: new OpenLayers.Protocol.WFS({
+//                    url: "http://localhost:8080/geoserver/wfs",
+//                    version: "1.1.0",
+//                    featurePrefix : "rural",
+//                    featureType: "Departamentos",
+//                    srsName: 'EPSG:900913',
+//                    geometryName: "the_geom"
+//                })
+//            });
+
+//            map.addLayer(wfslayer);
             
     map.addLayer(vectors);    
     
@@ -250,7 +266,7 @@ function getTopBar(){
          box: true
         }
     );
-    map.addControl(select);
+    map.addControl(select);                 
     
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Importar capas',
@@ -403,6 +419,8 @@ function getTopBar(){
          }
      }));     
     
+    tbar.push("-");
+    
     tbar.push(new GeoExt.Action({
             control: new OpenLayers.Control.Navigation(),
             map: map,
@@ -505,308 +523,573 @@ function getTopBar(){
              tooltip: "Obtener información"
      }));
      
-     tbar.push(new Ext.Toolbar.Button({
-         id: "dibujo",
-         tooltip: 'Dibujo',
-         icon: 'img/pencil.png',
-         handler: function(){
-             var window = new Ext.Window({
-                 title: "Dibujo",
-                 iconCls: 'dibujoIcon',
-                 layout: "fit",
-                 width: 440,
-//                 height:300,
-                 resizable: false,
-                 x: mapPanel.getPosition()[0] + (mapPanel.getWidth()/2) - 237,
-                 y: mapPanel.getPosition()[1] + 5,
-//                 shadow: false,
-                 tbar: [
-                        new Ext.Toolbar.Button({
-                             tooltip: 'Puntos',
-                             icon: "img/draw_circle.png",
-                             width: 35,
-                             height: 35,                             
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){
-                                         circle.activate();          
-                                     }else{
-                                         circle.deactivate();          
-                                     }
-                                 }
-                             }
-                         }),
-                        new Ext.Toolbar.Button({
-                             tooltip: 'Líneas',
-                             icon: "img/draw_line.png",
-                             width: 35,
-                             height: 35,                             
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){
-                                         line.activate();          
-                                     }else{
-                                         line.deactivate();          
-                                     }
-                                 }
-                             }
-                         }),
-                         
-                        new Ext.SplitButton({
-                             tooltip: 'Polígonos',
-                             icon: "img/draw_poly.png",
-                             iconCls: 'blist',
-                             width: 35,
-                             height: 35,                             
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){
-                                         if(!isRegular){
-                                             polygonRegular.deactivate();
-                                             polygonFree.activate();
-                                         }else{
-                                             polygonFree.deactivate();
-                                             polygonRegular.activate();
-                                         }         
-                                     }else{
-                                         polygonFree.deactivate();          
-                                         polygonRegular.deactivate();
-                                     }
-                                 }
-                             },
-                             menu: new Ext.menu.Menu({
-                                style: {
-                                    overflow: 'visible'     // For the Combo popup
-                                },items:[
-                                    
-                                    {
-                                        id: "polyIsFree",
-                                        text: 'Libre',
-                                        checked: true,
-                                        group: 'poly',
-                                        listeners: {
-                                            checkchange: function(item, state){
-                                              if(state){
-                                                isRegular = false;  
-                                                Ext.getCmp("polySidesField").disable();
-                                                Ext.getCmp("polySimCheck").disable();
-                                                polygonRegular.deactivate();
-                                                polygonFree.activate();
-                                              }
-                                            }                                            
-                                        }
+     tbar.push("-");
+     
+     tbar.push(
+     
+        [
+        new Ext.Toolbar.Button({
+             tooltip: 'Puntos',
+             icon: "img/draw_circle.png",                           
+             toggleGroup: "nav",  
+             allowDepress: true,
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){
+                         circle.activate();          
+                     }else{
+                         circle.deactivate();          
+                     }
+                 }
+             }
+         }),
+        new Ext.Toolbar.Button({
+             tooltip: 'Líneas',
+             icon: "img/draw_line.png",                            
+             toggleGroup: "nav",  
+             allowDepress: true,
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){
+                         line.activate();          
+                     }else{
+                         line.deactivate();          
+                     }
+                 }
+             }
+         }),
 
-                                    }, {
-                                        id: "polyIsRegular",
-                                        text: 'Regular',
-                                        checked: false,
-                                        group: 'poly',
-                                        listeners: {
-                                            checkchange: function(item, state){
-                                              if(state){
-                                                isRegular = true;
-                                                Ext.getCmp("polySidesField").enable();
-                                                Ext.getCmp("polySimCheck").enable();
-                                                polygonFree.deactivate();
-                                                polygonRegular.activate();
-                                              }
-                                            }                                            
-                                        }
-                                    },
-                                    new Ext.form.NumberField({
-                                        id: "polySidesField",
-                                        disabled: true,
-                                        emptyText: 'Lados',
-                                        width: 50,
-                                        iconCls: 'no-icon',
-                                        maxLength: 3,
-                                        autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete:'off', maxlength: '3'}, //needed torestrict max length
-                                        enableKeyEvents: true,
-                                        listeners: {
-                                            keyup: function(item, e){
-                                                polygonRegular.deactivate();  
-                                                sides = parseInt(Ext.getCmp("polySidesField").getValue());
-                                                if(isNaN(sides)){
-                                                    polygonRegular.handler.sides = 3;
-                                                }else{
-                                                    if(sides < 4){
-                                                        polygonRegular.handler.sides = 3;
-                                                    }else{
-                                                        polygonRegular.handler.sides = sides;
-                                                    }
-                                                }
-                                                polygonRegular.activate();
-                                            }
-                                        }
-                                    }),
-                                    {
-                                        id: "polySimCheck",
-                                        disabled: true,
-                                        text: 'Simétrico',
-                                        checked: true,
-                                        listeners: {
-                                            checkchange: function(item, state){
-                                              polygonRegular.deactivate(); 
-                                              isSimetric = state;
-                                              if(isSimetric){
-                                                  polygonRegular.handler.irregular = false;
-                                              }else{
-                                                  polygonRegular.handler.irregular = true;
-                                              }
-                                              polygonRegular.activate();
-                                            }                                            
-                                        }
+        new Ext.SplitButton({
+             tooltip: 'Polígonos',
+             icon: "img/draw_poly.png",
+             iconCls: 'blist',                           
+             toggleGroup: "nav",  
+             allowDepress: true,
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){
+                         if(!isRegular){
+                             polygonRegular.deactivate();
+                             polygonFree.activate();
+                         }else{
+                             polygonFree.deactivate();
+                             polygonRegular.activate();
+                         }         
+                     }else{
+                         polygonFree.deactivate();          
+                         polygonRegular.deactivate();
+                     }
+                 }
+             },
+             menu: new Ext.menu.Menu({
+                style: {
+                    overflow: 'visible'     // For the Combo popup
+                },items:[
+
+                    {
+                        id: "polyIsFree",
+                        text: 'Libre',
+                        checked: true,
+                        group: 'poly',
+                        listeners: {
+                            checkchange: function(item, state){
+                              if(state){
+                                isRegular = false;  
+                                Ext.getCmp("polySidesField").disable();
+                                Ext.getCmp("polySimCheck").disable();
+                                polygonRegular.deactivate();
+                                polygonFree.activate();
+                              }
+                            }                                            
+                        }
+
+                    }, {
+                        id: "polyIsRegular",
+                        text: 'Regular',
+                        checked: false,
+                        group: 'poly',
+                        listeners: {
+                            checkchange: function(item, state){
+                              if(state){
+                                isRegular = true;
+                                Ext.getCmp("polySidesField").enable();
+                                Ext.getCmp("polySimCheck").enable();
+                                polygonFree.deactivate();
+                                polygonRegular.activate();
+                              }
+                            }                                            
+                        }
+                    },
+                    new Ext.form.NumberField({
+                        id: "polySidesField",
+                        disabled: true,
+                        emptyText: 'Lados',
+                        width: 50,
+                        iconCls: 'no-icon',
+                        maxLength: 3,
+                        autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete:'off', maxlength: '3'}, //needed torestrict max length
+                        enableKeyEvents: true,
+                        listeners: {
+                            keyup: function(item, e){
+                                polygonRegular.deactivate();  
+                                sides = parseInt(Ext.getCmp("polySidesField").getValue());
+                                if(isNaN(sides)){
+                                    polygonRegular.handler.sides = 3;
+                                }else{
+                                    if(sides < 4){
+                                        polygonRegular.handler.sides = 3;
+                                    }else{
+                                        polygonRegular.handler.sides = sides;
                                     }
-                                ]
-                                
-                            })
-                         }),                         
+                                }
+                                polygonRegular.activate();
+                            }
+                        }
+                    }),
+                    {
+                        id: "polySimCheck",
+                        disabled: true,
+                        text: 'Simétrico',
+                        checked: true,
+                        listeners: {
+                            checkchange: function(item, state){
+                              polygonRegular.deactivate(); 
+                              isSimetric = state;
+                              if(isSimetric){
+                                  polygonRegular.handler.irregular = false;
+                              }else{
+                                  polygonRegular.handler.irregular = true;
+                              }
+                              polygonRegular.activate();
+                            }                                            
+                        }
+                    }
+                ]
+
+            })
+         }),                         
+
+         new GeoExt.Action({
+             tooltip: 'Select',
+             icon: "img/cursor.png",                           
+             control: new OpenLayers.Control.SelectFeature(
+                 vectors,
+                 {
+                 clickout: true, toggle: false,
+                 multiple: false, hover: false,
+                 toggleKey: "ctrlKey", // ctrl key removes from selection
+                 multipleKey: "shiftKey", // shift key adds to selection
+                 box: true
+                 }
+             ),
+             map: map,
+             toggleGroup: "nav", 
+             allowDepress: true          
+         }),
+         new Ext.Toolbar.Button({
+             tooltip: 'Mover',
+             icon: "img/hand.png",                            
+             toggleGroup: "nav",  
+             allowDepress: true,
+             control: drag,
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){
+                         drag.activate();          
+                     }else{
+                         drag.deactivate();          
+                     }
+                 }
+             }
+         }),    
+         new Ext.Toolbar.Button({
+             tooltip: 'Borrar features',
+             icon: "img/eraser.png",                           
+             toggleGroup: "nav",  
+             allowDepress: true,
+             control: removeFeature,
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){
+                         removeFeature.activate();          
+                     }else{
+                         removeFeature.deactivate();          
+                     }
+                 }
+             }
+         }),
+         new Ext.Toolbar.Button({
+             tooltip: 'Borrar todo features',
+             icon: "img/trash.png",
+             handler: function(){
+                 vectors.destroyFeatures();
+             }
+         }),new Ext.Toolbar.Button({
+             tooltip: 'Cambiar tamaño',
+             icon: "img/resize.png",
+             iconCls: 'blist',
+             toggleGroup: "nav",  
+             allowDepress: true, 
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){                                     
+                        resize.activate(); 
+                     }else{
+                        resize.deactivate(); 
+                     }
+                 }
+             }
+         }),new Ext.Toolbar.Button({
+             tooltip: 'Rotar',
+             icon: "img/rotate.png",
+             toggleGroup: "nav",  
+             allowDepress: true,
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){                                        
+                        rotate.activate(); 
+                     }else{
+                        rotate.deactivate(); 
+                     }
+                 }
+             }
+         }),new Ext.Toolbar.Button({
+             tooltip: 'Deshacer',
+             icon: "img/undo.png", 
+             handler: function(){
+
+             }
+         }),new Ext.Toolbar.Button({
+             tooltip: 'Rehacer',
+             icon: "img/redo.png", 
+             handler: function(){
+
+             }
+         }),new Ext.Toolbar.Button({
+             tooltip: 'Modificar',
+             icon: "img/pencil.png",                            
+             toggleGroup: "nav",  
+             allowDepress: true,
+             control: modify,
+             listeners: {
+                 toggle: function(){
+                     if(this.pressed){
+                         modify.activate();          
+                     }else{
+                         modify.deactivate();          
+                     }
+                 }
+             }
+         })      
+         ]     
+             
+     );
          
-                         new GeoExt.Action({
-                             tooltip: 'Select',
-                             icon: "img/cursor.png",
-                             width: 35,
-                             height: 35,                             
-                             control: new OpenLayers.Control.SelectFeature(
-                                 vectors,
-                                 {
-                                 clickout: true, toggle: false,
-                                 multiple: false, hover: false,
-                                 toggleKey: "ctrlKey", // ctrl key removes from selection
-                                 multipleKey: "shiftKey", // shift key adds to selection
-                                 box: true
-                                 }
-                             ),
-                             map: map,
-                             toggleGroup: "nav", 
-                             allowDepress: true          
-                         }),
-                         new Ext.Toolbar.Button({
-                             tooltip: 'Mover',
-                             icon: "img/hand.png",
-                             width: 35,
-                             height: 35,                             
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             control: drag,
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){
-                                         drag.activate();          
-                                     }else{
-                                         drag.deactivate();          
-                                     }
-                                 }
-                             }
-                         }),    
-                         new Ext.Toolbar.Button({
-                             tooltip: 'Borrar features',
-                             icon: "img/eraser.png",
-                             width: 35,
-                             height: 35,                             
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             control: removeFeature,
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){
-                                         removeFeature.activate();          
-                                     }else{
-                                         removeFeature.deactivate();          
-                                     }
-                                 }
-                             }
-                         }),
-                         new Ext.Toolbar.Button({
-                             tooltip: 'Borrar todo features',
-                             icon: "img/trash.png",
-                             width: 35,
-                             height: 35,  
-                             handler: function(){
-                                 vectors.destroyFeatures();
-                             }
-                         }),new Ext.Toolbar.Button({
-                             tooltip: 'Cambiar tamaño',
-                             icon: "img/resize.png",
-                             iconCls: 'blist',
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             width: 35,
-                             height: 35,  
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){                                     
-                                        resize.activate(); 
-                                     }else{
-                                        resize.deactivate(); 
-                                     }
-                                 }
-                             }
-                         }),new Ext.Toolbar.Button({
-                             tooltip: 'Rotar',
-                             icon: "img/rotate.png",
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             width: 35,
-                             height: 35,  
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){                                        
-                                        rotate.activate(); 
-                                     }else{
-                                        rotate.deactivate(); 
-                                     }
-                                 }
-                             }
-                         }),new Ext.Toolbar.Button({
-                             tooltip: 'Deshacer',
-                             icon: "img/undo.png",
-                             width: 35,
-                             height: 35,  
-                             handler: function(){
-
-                             }
-                         }),new Ext.Toolbar.Button({
-                             tooltip: 'Rehacer',
-                             icon: "img/redo.png",
-                             width: 35,
-                             height: 35,  
-                             handler: function(){
-
-                             }
-                         }),new Ext.Toolbar.Button({
-                             tooltip: 'Modificar',
-                             icon: "img/pencil.png",
-                             width: 35,
-                             height: 35,                             
-                             toggleGroup: "nav",  
-                             allowDepress: true,
-                             control: modify,
-                             listeners: {
-                                 toggle: function(){
-                                     if(this.pressed){
-                                         modify.activate();          
-                                     }else{
-                                         modify.deactivate();          
-                                     }
-                                 }
-                             }
-                         })      
-                 ]
-             });
-             window.show();
-             window.on('close',function(){
-                 Ext.getCmp("dibujo").enable();
-             });
-             Ext.getCmp("dibujo").disable();
-         }
-     }));     
+     tbar.push("-");    
+     
+//     tbar.push(new Ext.Toolbar.Button({
+//         id: "dibujo",
+//         tooltip: 'Dibujo',
+//         icon: 'img/pencil.png',
+//         handler: function(){
+//             var window = new Ext.Window({
+//                 title: "Dibujo",
+//                 iconCls: 'dibujoIcon',
+//                 layout: "fit",
+//                 width: 440,
+////                 height:300,
+//                 resizable: false,
+//                 x: mapPanel.getPosition()[0] + (mapPanel.getWidth()/2) - 237,
+//                 y: mapPanel.getPosition()[1] + 5,
+////                 shadow: false,
+//                 tbar: [
+//                        new Ext.Toolbar.Button({
+//                             tooltip: 'Puntos',
+//                             icon: "img/draw_circle.png",
+//                             width: 35,
+//                             height: 35,                             
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){
+//                                         circle.activate();          
+//                                     }else{
+//                                         circle.deactivate();          
+//                                     }
+//                                 }
+//                             }
+//                         }),
+//                        new Ext.Toolbar.Button({
+//                             tooltip: 'Líneas',
+//                             icon: "img/draw_line.png",
+//                             width: 35,
+//                             height: 35,                             
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){
+//                                         line.activate();          
+//                                     }else{
+//                                         line.deactivate();          
+//                                     }
+//                                 }
+//                             }
+//                         }),
+//                         
+//                        new Ext.SplitButton({
+//                             tooltip: 'Polígonos',
+//                             icon: "img/draw_poly.png",
+//                             iconCls: 'blist',
+//                             width: 35,
+//                             height: 35,                             
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){
+//                                         if(!isRegular){
+//                                             polygonRegular.deactivate();
+//                                             polygonFree.activate();
+//                                         }else{
+//                                             polygonFree.deactivate();
+//                                             polygonRegular.activate();
+//                                         }         
+//                                     }else{
+//                                         polygonFree.deactivate();          
+//                                         polygonRegular.deactivate();
+//                                     }
+//                                 }
+//                             },
+//                             menu: new Ext.menu.Menu({
+//                                style: {
+//                                    overflow: 'visible'     // For the Combo popup
+//                                },items:[
+//                                    
+//                                    {
+//                                        id: "polyIsFree",
+//                                        text: 'Libre',
+//                                        checked: true,
+//                                        group: 'poly',
+//                                        listeners: {
+//                                            checkchange: function(item, state){
+//                                              if(state){
+//                                                isRegular = false;  
+//                                                Ext.getCmp("polySidesField").disable();
+//                                                Ext.getCmp("polySimCheck").disable();
+//                                                polygonRegular.deactivate();
+//                                                polygonFree.activate();
+//                                              }
+//                                            }                                            
+//                                        }
+//
+//                                    }, {
+//                                        id: "polyIsRegular",
+//                                        text: 'Regular',
+//                                        checked: false,
+//                                        group: 'poly',
+//                                        listeners: {
+//                                            checkchange: function(item, state){
+//                                              if(state){
+//                                                isRegular = true;
+//                                                Ext.getCmp("polySidesField").enable();
+//                                                Ext.getCmp("polySimCheck").enable();
+//                                                polygonFree.deactivate();
+//                                                polygonRegular.activate();
+//                                              }
+//                                            }                                            
+//                                        }
+//                                    },
+//                                    new Ext.form.NumberField({
+//                                        id: "polySidesField",
+//                                        disabled: true,
+//                                        emptyText: 'Lados',
+//                                        width: 50,
+//                                        iconCls: 'no-icon',
+//                                        maxLength: 3,
+//                                        autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete:'off', maxlength: '3'}, //needed torestrict max length
+//                                        enableKeyEvents: true,
+//                                        listeners: {
+//                                            keyup: function(item, e){
+//                                                polygonRegular.deactivate();  
+//                                                sides = parseInt(Ext.getCmp("polySidesField").getValue());
+//                                                if(isNaN(sides)){
+//                                                    polygonRegular.handler.sides = 3;
+//                                                }else{
+//                                                    if(sides < 4){
+//                                                        polygonRegular.handler.sides = 3;
+//                                                    }else{
+//                                                        polygonRegular.handler.sides = sides;
+//                                                    }
+//                                                }
+//                                                polygonRegular.activate();
+//                                            }
+//                                        }
+//                                    }),
+//                                    {
+//                                        id: "polySimCheck",
+//                                        disabled: true,
+//                                        text: 'Simétrico',
+//                                        checked: true,
+//                                        listeners: {
+//                                            checkchange: function(item, state){
+//                                              polygonRegular.deactivate(); 
+//                                              isSimetric = state;
+//                                              if(isSimetric){
+//                                                  polygonRegular.handler.irregular = false;
+//                                              }else{
+//                                                  polygonRegular.handler.irregular = true;
+//                                              }
+//                                              polygonRegular.activate();
+//                                            }                                            
+//                                        }
+//                                    }
+//                                ]
+//                                
+//                            })
+//                         }),                         
+//         
+//                         new GeoExt.Action({
+//                             tooltip: 'Select',
+//                             icon: "img/cursor.png",
+//                             width: 35,
+//                             height: 35,                             
+//                             control: new OpenLayers.Control.SelectFeature(
+//                                 vectors,
+//                                 {
+//                                 clickout: true, toggle: false,
+//                                 multiple: false, hover: false,
+//                                 toggleKey: "ctrlKey", // ctrl key removes from selection
+//                                 multipleKey: "shiftKey", // shift key adds to selection
+//                                 box: true
+//                                 }
+//                             ),
+//                             map: map,
+//                             toggleGroup: "nav", 
+//                             allowDepress: true          
+//                         }),
+//                         new Ext.Toolbar.Button({
+//                             tooltip: 'Mover',
+//                             icon: "img/hand.png",
+//                             width: 35,
+//                             height: 35,                             
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             control: drag,
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){
+//                                         drag.activate();          
+//                                     }else{
+//                                         drag.deactivate();          
+//                                     }
+//                                 }
+//                             }
+//                         }),    
+//                         new Ext.Toolbar.Button({
+//                             tooltip: 'Borrar features',
+//                             icon: "img/eraser.png",
+//                             width: 35,
+//                             height: 35,                             
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             control: removeFeature,
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){
+//                                         removeFeature.activate();          
+//                                     }else{
+//                                         removeFeature.deactivate();          
+//                                     }
+//                                 }
+//                             }
+//                         }),
+//                         new Ext.Toolbar.Button({
+//                             tooltip: 'Borrar todo features',
+//                             icon: "img/trash.png",
+//                             width: 35,
+//                             height: 35,  
+//                             handler: function(){
+//                                 vectors.destroyFeatures();
+//                             }
+//                         }),new Ext.Toolbar.Button({
+//                             tooltip: 'Cambiar tamaño',
+//                             icon: "img/resize.png",
+//                             iconCls: 'blist',
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             width: 35,
+//                             height: 35,  
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){                                     
+//                                        resize.activate(); 
+//                                     }else{
+//                                        resize.deactivate(); 
+//                                     }
+//                                 }
+//                             }
+//                         }),new Ext.Toolbar.Button({
+//                             tooltip: 'Rotar',
+//                             icon: "img/rotate.png",
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             width: 35,
+//                             height: 35,  
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){                                        
+//                                        rotate.activate(); 
+//                                     }else{
+//                                        rotate.deactivate(); 
+//                                     }
+//                                 }
+//                             }
+//                         }),new Ext.Toolbar.Button({
+//                             tooltip: 'Deshacer',
+//                             icon: "img/undo.png",
+//                             width: 35,
+//                             height: 35,  
+//                             handler: function(){
+//
+//                             }
+//                         }),new Ext.Toolbar.Button({
+//                             tooltip: 'Rehacer',
+//                             icon: "img/redo.png",
+//                             width: 35,
+//                             height: 35,  
+//                             handler: function(){
+//
+//                             }
+//                         }),new Ext.Toolbar.Button({
+//                             tooltip: 'Modificar',
+//                             icon: "img/pencil.png",
+//                             width: 35,
+//                             height: 35,                             
+//                             toggleGroup: "nav",  
+//                             allowDepress: true,
+//                             control: modify,
+//                             listeners: {
+//                                 toggle: function(){
+//                                     if(this.pressed){
+//                                         modify.activate();          
+//                                     }else{
+//                                         modify.deactivate();          
+//                                     }
+//                                 }
+//                             }
+//                         })      
+//                 ]
+//             });
+//             window.show();
+//             window.on('close',function(){
+//                 
+//                 Ext.getCmp("dibujo").enable();
+//             });
+//             Ext.getCmp("dibujo").disable();
+//         }
+//     }));     
 
      tbar.push("->");
 
@@ -1854,6 +2137,94 @@ function createLeaf(titulo, servidor, params, options){
                         handler: function(){
 
                         }
+                    },{
+                        text: 'Información',
+                        icon: "img/information-italic.png",
+                        handler: function(){
+
+                            var layer = map.getLayersByName(e.attributes.layer)[0];
+                            var layerfullname = layer.params.LAYERS;
+                            var layername = layerfullname.substr(layerfullname.indexOf(":") + 1);
+                            var nombre = numerarNombre("wfs" + layer.name);
+                            
+                            var protocolo = new OpenLayers.Protocol.WFS({
+                                url: layer.url,
+                                version: "1.1.0",
+                                featureType: layername,
+                                srsName: 'EPSG:900913',
+                                defaultFilter: new OpenLayers.Filter.Spatial({
+                                    type: OpenLayers.Filter.Spatial.BBOX,
+                                    value: map.getExtent()
+                                })
+                            });
+                            
+                            protocolo.read({
+                                readOptions: {output: "object"},
+                                maxFeatures: 100,
+                                callback: function(resp){
+
+                                    if(resp.error){
+                                        Ext.MessageBox.alert('Error', 'Ha ocurrido un error al tratar de obtener la información solicitada');
+                                    }else{
+                                        
+                                        var attributesJSON = resp.features[0].attributes;
+                                        var columns = [];
+                                        var fields = [];
+
+                                        for(attribute in attributesJSON){
+                                            columns.push({header: attribute, dataIndex: attribute, sortable: true});
+                                            if(isNaN(parseFloat(attributesJSON[attribute]))){
+                                                fields.push({name: attribute, type: Ext.data.Types.STRING});
+                                            }else{
+                                                fields.push({name: attribute, type: Ext.data.Types.FLOAT});
+                                            }
+
+                                        }                                      
+
+                                        var wfslayer = new OpenLayers.Layer.Vector(nombre, {
+                                            displayInLayerSwitcher: false
+                                        });
+
+                                        map.addLayer(wfslayer);  
+
+                                        wfslayer.addFeatures(resp.features);
+
+                                        var grid = new Ext.grid.GridPanel({
+                                            viewConfig: {forceFit: false},
+                                            border: false,
+                                            store: new GeoExt.data.FeatureStore({
+                                                fields: fields,
+                                                layer: wfslayer                                   
+                                            }),
+                                            sm: new GeoExt.grid.FeatureSelectionModel(),
+                                            columns: columns
+                                        });           
+
+                                        var window = new Ext.Window({
+                                            title: layer.name,
+                                            iconCls: 'informacionIcon',
+                                            layout: "fit",
+                                            width: (mapPanel.getWidth()),
+                                            height: (mapPanel.getHeight()) / 4,
+                                            x: mapPanel.getPosition()[0],
+                                            y: mapPanel.getPosition()[1] + ((mapPanel.getHeight()) * 3 / 4),
+                                            resizable: false,
+                                            autoScroll: true,
+                                            items:[grid]
+                                        }).show();  
+
+                                        window.on('close',function(){
+                                            map.removeLayer(wfslayer);
+                                        });                                        
+
+                                    }
+
+
+
+                                }
+                            });
+
+                        }
                     }]
                 });
 
@@ -1948,6 +2319,38 @@ function generateViewport(){
         }
     });
     
+    wfsstore = new GeoExt.data.FeatureStore({
+        fields: [],
+        proxy: new GeoExt.data.ProtocolProxy({
+            protocol: new OpenLayers.Protocol.WFS({
+                url: "/geoserver/ows",
+                version: "1.1.0",
+                featureType: "Departamentos"
+            })
+        }),
+        autoLoad: false
+    });    
+    
+    
+    featureGridpanel = new Ext.grid.GridPanel({
+        viewConfig: {forceFit: false},
+        border: false,
+        store: wmsServerStore,
+        sm: new GeoExt.grid.FeatureSelectionModel(),
+        columns: [
+            {header: "nombre", dataIndex: "nombre"},
+            {header: "poblacion_2001", dataIndex: "poblacion_2001"}            
+        ]
+    });
+    
+    var queryPanel = new Ext.FormPanel({
+        labelWidth: 85, // label settings here cascade unless overridden
+        frame:true,
+        height: 185,
+        border: false,
+        items: []
+    });
+    
     //defino el viewport 
     new Ext.Viewport({
             layout: "border",  
@@ -1988,8 +2391,19 @@ function generateViewport(){
                             region: 'center',
                             border:false,
                             layout: 'border',
-                            items: [mapPanel]
+                            items: [
+                                mapPanel,
+//                                {
+//                                    region: 'south',
+//                                    collapseMode: 'mini',
+//                                    split: true,
+//                                    height: 200,
+////                                    layout: 'border',
+//                                    items:[featureGridpanel]
+//                                }                                
+                            ]
                         }
+
                     ]
                 }
             ]
