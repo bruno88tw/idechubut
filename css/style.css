@@ -15,6 +15,10 @@
    background:transparent url(../img/question.png) no-repeat 0 0;
 }
 
+.layersIcon{
+   background:transparent url(../img/map_add.png) no-repeat 0 0;
+}
+
 .acercaDeIcon{
    background:transparent url(../img/star.png) no-repeat 0 0;
 }
