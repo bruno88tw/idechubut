@@ -68,11 +68,27 @@
 }
 
 .guardarIcon{
-   background:transparent url(../img/disk.png) no-repeat 0 0;
+   background:transparent url(../img/folder-save.png) no-repeat 0 0;
 }
 
 .abrirIcon{
-   background:transparent url(../img/open.png) no-repeat 0 0;
+   background:transparent url(../img/folder-open.png) no-repeat 0 0;
+}
+
+.mapIcon{
+   background:transparent url(../img/map.png) no-repeat 0 0;
+}
+
+.osmIcon{
+   background:transparent url(../img/osm.png) no-repeat 0 0;
+}
+
+.googleIcon{
+   background:transparent url(../img/google.png) no-repeat 0 0;
+}
+
+.bingIcon{
+   background:transparent url(../img/bing.png) no-repeat 0 0;
 }
 
 .scalebox{
@@ -129,7 +145,7 @@
 .rosa{
    position:absolute; 
    z-index:100000; 
-   right:0px; 
+   right:10px; 
    top:10px
 }
 
