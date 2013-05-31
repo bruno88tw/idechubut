@@ -138,11 +138,43 @@ function generateViewport(){
         rootVisible: false,
         border: false,
         enableDD: true,
-        useArrows: true,
-        tbar:[
-                        {
+//        useArrows: true,
+        tbar:[ 
+            new Ext.Toolbar.Button({
+                tooltip: 'Agregar capa',
+                icon: 'img/map_add.png',
+                handler: function(){
+                    agregarCapas(null);
+                }
+            }),
+                        new Ext.Toolbar.Button({
+                tooltip: 'Agregar carpeta',
+                icon: 'img/folder-add.png',
+                handler: function(){
+                   var newFolder = createNode("Nueva carpeta");
+                   Ext.getCmp("myTreePanel").getRootNode().appendChild(newFolder);
+                   setFolderName(newFolder);
+                }
+            }),    
+            new Ext.Toolbar.Button({
+                tooltip: 'Expandir todo',
+                icon: 'img/list-add.png',
+                handler: function(){
+                   expandAll(Ext.getCmp("myTreePanel").getRootNode());
+                }
+            }),
+            new Ext.Toolbar.Button({
+                tooltip: 'Colapsar todo',
+                icon: 'img/list-remove.png',
+                handler: function(){
+                   collapseAll(Ext.getCmp("myTreePanel").getRootNode());
+                }
+            }),           
+        ],
+        bbar: [            
+            {
                 icon: "img/map.png",
-//                text: "Mapa base",
+                text: "Mapa Base",
                 menu: new Ext.menu.Menu({
                     items: [
                         {
@@ -214,14 +246,8 @@ function generateViewport(){
                         }                       
                     ]
                 })
-            }, 
-            new Ext.Toolbar.Button({
-                tooltip: 'Agregar capa',
-                icon: 'img/map_add.png',
-                handler: function(){
-                    agregarCapas(null);
-                }
-            }),
+            },
+            "->",
             new Ext.Toolbar.Button({
                 tooltip: 'Importar capas',
                 icon: 'img/folder-open.png',
@@ -231,30 +257,7 @@ function generateViewport(){
                 tooltip: 'Guardar capas',
                 icon: 'img/folder-save.png',
                 handler: onGuardarCapas
-            }),
-            new Ext.Toolbar.Button({
-                tooltip: 'Agregar carpeta',
-                icon: 'img/folder-add.png',
-                handler: function(){
-                   var newFolder = createNode("Nueva carpeta");
-                   Ext.getCmp("myTreePanel").getRootNode().appendChild(newFolder);
-                   setFolderName(newFolder);
-                }
-            }),
-            new Ext.Toolbar.Button({
-                tooltip: 'Expandir todo',
-                icon: 'img/list-add.png',
-                handler: function(){
-                   expandAll(Ext.getCmp("myTreePanel").getRootNode());
-                }
-            }),
-            new Ext.Toolbar.Button({
-                tooltip: 'Colapsar todo',
-                icon: 'img/list-remove.png',
-                handler: function(){
-                   collapseAll(Ext.getCmp("myTreePanel").getRootNode());
-                }
-            })
+            })        
         ]
     });     
     
@@ -404,19 +407,27 @@ function generateViewport(){
 //                        },
                         {
                             region: 'west',
+                            layout: "border",
                             collapseMode: 'mini',
                             split: true,                            
                             width: 250,
                             maxWidth: 250,
                             minWidth: 250,
-                            items:new Ext.TabPanel({
-                                activeTab: 0,
-                                resizeTabs: true,
-                                height: 1000,
-                                border: false,
-                                tabWidth: 125,                                
-                                items: [layerTreePanel,legendPanel]
-                            })
+                            items: [
+                                new Ext.TabPanel({
+                                    region: "center",
+                                    activeTab: 0,
+                                    resizeTabs: true,
+//                                    autoHeight: true,
+                                    border: false,
+                                    tabWidth: 125,                                
+                                    items: [layerTreePanel,legendPanel]
+                                })                                                              
+                            ]
+                                    
+                                 
+                                 
+
                         },
 //                        {
 //                            region: 'east',
@@ -479,8 +490,15 @@ function finalConfig(){
     
     map.addControl(new OpenLayers.Control.MousePosition({
         div: document.getElementById('position'),
-        prefix: '<b>lon:</b> ',
-        separator: '&nbsp; <b>lat:</b> ' 
+//        prefix: '<b>lon:</b> ',
+//        separator: '&nbsp; <b>lat:</b> ',
+//        displayProjection: projection4326,
+//        numDigits: 2,
+        formatOutput: function(lonLat) {
+            var markup = convertDMS(lonLat.lat, "LAT");
+            markup += " " + convertDMS(lonLat.lon, "LON");
+            return markup
+        }
     }));     
 
     var scaleCombo = new Ext.form.ComboBox({

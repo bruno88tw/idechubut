@@ -1121,15 +1121,15 @@ function agregarCapas(node){
         columns: [
             expander,
             {
-              header: "Nombre",
-              dataIndex: "name",
-              sortable: true
-            },
-            {
               header: "Título",
               dataIndex: "title",
               sortable: true
-            }
+            },
+            {
+              header: "Nombre",
+              dataIndex: "name",
+              sortable: true
+            }            
         ],
         plugins: expander
     });
@@ -2111,3 +2111,58 @@ function agregarDescendencia(father,children){
 
 
 
+function convertDMS(coordinate, type) {
+    var coords;
+
+    abscoordinate = Math.abs(coordinate)
+    coordinatedegrees = Math.floor(abscoordinate);
+
+    coordinateminutes = (abscoordinate - coordinatedegrees)/(1/60);
+    tempcoordinateminutes = coordinateminutes;
+    coordinateminutes = Math.floor(coordinateminutes);
+    coordinateseconds = (tempcoordinateminutes - coordinateminutes)/(1/60);
+    coordinateseconds =  Math.round(coordinateseconds*10);
+    coordinateseconds /= 10;
+    coordinateseconds = Math.round(coordinateseconds);
+
+    if( coordinatedegrees < 10 )
+      coordinatedegrees = "0" + coordinatedegrees;
+
+    if( coordinateminutes < 10 )
+      coordinateminutes = "0" + coordinateminutes;
+
+    if( coordinateseconds < 10 )
+      coordinateseconds = "0" + coordinateseconds;
+
+      if(type == "LAT"){
+          coords = "<b>lat: </b>"+coordinatedegrees+"º "+coordinateminutes+"' "+coordinateseconds+"'' "+this.getHemi(coordinate, type)+"&nbsp&nbsp";
+      }else{
+          coords = "<b>lon: </b>"+coordinatedegrees+"º "+coordinateminutes+"' "+coordinateseconds+"'' "+this.getHemi(coordinate, type);
+      }            
+
+    return coords;
+}
+
+  /**
+   * Return the hemisphere abbreviation for this coordinate.
+   */
+function getHemi(coordinate, type) {
+    var coordinatehemi = "";
+    if (type == 'LAT') {
+      if (coordinate >= 0) {
+        coordinatehemi = "N";
+      }
+      else {
+        coordinatehemi = "S";
+      }
+    }
+    else if (type == 'LON') {
+      if (coordinate >= 0) {
+        coordinatehemi = "E";
+      } else {
+        coordinatehemi = "O";
+      }
+    }
+
+    return coordinatehemi;
+}
