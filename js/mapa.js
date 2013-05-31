@@ -11,6 +11,18 @@
 
 OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
+//Ext.Loader.setConfig({
+//    enabled: true
+//});
+//Ext.Loader.setPath('Ext.ux', '../ux');
+//
+//Ext.require([
+//    'Ext.grid.*',
+//    'Ext.data.*',
+//    'Ext.ux.RowExpander',
+//    'Ext.selection.CheckboxModel'
+//]);
+
 Ext.onReady(function() {
     
     Ext.QuickTips.init();  //initialize quick tips   
@@ -118,7 +130,6 @@ function generateViewport(){
     restoreIndex(index);
     
     layerTreePanel = new Ext.tree.TreePanel({
-        flex:1,
         autoScroll: true,
         iconCls: "layerStackIcon",
         title: 'Capas',
@@ -247,21 +258,21 @@ function generateViewport(){
         ]
     });     
     
-    layerTreePanel2 = new Ext.tree.TreePanel({
-        flex:1,
-        autoScroll: true,
-        title: 'Capas2',
-        root: new GeoExt.tree.OverlayLayerContainer({
-            text: "Solo overlays",
-            icon: "img/layers.png",
-            map: map,
-            expanded: false
-        }),
-        rootVisible: false,
-        border: false,
-        enableDD: true,
-        useArrows: true
-    }); 
+//    layerTreePanel2 = new Ext.tree.TreePanel({
+//        flex:1,
+//        autoScroll: true,
+//        title: 'Capas2',
+//        root: new GeoExt.tree.OverlayLayerContainer({
+//            text: "Solo overlays",
+//            icon: "img/layers.png",
+//            map: map,
+//            expanded: false
+//        }),
+//        rootVisible: false,
+//        border: false,
+//        enableDD: true,
+//        useArrows: true
+//    }); 
     
     legendPanel = new GeoExt.LegendPanel({
         title: 'Leyenda',
@@ -284,6 +295,7 @@ function generateViewport(){
     featureGridpanel = new Ext.grid.GridPanel({
         viewConfig: {forceFit: false},
         border: false,
+        columnLines: true,
         store: [],
         sm: new GeoExt.grid.FeatureSelectionModel(),
         columns: []

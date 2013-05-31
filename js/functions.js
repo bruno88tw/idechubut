@@ -1104,6 +1104,12 @@ function agregarCapas(node){
             }
         }
     });    
+    
+   var expander = new Ext.ux.grid.RowExpander({
+        tpl : new Ext.Template(
+            '<HR><p><b>Resumen:</b> {abstract}</p><HR>'
+        )
+    }); 
 
    capabilitiesGrid = new Ext.grid.GridPanel({
         border: false,
@@ -1111,19 +1117,21 @@ function agregarCapas(node){
           forceFit: true
         },
         store: capStore,
+        columnLines: true,
         columns: [
-//        {
-//          header: "Nombre",
-//          dataIndex: "name",
-//          sortable: true},
-        {
-          header: "Título",
-          dataIndex: "title",
-          sortable: true},
-        {
-          header: "Resumen",
-          dataIndex: "abstract"}
-        ]
+            expander,
+            {
+              header: "Nombre",
+              dataIndex: "name",
+              sortable: true
+            },
+            {
+              header: "Título",
+              dataIndex: "title",
+              sortable: true
+            }
+        ],
+        plugins: expander
     });
 
 
@@ -1876,6 +1884,7 @@ function createLeaf(titulo, servidor, params, options){
                                         var columns = [];
                                         var fields = [];
 
+                                        columns.push(new Ext.grid.RowNumberer());
                                         for(attribute in attributesJSON){
                                             columns.push({header: attribute, dataIndex: attribute, sortable: true});
                                             if(isNaN(parseFloat(attributesJSON[attribute]))){
