@@ -19,7 +19,7 @@ function getCapabilitiesUrl(wms_url){
         cap_url = wms_url + "&service=wms&request=GetCapabilities";
     }    
     
-    return cap_url;
+    return cap_url;ge
     
 }
 
@@ -106,72 +106,12 @@ function getTopBar(){
 //         box: true
 //        }
 //    );
-//    map.addControl(select);                                      
-    
-     tbar.push(
-            {
-                icon: "img/map.png",
-                text: "Mapa base",
-                menu: new Ext.menu.Menu({
-                    items: [
-                        {
-                            text: "OpenStreetMap",
-                            iconCls: "osmIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("OpenStreetMap")[0]);
-                            }
-                        },{
-                            text: "Google Streets",
-                            iconCls: "googleIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("Google Streets")[0]);
-                            }
-                        },{
-                            text: "Google Terrain",
-                            iconCls: "googleIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("Google Terrain")[0]);
-                            }
-                        },{
-                            text: "Google Satellite",
-                            iconCls: "googleIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("Google Satellite")[0]);
-                            }
-                        },{
-                            text: "Google Hybrid",
-                            iconCls: "googleIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("Google Hybrid")[0]);
-                            }
-                        },{
-                            text: "Bing Road",
-                            iconCls: "bingIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("Bing Road")[0]);
-                            }
-                        },{
-                            text: "Bing Aerial",
-                            iconCls: "bingIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("Bing Aerial")[0]);
-                            }
-                        },{
-                            text: "Bing Hybrid",
-                            iconCls: "bingIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("Bing Hybrid")[0]);
-                            }
-                        }                       
-                    ]
-                })
-            }         
-     );    
+//    map.addControl(select);                                          
     
     tbar.push(new GeoExt.Action({
             control: new OpenLayers.Control.Navigation(),
             map: map,
-            text: "Mover",
+//            text: "Mover",
             icon: "img/arrow-move.png",
             toggleGroup: "nav",
             tooltip: "Navegación",
@@ -181,7 +121,7 @@ function getTopBar(){
     tbar.push(new GeoExt.Action({
             control: new OpenLayers.Control.ZoomToMaxExtent(),
             map: map,
-            text:"Zoom",
+//            text:"Zoom",
             icon: "img/magnifier-zoom-fit.png",
             tooltip: 'Zoom a la máxima extensión'
     }));
@@ -189,7 +129,7 @@ function getTopBar(){
     tbar.push(new GeoExt.Action({
             control: new OpenLayers.Control.ZoomBox(),
             map: map,
-            text:"Acercar",
+//            text:"Acercar",
             icon: "img/magnifier-zoom-in.png",
             toggleGroup: "nav",
             tooltip: "Zoom in"
@@ -198,7 +138,7 @@ function getTopBar(){
     tbar.push(new GeoExt.Action({
              control: new OpenLayers.Control.ZoomBox({out: true}),
              map: map,
-             text:"Alejar",
+//             text:"Alejar",
              icon: "img/magnifier-zoom-out.png",
              toggleGroup: "nav",
              tooltip: "Zoom out"
@@ -206,7 +146,7 @@ function getTopBar(){
 
     tbar.push(new GeoExt.Action({
              icon: "img/control-right.png",
-             text:"Anterior",
+//             text:"Anterior",
              control: map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].previous,
              disabled: true,
              tooltip: "Zoom anterior"
@@ -214,7 +154,7 @@ function getTopBar(){
 
      tbar.push(new GeoExt.Action({
              icon: "img/control-left.png",
-             text:"Siguiente",
+//             text:"Siguiente",
              control: map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].next,
              disabled: true,
              tooltip: "Zoom posterior"
@@ -239,7 +179,7 @@ function getTopBar(){
              }
          }),
          map: map,
-         text:"Distancia",
+//         text:"Distancia",
          toggleGroup: "nav",
          icon: 'img/rulerline.png',
          tooltip: "Medidor de distancias"
@@ -264,7 +204,7 @@ function getTopBar(){
              }
          }),
          map: map,
-         text:"Superficie",
+//         text:"Superficie",
          toggleGroup: "nav",
          icon: 'img/rulerarea.png',
          tooltip: "Medidor de superficie"
@@ -273,7 +213,7 @@ function getTopBar(){
      tbar.push(new GeoExt.Action({
              control: map.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo')[0],
              map: map,
-             text:"Información",
+//             text:"Información",
              icon: "img/information-italic.png",
              toggleGroup: "nav",
              tooltip: "Obtener información"
@@ -899,7 +839,7 @@ function getTopBar(){
 
      tbar.push(new Ext.Toolbar.Button({
          id: "configuracion",
-         text: "Configuración",
+//         text: "Configuración",
          tooltip: 'Configuración',
          icon: 'img/gear.png',
          handler: function(){
@@ -1037,7 +977,7 @@ function getTopBar(){
 
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Imprimir',
-         text: "Imprimir",
+//         text: "Imprimir",
          icon: 'img/printer.png',
          handler: function(){
 
@@ -1064,7 +1004,7 @@ function getTopBar(){
 
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Ayuda',
-         text: "Ayuda",
+//         text: "Ayuda",
          icon: 'img/question.png',
          handler: function(){
              var window = new Ext.Window({
@@ -1090,7 +1030,7 @@ function getTopBar(){
 
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Acerca de',
-         text:"Acerca de",
+//         text:"Acerca de",
          icon: 'img/star.png',
          handler: function(){
              var window = new Ext.Window({
@@ -1172,10 +1112,10 @@ function agregarCapas(node){
         },
         store: capStore,
         columns: [
-        {
-          header: "Nombre",
-          dataIndex: "name",
-          sortable: true},
+//        {
+//          header: "Nombre",
+//          dataIndex: "name",
+//          sortable: true},
         {
           header: "Título",
           dataIndex: "title",
@@ -1503,7 +1443,9 @@ function agregarCapas(node){
                                 Ext.getCmp("myTreePanel").getRootNode().appendChild(newLeaf);  
                             }else{
                                 Ext.getCmp("myTreePanel").getRootNode().findChild("id",node.attributes.id,true).appendChild(newLeaf);  
-                            }                               
+                            }    
+                            
+                            map.raiseLayer(wfsLayer,1);
                             
                     });
                 }

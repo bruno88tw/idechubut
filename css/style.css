@@ -91,6 +91,22 @@
    background:transparent url(../img/bing.png) no-repeat 0 0;
 }
 
+.ignIcon{
+   background:transparent url(../img/ign.png) no-repeat 0 0;
+}
+
+.mapQuestIcon{
+   background:transparent url(../img/mapQuest.png) no-repeat 0 0;
+}
+
+.layerStackIcon{
+   background:transparent url(../img/layers-stack.png) no-repeat 0 0;
+}
+
+.legendIcon{
+   background:transparent url(../img/legend.png) no-repeat 0 0;
+}
+
 .scalebox{
    position:absolute; 
    display: block;
