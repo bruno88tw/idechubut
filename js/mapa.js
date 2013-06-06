@@ -40,7 +40,7 @@ function createMap(){
         {
             controls: [
                 new OpenLayers.Control.NavigationHistory(),
-                new OpenLayers.Control.PanZoomBar(),
+//                new OpenLayers.Control.PanZoomBar(),
                 new OpenLayers.Control.Navigation(),                   
                 new OpenLayers.Control.WMSGetFeatureInfo(featureInfoOptions)        
             ],
@@ -50,7 +50,9 @@ function createMap(){
             displayProjection: projection4326, 
             units: 'm'
         }
-    );                    
+    );     
+        
+    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,20));    
         
 //    map.addLayer(new OpenLayers.Layer.CloudMade(
 //        'Cloudmade', 
@@ -58,13 +60,21 @@ function createMap(){
 //        {useCanvas: OpenLayers.Layer.Grid.ONECANVASPERLAYER}
 //    ));     
    
-    map.addLayer(new OpenLayers.Layer.WMS(
-        "IGN", 
-        "http://172.158.158.1/geoserver/wms", 
-        {layers: "rural:basemap", transparent: 'false', styles:"", format: 'image/jpeg', tiled: true, tilesOrigin : map.maxExtent.left + ',' + map.maxExtent.bottom}, 
-        {isBaseLayer: true, visibility: false, singleTile: true, displayInLayerSwitcher: false, buffer: 0, yx : {'EPSG:4326' : true}}
-    ));
-        
+//    map.addLayer(new OpenLayers.Layer.WMS(
+//        "IGN", 
+//        "http://172.158.0.21/geoserver/wms", 
+//        {layers: "rural:basemap", transparent: 'false', styles:"", format: 'image/jpeg', tiled: true, tilesOrigin : map.maxExtent.left + ',' + map.maxExtent.bottom}, 
+//        {isBaseLayer: true, visibility: false, singleTile: true, displayInLayerSwitcher: false, buffer: 0, yx : {'EPSG:4326' : true}}
+//    ));
+                    
+    map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
+    map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
+    map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
+    map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 6, maxZoomLevel: 19}));
+    map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 6, resolutions: resolutions, isBaseLayer:true, sphericalMercator: true}));    
+    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: bingApiKey, type: "Road", zoomOffset: 6, resolutions: resolutions}));
+    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: bingApiKey, type: "Aerial", zoomOffset: 6, resolutions: resolutions}));
+    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: bingApiKey, type: "AerialWithLabels", zoomOffset: 6, resolutions: resolutions}));
     map.addLayer(new OpenLayers.Layer.OSM("mapquest",
         ["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
         "http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
@@ -79,17 +89,8 @@ function createMap(){
         "http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
         "http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],
         {zoomOffset: 6, resolutions: resolutions2, isBaseLayer:true, sphericalMercator: true}
-    ));     
+    ));    
         
-    map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 6, resolutions: resolutions, isBaseLayer:true, sphericalMercator: true}));    
-    map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
-    map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
-    map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
-    map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 6, maxZoomLevel: 19}));
-    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: bingApiKey, type: "Road", zoomOffset: 6, resolutions: resolutions}));
-    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: bingApiKey, type: "Aerial", zoomOffset: 6, resolutions: resolutions}));
-    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: bingApiKey, type: "AerialWithLabels", zoomOffset: 6, resolutions: resolutions}));
-
     map.setCenter(new OpenLayers.LonLat(-69, -44).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), 0);
     // vector layer para dibujo
     vectors = new OpenLayers.Layer.Vector("Vectores", {displayInLayerSwitcher: false}); 
@@ -98,6 +99,8 @@ function createMap(){
     // vector layer para wfs
     wfsLayer = new OpenLayers.Layer.Vector("wfsLayer", {displayInLayerSwitcher: false});                    
     map.addLayer(wfsLayer);
+    
+    map.addLayer(locationLayer);
     
 }
 
@@ -129,6 +132,22 @@ function generateViewport(){
     agregarDescendencia(rootnode,tree);
     restoreIndex(index);
     
+    layerTreePanel2 = new Ext.tree.TreePanel({
+        title: 'Orden',
+        iconCls: "layers-arrangeIcon",
+        autoScroll: true,
+        root: new GeoExt.tree.OverlayLayerContainer({
+            text: "Solo overlays",
+            icon: "img/layers.png",
+            map: map,
+            expanded: false
+        }),
+        rootVisible: false,
+        border: false,
+        enableDD: true,
+        useArrows: true
+    });     
+    
     layerTreePanel = new Ext.tree.TreePanel({
         autoScroll: true,
         iconCls: "layerStackIcon",
@@ -147,7 +166,7 @@ function generateViewport(){
                     agregarCapas(null);
                 }
             }),
-                        new Ext.Toolbar.Button({
+            new Ext.Toolbar.Button({
                 tooltip: 'Agregar carpeta',
                 icon: 'img/folder-add.png',
                 handler: function(){
@@ -169,7 +188,7 @@ function generateViewport(){
                 handler: function(){
                    collapseAll(Ext.getCmp("myTreePanel").getRootNode());
                 }
-            }),           
+            })
         ],
         bbar: [            
             {
@@ -177,67 +196,77 @@ function generateViewport(){
                 text: "Mapa Base",
                 menu: new Ext.menu.Menu({
                     items: [
+//                        {
+//                            text: "IGN",
+//                            iconCls: "ignIcon",
+//                            handler: function(){
+//                                map.setBaseLayer(map.getLayersByName("IGN")[0]);
+//                            }
+//                        },
                         {
-                            text: "IGN",
-                            iconCls: "ignIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("IGN")[0]);
-                            }
-                        },{
-                            text: "OpenStreetMap",
-                            iconCls: "osmIcon",
-                            handler: function(){
-                                map.setBaseLayer(map.getLayersByName("OpenStreetMap")[0]);
-                            }
-                        },{
                             text: "Google Streets",
                             iconCls: "googleIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("Google Streets")[0]);
                             }
-                        },{
+                        },
+                        {
                             text: "Google Terrain",
                             iconCls: "googleIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("Google Terrain")[0]);
                             }
-                        },{
+                        },
+                        {
                             text: "Google Satellite",
                             iconCls: "googleIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("Google Satellite")[0]);
                             }
-                        },{
+                        },
+                        {
                             text: "Google Hybrid",
                             iconCls: "googleIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("Google Hybrid")[0]);
                             }
-                        },{
+                        },
+                        {
+                            text: "OpenStreetMap",
+                            iconCls: "osmIcon",
+                            handler: function(){
+                                map.setBaseLayer(map.getLayersByName("OpenStreetMap")[0]);
+                            }
+                        },                                
+                        {
                             text: "Bing Road",
                             iconCls: "bingIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("Bing Road")[0]);
                             }
-                        },{
+                        },
+                        {
                             text: "Bing Aerial",
                             iconCls: "bingIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("Bing Aerial")[0]);
                             }
-                        },{
+                        },
+                        {
                             text: "Bing Hybrid",
                             iconCls: "bingIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("Bing Hybrid")[0]);
                             }
-                        },{
+                        },
+                        {
                             text: "mapquest",
                             iconCls: "mapQuestIcon",
                             handler: function(){
                                 map.setBaseLayer(map.getLayersByName("mapquest")[0]);
                             }
-                        },{
+                        },
+                        {
                             text: "mapquestAerial",
                             iconCls: "mapQuestIcon",
                             handler: function(){
@@ -261,21 +290,7 @@ function generateViewport(){
         ]
     });     
     
-//    layerTreePanel2 = new Ext.tree.TreePanel({
-//        flex:1,
-//        autoScroll: true,
-//        title: 'Capas2',
-//        root: new GeoExt.tree.OverlayLayerContainer({
-//            text: "Solo overlays",
-//            icon: "img/layers.png",
-//            map: map,
-//            expanded: false
-//        }),
-//        rootVisible: false,
-//        border: false,
-//        enableDD: true,
-//        useArrows: true
-//    }); 
+
     
     legendPanel = new GeoExt.LegendPanel({
         title: 'Leyenda',
@@ -372,10 +387,10 @@ function generateViewport(){
             items:[
                 {
                     region: 'north',
-                    height: 40,
+                    height: 30,
                     bodyStyle:'background-color:black',
                     border:false,
-                    html: '<img src="img/banner.jpg" alt="banner" style="height: 100%">'
+                    html: '<img src="img/banner-dgeyc.jpg" alt="banner" style="height: 100%">'
                 },
                 {
                     layout: 'border',
@@ -410,9 +425,9 @@ function generateViewport(){
                             layout: "border",
                             collapseMode: 'mini',
                             split: true,                            
-                            width: 250,
-                            maxWidth: 250,
-                            minWidth: 250,
+                            width: 280,
+                            maxWidth: 280,
+                            minWidth: 280,
                             items: [
                                 new Ext.TabPanel({
                                     region: "center",
@@ -420,8 +435,8 @@ function generateViewport(){
                                     resizeTabs: true,
 //                                    autoHeight: true,
                                     border: false,
-                                    tabWidth: 125,                                
-                                    items: [layerTreePanel,legendPanel]
+                                    tabWidth: 110,                                
+                                    items: [layerTreePanel,layerTreePanel2,legendPanel]
                                 })                                                              
                             ]
                                     
@@ -480,6 +495,7 @@ function finalConfig(){
     var mapdiv = document.getElementById('mapPanel').firstChild.firstChild.firstChild;
     mapdiv.appendChild(document.getElementById('scalelinediv'));
     mapdiv.appendChild(document.getElementById('scalecombodiv'));
+    mapdiv.appendChild(document.getElementById('geocoderdiv'));
     mapdiv.appendChild(document.getElementById('position'));
     mapdiv.appendChild(document.getElementById('minimapcontainer'));
 //    mapdiv.appendChild(document.getElementById('mapBackground'));
@@ -500,6 +516,15 @@ function finalConfig(){
             return markup
         }
     }));     
+    
+    var geocoder = new GeoExt.form.GeocoderComboBox({       
+        layer: locationLayer,
+        emptyText: "Buscar",
+        map: map,
+        renderTo: document.getElementById("geocoderdiv"),
+        bounds: max_bounds,
+        width: 200
+    });  
 
     var scaleCombo = new Ext.form.ComboBox({
         width: 130,

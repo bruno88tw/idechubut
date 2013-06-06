@@ -106,7 +106,7 @@ function getTopBar(){
 //         box: true
 //        }
 //    );
-//    map.addControl(select);                                          
+//    map.addControl(select);                                                  
     
     tbar.push(new GeoExt.Action({
             control: new OpenLayers.Control.Navigation(),
@@ -861,13 +861,29 @@ function getTopBar(){
                              border: false,
                              items: [
                                  new Ext.form.Checkbox({
+                                     fieldLabel: 'Buscador',
+                                     checked: navegador,
+                                     listeners:{
+                                        check: function(){
+                                            var geocoderdiv = document.getElementById("geocoderdiv");
+                                            if (this.getValue() == true){
+                                                buscador = true;
+                                                geocoderdiv.style.display = "block"; 
+                                            }else{
+                                                buscador = false;
+                                                geocoderdiv.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }),                                 
+                                 new Ext.form.Checkbox({
                                      fieldLabel: 'Navegador',
                                      checked: navegador,
                                      listeners:{
                                         check: function(){
                                             if (this.getValue() == true){
                                                 navegador = true;
-                                                map.addControl(new OpenLayers.Control.PanZoomBar());
+                                                map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,20));  
                                             }else{
                                                 navegador = false;
                                                 map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);
@@ -1454,6 +1470,7 @@ function agregarCapas(node){
                             }    
                             
                             map.raiseLayer(wfsLayer,1);
+                            map.raiseLayer(locationLayer,1);
                             
                     });
                 }

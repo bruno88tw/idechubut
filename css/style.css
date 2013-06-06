@@ -107,6 +107,20 @@
    background:transparent url(../img/legend.png) no-repeat 0 0;
 }
 
+.layers-arrangeIcon{
+   background:transparent url(../img/layers-arrange.png) no-repeat 0 0;
+}
+
+.geocodercombobox{
+   position:absolute; 
+   z-index:100000; 
+   left:165px; 
+   top:10px; 
+   margin-left: -155px; 
+   width: 210px; 
+   height: 21px; 
+}
+
 .scalebox{
    position:absolute; 
    display: block;
