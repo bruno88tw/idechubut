@@ -835,265 +835,467 @@ function getTopBar(){
 //             window.show(); 
 //                   
 //         }
+//     }));    
+
+    tbar.push({
+        icon: 'img/gear.png',
+        tooltip: 'Configuración',
+        menu: new Ext.menu.Menu({
+            id: 'mainMenu',
+            style: {
+                overflow: 'visible'     // For the Combo popup
+            },
+            items: [
+                {
+                    text: 'Título',
+                    checked: titulo,
+                    checkHandler: function(){
+                        var titulodiv = document.getElementById("titulodiv");
+                        if (this.checked){
+                            titulo = true;
+                            titulodiv.style.display = "block"; 
+                        }else{
+                            titulo = false;
+                            titulodiv.style.display = "none";
+                        }
+                    }
+
+                }, 
+                new Ext.Toolbar.Button({
+                   text: "Cambiar título",
+                   width: 105,
+                   handler: function(){         
+                       Ext.MessageBox.prompt('Título', '', function(btn, text){
+                           if (btn == "ok"){
+                               document.getElementById("titulodiv").innerHTML = text;
+                           }
+                       });
+                   }
+                }),
+                {
+                    text: 'Subtítulo',
+                    checked: titulo,
+                    checkHandler: function(){
+                        var subtitulodiv = document.getElementById("subtitulodiv");
+                        if (this.checked){
+                            subtitulo = true;
+                            subtitulodiv.style.display = "block"; 
+                        }else{
+                            subtitulo = false;
+                            subtitulodiv.style.display = "none";
+                        }
+                    }
+                }, 
+                new Ext.Toolbar.Button({
+                   text: "Cambiar subtítulo",
+                   width: 105,
+                   handler: function(){   
+                       Ext.MessageBox.prompt('Subtítulo', '', function(btn, text){
+                           if (btn == "ok"){
+                               document.getElementById("subtitulodiv").innerHTML = text;
+                           }
+                       });
+
+                   }
+                }),
+                {
+                    text: 'Buscador',
+                    checked: buscador,
+                    checkHandler: function(){
+                        var leyendadiv = document.getElementById("legenddiv");
+                        var geocoderdiv = document.getElementById("geocoderdiv");
+                        if (this.checked){
+                            buscador = true;
+                            geocoderdiv.style.display = "block"; 
+                            leyendadiv.style.top = "45px";
+                        }else{
+                            buscador = false;
+                            geocoderdiv.style.display = "none";
+                            leyendadiv.style.top = "10px";
+                        }
+                    }
+                },                                 
+                {
+                    text: 'Navegador',
+                    checked: navegador,
+                    checkHandler: function(){
+                        var leyendadiv = document.getElementById("legenddiv");
+                        var geocoderdiv = document.getElementById("geocoderdiv");                                            
+                        if (this.checked){
+                            navegador = true;
+                            map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,3));  
+                            geocoderdiv.style.left = "55px"; 
+                            leyendadiv.style.left = "55px";                                                
+                        }else{
+                            navegador = false;
+                            map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);
+                            geocoderdiv.style.left = "10px"; 
+                            leyendadiv.style.left = "10px";      
+                        }
+                    }
+                },
+                {
+                    text: 'Leyenda',
+                    checked: leyenda,
+                    checkHandler: function(){
+                        var leyendadiv = document.getElementById("legenddiv");
+                        if (this.checked){
+                            leyenda = true;
+                            leyendadiv.style.display = "block";
+                        }else{
+                            leyenda = false;
+                            leyendadiv.style.display = "none";
+                        }
+                    }
+                },
+                {
+                    text: 'Escala',
+                    checked: escala,
+                    checkHandler: function(){
+                        var scalelinediv = document.getElementById("scalelinediv");
+                        if (this.checked){
+                            escala = true;
+                            scalelinediv.style.display = "block";
+                        }else{
+                            escala = false;
+                            scalelinediv.style.display = "none";
+                        }
+                    }
+                },
+                {
+                    text: 'Resolucion',
+                    checked: resolucion,
+                    checkHandler: function(){
+                        var scalelinediv = document.getElementById("scalelinediv");
+                        var scalecombodiv = document.getElementById("scalecombodiv");
+                        if (this.checked){
+                            resolucion = true;
+                            scalecombodiv.style.display = "block";
+                            scalelinediv.style.bottom = "35px";
+                        }else{
+                            resolucion = false;
+                            scalecombodiv.style.display = "none";
+                            scalelinediv.style.bottom = "10px";
+                        }
+                    }
+                },
+                {
+                    text: 'Posición',
+                    checked: posicion,
+                    checkHandler: function(){
+                        var posicioncontainer = document.getElementById("position");
+                        if (this.checked){
+                            posicion = true;
+                            posicioncontainer.style.display = "block";
+                        }else{
+                            posicion = false;
+                            posicioncontainer.style.display = "none";
+                        }
+                    }
+                },
+                {
+                    text: 'Minimapa',
+                    checked: minimapa,
+                    checkHandler: function(){
+                        var minimapcontainer = document.getElementById("minimapcontainer");
+                        if (this.checked){
+                            minimapa = true;
+                            minimapcontainer.style.display = "block";
+                        }else{
+                            minimapa = false;
+                            minimapcontainer.style.display = "none";
+                        }
+                    }
+                },
+                {
+                    text: 'Norte',
+                    checked: norte,
+                    checkHandler: function(){
+                        var rosa = document.getElementById("rosa");;
+                        if (this.checked){
+                            norte = true;
+                            rosa.style.display = "block";
+                        }else{
+                            norte = false;
+                            rosa.style.display = "none";
+                        }
+                    }
+                },
+                {
+                    text: 'Grilla',
+                    checked: grilla,
+                    checkHandler: function(){
+                        if (this.checked){
+                            grilla = true;
+                            map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false, labelSymbolizer: new OpenLayers.Symbolizer.Text({fontSize:9})}));
+                        }else{
+                            grilla = false;
+                            map.removeLayer(map.getLayersByName("Grilla")[0]);
+                            map.removeControl(map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
+                        }
+                    }
+                }                                                          
+            ]
+        })
+    });
+
+//     tbar.push(new Ext.Toolbar.Button({
+//         id: "configuracion",
+////         text: "Configuración",
+//         tooltip: 'Configuración',
+//         icon: 'img/gear.png',
+//         handler: function(){
+//             var window = new Ext.Window({
+//                 title: "Configuración",
+//                 iconCls: 'configuracionIcon',
+//                 layout: "fit",
+//                 resizable: false,
+//                 items:[
+//                     
+//                    new Ext.Panel({
+//                        border: false,
+//                        autoScroll: true,
+//                        width: "100%",
+//                        heigth: "100%",
+//                        items: new Ext.FormPanel({
+//                             labelWidth: 85, // label settings here cascade unless overridden
+//                             frame:true,
+//                             border: false,
+//                             items: [
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Título',
+//                                     checked: titulo,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var titulodiv = document.getElementById("titulodiv");
+//                                            if (this.getValue() == true){
+//                                                titulo = true;
+//                                                titulodiv.style.display = "block"; 
+//                                            }else{
+//                                                titulo = false;
+//                                                titulodiv.style.display = "none";
+//                                            }
+//                                        }
+//                                     }
+//                                 }), 
+//                                 {html: "<hr>"},
+//                                 new Ext.Toolbar.Button({
+////                                    tooltip: 'Cambiar título',
+//                                    text: "Cambiar título",
+//                                    width: 105,
+////                                    icon: 'img/printer.png',
+//                                    handler: function(){         
+//                                        Ext.MessageBox.prompt('Título', '', function(btn, text){
+//                                            if (btn == "ok"){
+//                                                document.getElementById("titulodiv").innerHTML = text;
+//                                            }
+//                                        });
+//                                    }
+//                                 }),
+//                                 {html: "<hr>"},
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Subtítulo',
+//                                     checked: titulo,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var subtitulodiv = document.getElementById("subtitulodiv");
+//                                            if (this.getValue() == true){
+//                                                subtitulo = true;
+//                                                subtitulodiv.style.display = "block"; 
+//                                            }else{
+//                                                subtitulo = false;
+//                                                subtitulodiv.style.display = "none";
+//                                            }
+//                                        }
+//                                     }
+//                                 }), 
+//                                 {html: "<hr>"},
+//                                 new Ext.Toolbar.Button({
+////                                    tooltip: 'Cambiar título',
+//                                    text: "Cambiar subtítulo",
+//                                    width: 105,
+////                                    icon: 'img/printer.png',
+//                                    handler: function(){   
+//                                        Ext.MessageBox.prompt('Subtítulo', '', function(btn, text){
+//                                            if (btn == "ok"){
+//                                                document.getElementById("subtitulodiv").innerHTML = text;
+//                                            }
+//                                        });
+//
+//                                    }
+//                                 }),
+//                                 {html: "<hr>"},
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Buscador',
+//                                     checked: buscador,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var leyendadiv = document.getElementById("legenddiv");
+//                                            var geocoderdiv = document.getElementById("geocoderdiv");
+//                                            if (this.getValue() == true){
+//                                                buscador = true;
+//                                                geocoderdiv.style.display = "block"; 
+//                                                leyendadiv.style.top = "45px";
+//                                            }else{
+//                                                buscador = false;
+//                                                geocoderdiv.style.display = "none";
+//                                                leyendadiv.style.top = "10px";
+//                                            }
+//                                        }
+//                                     }
+//                                 }),                                 
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Navegador',
+//                                     checked: navegador,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var leyendadiv = document.getElementById("legenddiv");
+//                                            var geocoderdiv = document.getElementById("geocoderdiv");                                            
+//                                            if (this.getValue() == true){
+//                                                navegador = true;
+//                                                map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,3));  
+//                                                geocoderdiv.style.left = "55px"; 
+//                                                leyendadiv.style.left = "55px";                                                
+//                                            }else{
+//                                                navegador = false;
+//                                                map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);
+//                                                geocoderdiv.style.left = "10px"; 
+//                                                leyendadiv.style.left = "10px";      
+//                                            }
+//                                        }
+//                                     }
+//                                 }),
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Leyenda',
+//                                     checked: leyenda,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var leyendadiv = document.getElementById("legenddiv");
+//                                            if (this.getValue() == true){
+//                                                leyenda = true;
+//                                                leyendadiv.style.display = "block";
+//                                            }else{
+//                                                leyenda = false;
+//                                                leyendadiv.style.display = "none";
+//                                            }
+//                                        }
+//                                     }
+//                                 }),
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Escala',
+//                                     checked: escala,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var scalelinediv = document.getElementById("scalelinediv");
+//                                            if (this.getValue() == true){
+//                                                escala = true;
+//                                                scalelinediv.style.display = "block";
+//                                            }else{
+//                                                escala = false;
+//                                                scalelinediv.style.display = "none";
+//                                            }
+//                                        }
+//                                     }
+//                                 }),
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Resolucion',
+//                                     checked: resolucion,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var scalelinediv = document.getElementById("scalelinediv");
+//                                            var scalecombodiv = document.getElementById("scalecombodiv");
+//                                            if (this.getValue() == true){
+//                                                resolucion = true;
+//                                                scalecombodiv.style.display = "block";
+//                                                scalelinediv.style.bottom = "35px";
+//                                            }else{
+//                                                resolucion = false;
+//                                                scalecombodiv.style.display = "none";
+//                                                scalelinediv.style.bottom = "10px";
+//                                            }
+//                                        }
+//                                     }
+//                                 }),
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Posición',
+//                                     checked: posicion,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var posicioncontainer = document.getElementById("position");
+//                                            if (this.getValue() == true){
+//                                                posicion = true;
+//                                                posicioncontainer.style.display = "block";
+//                                            }else{
+//                                                posicion = false;
+//                                                posicioncontainer.style.display = "none";
+//                                            }
+//                                        }
+//                                     }
+//                                 }),
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Minimapa',
+//                                     checked: minimapa,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var minimapcontainer = document.getElementById("minimapcontainer");
+//                                            if (this.getValue() == true){
+//                                                minimapa = true;
+//                                                minimapcontainer.style.display = "block";
+//                                            }else{
+//                                                minimapa = false;
+//                                                minimapcontainer.style.display = "none";
+//                                            }
+//                                        }
+//                                     }
+//                                 }),
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Norte',
+//                                     checked: norte,
+//                                     listeners:{
+//                                        check: function(){
+//                                            var rosa = document.getElementById("rosa");;
+//                                            if (this.getValue() == true){
+//                                                norte = true;
+//                                                rosa.style.display = "block";
+//                                            }else{
+//                                                norte = false;
+//                                                rosa.style.display = "none";
+//                                            }
+//                                        }
+//                                     }
+//                                 }),
+//                                 new Ext.form.Checkbox({
+//                                     fieldLabel: 'Grilla',
+//                                     checked: grilla,
+//                                     listeners:{
+//                                        check: function(){
+//                                            if (this.getValue() == true){
+//                                                grilla = true;
+//                                                map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false, labelSymbolizer: new OpenLayers.Symbolizer.Text({fontSize:9})}));
+//                                            }else{
+//                                                grilla = false;
+//                                                map.removeLayer(map.getLayersByName("Grilla")[0]);
+//                                                map.removeControl(map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
+//                                            }
+//                                        }
+//                                     }
+//                                 })                                                           
+//                             ]
+//                         })
+//                    })                     
+//                     
+//                     
+//                     
+//                 ]
+//
+//             });
+//             window.show();
+//             window.on('close',function(){
+//                 Ext.getCmp("configuracion").enable();
+//             });
+//             Ext.getCmp("configuracion").disable();
+//         }
 //     }));
-
-     tbar.push(new Ext.Toolbar.Button({
-         id: "configuracion",
-//         text: "Configuración",
-         tooltip: 'Configuración',
-         icon: 'img/gear.png',
-         handler: function(){
-             var window = new Ext.Window({
-                 title: "Configuración",
-                 iconCls: 'configuracionIcon',
-                 layout: "fit",
-                 resizable: false,
-                 items:[
-                     
-                    new Ext.Panel({
-                        border: false,
-                        autoScroll: true,
-                        width: "100%",
-                        heigth: "100%",
-                        items: new Ext.FormPanel({
-                             labelWidth: 85, // label settings here cascade unless overridden
-                             frame:true,
-                             border: false,
-                             items: [
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Título',
-                                     checked: titulo,
-                                     listeners:{
-                                        check: function(){
-                                            var titulodiv = document.getElementById("titulodiv");
-                                            if (this.getValue() == true){
-                                                titulo = true;
-                                                titulodiv.style.display = "block"; 
-                                            }else{
-                                                titulo = false;
-                                                titulodiv.style.display = "none";
-                                            }
-                                        }
-                                     }
-                                 }), 
-                                 {html: "<hr>"},
-                                 new Ext.Toolbar.Button({
-//                                    tooltip: 'Cambiar título',
-                                    text: "Cambiar título",
-                                    width: 105,
-//                                    icon: 'img/printer.png',
-                                    handler: function(){         
-                                        Ext.MessageBox.prompt('Título', '', function(btn, text){
-                                            if (btn == "ok"){
-                                                document.getElementById("titulodiv").innerHTML = text;
-                                            }
-                                        });
-                                    }
-                                 }),
-                                 {html: "<hr>"},
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Subtítulo',
-                                     checked: titulo,
-                                     listeners:{
-                                        check: function(){
-                                            var subtitulodiv = document.getElementById("subtitulodiv");
-                                            if (this.getValue() == true){
-                                                subtitulo = true;
-                                                subtitulodiv.style.display = "block"; 
-                                            }else{
-                                                subtitulo = false;
-                                                subtitulodiv.style.display = "none";
-                                            }
-                                        }
-                                     }
-                                 }), 
-                                 {html: "<hr>"},
-                                 new Ext.Toolbar.Button({
-//                                    tooltip: 'Cambiar título',
-                                    text: "Cambiar subtítulo",
-                                    width: 105,
-//                                    icon: 'img/printer.png',
-                                    handler: function(){   
-                                        Ext.MessageBox.prompt('Subtítulo', '', function(btn, text){
-                                            if (btn == "ok"){
-                                                document.getElementById("subtitulodiv").innerHTML = text;
-                                            }
-                                        });
-
-                                    }
-                                 }),
-                                 {html: "<hr>"},
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Buscador',
-                                     checked: buscador,
-                                     listeners:{
-                                        check: function(){
-                                            var leyendadiv = document.getElementById("legenddiv");
-                                            var geocoderdiv = document.getElementById("geocoderdiv");
-                                            if (this.getValue() == true){
-                                                buscador = true;
-                                                geocoderdiv.style.display = "block"; 
-                                                leyendadiv.style.top = "45px";
-                                            }else{
-                                                buscador = false;
-                                                geocoderdiv.style.display = "none";
-                                                leyendadiv.style.top = "10px";
-                                            }
-                                        }
-                                     }
-                                 }),                                 
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Navegador',
-                                     checked: navegador,
-                                     listeners:{
-                                        check: function(){
-                                            var leyendadiv = document.getElementById("legenddiv");
-                                            var geocoderdiv = document.getElementById("geocoderdiv");                                            
-                                            if (this.getValue() == true){
-                                                navegador = true;
-                                                map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,3));  
-                                                geocoderdiv.style.left = "55px"; 
-                                                leyendadiv.style.left = "55px";                                                
-                                            }else{
-                                                navegador = false;
-                                                map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);
-                                                geocoderdiv.style.left = "10px"; 
-                                                leyendadiv.style.left = "10px";      
-                                            }
-                                        }
-                                     }
-                                 }),
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Leyenda',
-                                     checked: leyenda,
-                                     listeners:{
-                                        check: function(){
-                                            var leyendadiv = document.getElementById("legenddiv");
-                                            if (this.getValue() == true){
-                                                leyenda = true;
-                                                leyendadiv.style.display = "block";
-                                            }else{
-                                                leyenda = false;
-                                                leyendadiv.style.display = "none";
-                                            }
-                                        }
-                                     }
-                                 }),
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Escala',
-                                     checked: escala,
-                                     listeners:{
-                                        check: function(){
-                                            var scalelinediv = document.getElementById("scalelinediv");
-                                            if (this.getValue() == true){
-                                                escala = true;
-                                                scalelinediv.style.display = "block";
-                                            }else{
-                                                escala = false;
-                                                scalelinediv.style.display = "none";
-                                            }
-                                        }
-                                     }
-                                 }),
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Resolucion',
-                                     checked: resolucion,
-                                     listeners:{
-                                        check: function(){
-                                            var scalelinediv = document.getElementById("scalelinediv");
-                                            var scalecombodiv = document.getElementById("scalecombodiv");
-                                            if (this.getValue() == true){
-                                                resolucion = true;
-                                                scalecombodiv.style.display = "block";
-                                                scalelinediv.style.bottom = "35px";
-                                            }else{
-                                                resolucion = false;
-                                                scalecombodiv.style.display = "none";
-                                                scalelinediv.style.bottom = "10px";
-                                            }
-                                        }
-                                     }
-                                 }),
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Posición',
-                                     checked: posicion,
-                                     listeners:{
-                                        check: function(){
-                                            var posicioncontainer = document.getElementById("position");
-                                            if (this.getValue() == true){
-                                                posicion = true;
-                                                posicioncontainer.style.display = "block";
-                                            }else{
-                                                posicion = false;
-                                                posicioncontainer.style.display = "none";
-                                            }
-                                        }
-                                     }
-                                 }),
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Minimapa',
-                                     checked: minimapa,
-                                     listeners:{
-                                        check: function(){
-                                            var minimapcontainer = document.getElementById("minimapcontainer");
-                                            if (this.getValue() == true){
-                                                minimapa = true;
-                                                minimapcontainer.style.display = "block";
-                                            }else{
-                                                minimapa = false;
-                                                minimapcontainer.style.display = "none";
-                                            }
-                                        }
-                                     }
-                                 }),
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Norte',
-                                     checked: norte,
-                                     listeners:{
-                                        check: function(){
-                                            var rosa = document.getElementById("rosa");;
-                                            if (this.getValue() == true){
-                                                norte = true;
-                                                rosa.style.display = "block";
-                                            }else{
-                                                norte = false;
-                                                rosa.style.display = "none";
-                                            }
-                                        }
-                                     }
-                                 }),
-                                 new Ext.form.Checkbox({
-                                     fieldLabel: 'Grilla',
-                                     checked: grilla,
-                                     listeners:{
-                                        check: function(){
-                                            if (this.getValue() == true){
-                                                grilla = true;
-                                                map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false, labelSymbolizer: new OpenLayers.Symbolizer.Text({fontSize:9})}));
-                                            }else{
-                                                grilla = false;
-                                                map.removeLayer(map.getLayersByName("Grilla")[0]);
-                                                map.removeControl(map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
-                                            }
-                                        }
-                                     }
-                                 })                                                           
-                             ]
-                         })
-                    })                     
-                     
-                     
-                     
-                 ]
-
-             });
-             window.show();
-             window.on('close',function(){
-                 Ext.getCmp("configuracion").enable();
-             });
-             Ext.getCmp("configuracion").disable();
-         }
-     }));
 
      tbar.push(new Ext.Toolbar.Button({
          tooltip: 'Imprimir',
@@ -1112,7 +1314,6 @@ function getTopBar(){
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/ext-all.css">');
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/xtheme-gray.css">');                                                    
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers-2.12/theme/default/style.css">');
-            mywindow.document.write('<style type="text/css">body {width: 1280px;height: 100px;}</style>');
             mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
             mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
             mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
