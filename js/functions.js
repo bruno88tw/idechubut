@@ -861,17 +861,83 @@ function getTopBar(){
                              border: false,
                              items: [
                                  new Ext.form.Checkbox({
-                                     fieldLabel: 'Buscador',
-                                     checked: navegador,
+                                     fieldLabel: 'Título',
+                                     checked: titulo,
                                      listeners:{
                                         check: function(){
+                                            var titulodiv = document.getElementById("titulodiv");
+                                            if (this.getValue() == true){
+                                                titulo = true;
+                                                titulodiv.style.display = "block"; 
+                                            }else{
+                                                titulo = false;
+                                                titulodiv.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }), 
+                                 {html: "<hr>"},
+                                 new Ext.Toolbar.Button({
+//                                    tooltip: 'Cambiar título',
+                                    text: "Cambiar título",
+                                    width: 105,
+//                                    icon: 'img/printer.png',
+                                    handler: function(){         
+                                        Ext.MessageBox.prompt('Título', '', function(btn, text){
+                                            if (btn == "ok"){
+                                                document.getElementById("titulodiv").innerHTML = text;
+                                            }
+                                        });
+                                    }
+                                 }),
+                                 {html: "<hr>"},
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Subtítulo',
+                                     checked: titulo,
+                                     listeners:{
+                                        check: function(){
+                                            var subtitulodiv = document.getElementById("subtitulodiv");
+                                            if (this.getValue() == true){
+                                                subtitulo = true;
+                                                subtitulodiv.style.display = "block"; 
+                                            }else{
+                                                subtitulo = false;
+                                                subtitulodiv.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }), 
+                                 {html: "<hr>"},
+                                 new Ext.Toolbar.Button({
+//                                    tooltip: 'Cambiar título',
+                                    text: "Cambiar subtítulo",
+                                    width: 105,
+//                                    icon: 'img/printer.png',
+                                    handler: function(){   
+                                        Ext.MessageBox.prompt('Subtítulo', '', function(btn, text){
+                                            if (btn == "ok"){
+                                                document.getElementById("subtitulodiv").innerHTML = text;
+                                            }
+                                        });
+
+                                    }
+                                 }),
+                                 {html: "<hr>"},
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Buscador',
+                                     checked: buscador,
+                                     listeners:{
+                                        check: function(){
+                                            var leyendadiv = document.getElementById("legenddiv");
                                             var geocoderdiv = document.getElementById("geocoderdiv");
                                             if (this.getValue() == true){
                                                 buscador = true;
                                                 geocoderdiv.style.display = "block"; 
+                                                leyendadiv.style.top = "45px";
                                             }else{
                                                 buscador = false;
                                                 geocoderdiv.style.display = "none";
+                                                leyendadiv.style.top = "10px";
                                             }
                                         }
                                      }
@@ -881,12 +947,34 @@ function getTopBar(){
                                      checked: navegador,
                                      listeners:{
                                         check: function(){
+                                            var leyendadiv = document.getElementById("legenddiv");
+                                            var geocoderdiv = document.getElementById("geocoderdiv");                                            
                                             if (this.getValue() == true){
                                                 navegador = true;
-                                                map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,20));  
+                                                map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,3));  
+                                                geocoderdiv.style.left = "55px"; 
+                                                leyendadiv.style.left = "55px";                                                
                                             }else{
                                                 navegador = false;
                                                 map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);
+                                                geocoderdiv.style.left = "10px"; 
+                                                leyendadiv.style.left = "10px";      
+                                            }
+                                        }
+                                     }
+                                 }),
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Leyenda',
+                                     checked: leyenda,
+                                     listeners:{
+                                        check: function(){
+                                            var leyendadiv = document.getElementById("legenddiv");
+                                            if (this.getValue() == true){
+                                                leyenda = true;
+                                                leyendadiv.style.display = "block";
+                                            }else{
+                                                leyenda = false;
+                                                leyendadiv.style.display = "none";
                                             }
                                         }
                                      }
@@ -897,15 +985,31 @@ function getTopBar(){
                                      listeners:{
                                         check: function(){
                                             var scalelinediv = document.getElementById("scalelinediv");
-                                            var scalecombodiv = document.getElementById("scalecombodiv");
                                             if (this.getValue() == true){
                                                 escala = true;
                                                 scalelinediv.style.display = "block";
-                                                scalecombodiv.style.display = "block";
                                             }else{
                                                 escala = false;
                                                 scalelinediv.style.display = "none";
+                                            }
+                                        }
+                                     }
+                                 }),
+                                 new Ext.form.Checkbox({
+                                     fieldLabel: 'Resolucion',
+                                     checked: resolucion,
+                                     listeners:{
+                                        check: function(){
+                                            var scalelinediv = document.getElementById("scalelinediv");
+                                            var scalecombodiv = document.getElementById("scalecombodiv");
+                                            if (this.getValue() == true){
+                                                resolucion = true;
+                                                scalecombodiv.style.display = "block";
+                                                scalelinediv.style.bottom = "35px";
+                                            }else{
+                                                resolucion = false;
                                                 scalecombodiv.style.display = "none";
+                                                scalelinediv.style.bottom = "10px";
                                             }
                                         }
                                      }
@@ -1005,6 +1109,8 @@ function getTopBar(){
             var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height='+ height + ',width=' + width);       
             mywindow.document.write('<html><head><title>Imprimir mapa</title>');
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
+            mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/ext-all.css">');
+            mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/xtheme-gray.css">');                                                    
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers-2.12/theme/default/style.css">');
             mywindow.document.write('<style type="text/css">body {width: 1280px;height: 100px;}</style>');
             mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
@@ -1170,7 +1276,7 @@ function agregarCapas(node){
      
     window = new Ext.Window({
         title: "Agregar nuevas capas",
-        iconCls: 'layersIcon',
+        iconCls: 'layerIcon',
         layout: "fit",
         width: 500,
         height:300,
@@ -1535,7 +1641,7 @@ function createNode(text){
                 var menu = new Ext.menu.Menu({
                     items: [{
                         text: 'Agregar capa',
-                        icon: "img/map_add.png",
+                        icon: "img/map-plus.png",
                         handler: function(){
                             agregarCapas(e);
                         },
@@ -1652,7 +1758,7 @@ function createLeaf(titulo, servidor, params, options){
                         }
                     },{
                         text: 'Eliminar capa',
-                        icon: "img/menos.png",
+                        icon: "img/map-minus.png",
                         handler: function(){
                             e.remove();
                             map.removeLayer(map.getLayersByName(e.attributes.layer)[0]);   

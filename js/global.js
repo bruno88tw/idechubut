@@ -14,7 +14,7 @@ var savetree = [];
 var featureGridpanel;
 var isGetFeatureActive = false;
 var mapPanel, layerTreePanel, legendPanel;
-var buscador = true, navegador = true, escala = true, minimapa = true, norte = true, posicion = true, grilla = false; 
+var leyenda = true, titulo = false, subtitulo = false, buscador = true, navegador = true, escala = true, resolucion = true, minimapa = true, norte = true, posicion = true, grilla = false; 
 var max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38); // (west, south, east, north)
 var projection4326 = new OpenLayers.Projection("EPSG:4326");
 var projectionMercator = new OpenLayers.Projection("EPSG:900913"); 
@@ -27,11 +27,10 @@ var wfsReconocerControl = null;
 var wfsSelectControl = null;
 
 var servidoresWMS = [
-    ["DGEyC","http://172.158.0.21/geoserver/wms"],
-    ["OpenGeo","http://suite.opengeo.org/geoserver/wms"],
-    ["IGN1","http://sdi.ign.gob.ar/geoserver2/wms"],
-    ["IGN2","http://wms.ign.gob.ar/geoserver/ows"],    
-    ["SCTeI","http://200.63.163.47/geoserver/wms"],
+    ["Dirección General de Estadística y Censos","http://172.158.0.21/geoserver/wms"],
+    ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
+    ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
+    ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
     ["Ministerio de Educación","http://www.chubut.edu.ar:8080/geoserver/wms"],
     ["Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"]
 ];
