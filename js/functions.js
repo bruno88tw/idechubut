@@ -112,7 +112,7 @@ function getTopBar(){
             control: new OpenLayers.Control.Navigation(),
             map: map,
 //            text: "Mover",
-            icon: "img/arrow-move.png",
+            icon: "img/move2.png",
             toggleGroup: "nav",
             tooltip: "Navegación",
             checked: true
@@ -145,7 +145,7 @@ function getTopBar(){
     }));
 
     tbar.push(new GeoExt.Action({
-             icon: "img/control-right.png",
+             icon: "img/history-zoom-left.png",
 //             text:"Anterior",
              control: map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].previous,
              disabled: true,
@@ -153,7 +153,7 @@ function getTopBar(){
      }));
 
      tbar.push(new GeoExt.Action({
-             icon: "img/control-left.png",
+             icon: "img/history-zoom-right.png",
 //             text:"Siguiente",
              control: map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].next,
              disabled: true,
@@ -1314,6 +1314,7 @@ function getTopBar(){
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/ext-all.css">');
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/xtheme-gray.css">');                                                    
             mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers-2.12/theme/default/style.css">');
+//            mywindow.document.write('<style type="text/css">body {width: 1280px;height: 100px;}</style>');
             mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
             mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
             mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
