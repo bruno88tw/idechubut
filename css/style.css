@@ -114,7 +114,7 @@
 .geocodercombobox{
    position:absolute; 
    z-index:100000; 
-   left:55px; 
+   left:10px; 
    top:10px; 
    width: 210px; 
    height: 21px; 
@@ -124,7 +124,7 @@
    position:absolute; 
    z-index:100000; 
    top:45px; 
-   left: 55px;
+   left: 10px;
    width: 200px; 
    height: 500px; 
    /*text-align: center;*/

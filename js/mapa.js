@@ -52,7 +52,7 @@ function createMap(){
         }
     );     
         
-    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,3));    
+//    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,3));    
         
 //    map.addLayer(new OpenLayers.Layer.CloudMade(
 //        'Cloudmade', 
@@ -494,7 +494,7 @@ function generateViewport(){
                                 mapPanel,
                                 {
                                     id: "wfsPanel",
-                                    title: "WFS",
+//                                    title: "Atributos",
                                     region: 'south',
                                     collapseMode: 'mini',
                                     collapsed: true,

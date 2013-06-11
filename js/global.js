@@ -14,7 +14,7 @@ var savetree = [];
 var featureGridpanel;
 var isGetFeatureActive = false;
 var mapPanel, layerTreePanel, legendPanel;
-var leyenda = true, titulo = false, subtitulo = false, buscador = true, navegador = true, escala = true, resolucion = true, minimapa = true, norte = true, posicion = true, grilla = false; 
+var leyenda = true, titulo = false, subtitulo = false, buscador = true, navegador = false, escala = true, resolucion = true, minimapa = true, norte = true, posicion = true, grilla = false; 
 var max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38); // (west, south, east, north)
 var projection4326 = new OpenLayers.Projection("EPSG:4326");
 var projectionMercator = new OpenLayers.Projection("EPSG:900913"); 
@@ -27,7 +27,7 @@ var wfsReconocerControl = null;
 var wfsSelectControl = null;
 
 var servidoresWMS = [
-    ["Dirección General de Estadística y Censos","http://172.158.0.21/geoserver/wms"],
+    ["Dirección General de Estadística y Censos","http://172.158.1.0/geoserver/wms"],
     ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
     ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
     ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
@@ -42,26 +42,26 @@ var wmsServerStore = new Ext.data.ArrayStore({
 
 var tree = [    
     {"type":"folder","name":"DGEyC","children":[               
-            {"type":"leaf", "title":"Comarcas", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:comarcas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-            {"type":"leaf", "title":"Departamentos", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:departamentos", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-            {"type":"leaf", "title":"Fracciones", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:fracciones", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-            {"type":"leaf", "title":"Radios", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:radios", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-            {"type":"leaf", "title":"Localidades", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:localidades", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-            {"type":"leaf", "title":"Ejidos", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "urbano:ejidos_catastro_completos", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//            {"type":"leaf", "title":"Comarcas", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:comarcas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Departamentos", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:Departamentos", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Fracciones", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_fracciones", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Radios", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_radios", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Localidades", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_localidades", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//            {"type":"leaf", "title":"Ejidos", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "urbano:ejidos_catastro_completos", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
             {"type":"folder", "name":"Urbano", "children":[
-                    {"type":"leaf", "title":"Calles", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "urbano:calles", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false, displayInLayerSwitcher: false}},
-                    {"type":"leaf", "title":"Manzanas", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "urbano:manzanas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Barrios", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "urbano:barrios", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
+                    {"type":"leaf", "title":"Calles", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "urbano:calles", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false, displayInLayerSwitcher: false}},
+                    {"type":"leaf", "title":"Manzanas", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "urbano:manzanas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                    {"type":"leaf", "title":"Barrios", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "urbano:barrios", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
             ]},
             {"type":"folder", "name":"Rural", "children":[
-                    {"type":"leaf", "title":"Censo Nac. Agropecuario 2002", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:cna2002", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Censo Nac. Agropecuario 2008", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:cna2008", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
+                    {"type":"leaf", "title":"Censo Nac. Agropecuario 2002", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:parcelas", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Censo Nac. Agropecuario 2008", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_parcelas_cna2008", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
             ]},
             {"type":"folder", "name":"Mapas temáticos", "children":[
-                    {"type":"leaf", "title":"Población total 2010", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Índice de debilidad social", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:debilidad_social", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Índice de delincuencia", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:delincuencia", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Porcentaje de población extranjera", "server":"http://172.158.0.21/geoserver/wms", "params":{layers: "rural:poblacion_extranjera", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
+                    {"type":"leaf", "title":"Población total 2010", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_departamentos3pob2010", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Índice de debilidad social", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_debilidad_social", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Índice de delincuencia", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_delincuencia", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Porcentaje de población extranjera", "server":"http://172.158.1.0/geoserver/wms", "params":{layers: "rural:v_poblacion_extranjera", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
             ]}            
     ]}    
 ];
@@ -83,16 +83,16 @@ var index = [
     "Índice de debilidad social",
     "Índice de delincuencia",
     "Porcentaje de población extranjera",
-    "Ejidos",
+//    "Ejidos",
     "Censo Nac. Agropecuario 2002",
     "Censo Nac. Agropecuario 2008",
     "Radios",
     "Fracciones",
     "Departamentos",
-    "Comarcas",
+//    "Comarcas",
     "Manzanas",
     "Calles",
-    "Barrios",
+//    "Barrios",
     "Localidades"
 ];
 

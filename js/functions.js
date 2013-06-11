@@ -214,7 +214,7 @@ function getTopBar(){
              control: map.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo')[0],
              map: map,
 //             text:"Información",
-             icon: "img/information-italic.png",
+             icon: "img/cursor-info.png",
              toggleGroup: "nav",
              tooltip: "Obtener información"
      }));
@@ -1926,7 +1926,7 @@ function createLeaf(titulo, servidor, params, options){
                 var menu = new Ext.menu.Menu({
                     items: [{
                         text: 'Zoom a la capa',
-                        icon: "img/zoom.png",                        
+                        icon: "img/zoom-to-map.png",                        
                         handler: function(){     
                             var capurl;
                             var layer = map.getLayersByName(e.attributes.layer)[0];
@@ -1943,7 +1943,14 @@ function createLeaf(titulo, servidor, params, options){
                                 autoLoad: true,
                                 listeners:{
                                     load: function(){
-                                        var item = this.find('title', titulo);
+//                                        var item = this.find('title', params.layers);
+                                        var item;
+                                        for(var x = 0; x < this.data.items.length; x++){
+                                            if(this.data.items[x].data.name == params.layers){
+                                                item = x;
+                                                break;
+                                            }
+                                        }
                                         var west = this.data.items[item].data.llbbox[0];
                                         var south = this.data.items[item].data.llbbox[1];
                                         var east = this.data.items[item].data.llbbox[2];
@@ -1967,19 +1974,19 @@ function createLeaf(titulo, servidor, params, options){
                         }
                     },{
                         text: 'Subir capa',
-                        icon: "img/arrow-up.png",
+                        icon: "img/subir-capa.png",
                         handler: function(){
                             map.raiseLayer(map.getLayersByName(e.attributes.layer)[0],1);   
                         }
                     },{
                         text: 'Bajar capa',
-                        icon: "img/arrow-down.png",
+                        icon: "img/bajar-capa.png",
                         handler: function(){
                             map.raiseLayer(map.getLayersByName(e.attributes.layer)[0],-1);   
                         }
                     },{
                         text: 'Propiedades',
-                        icon: "img/gear.png",
+                        icon: "img/map-properties.png",
                         handler: function(){
                             var descripcionEstiloField;
                             var styleCombo;
@@ -2171,7 +2178,7 @@ function createLeaf(titulo, servidor, params, options){
 
                         }                        
                     },{
-                        text: 'WFS',
+                        text: 'Atributos',
                         icon: "img/information-italic.png",
                         handler: function(){
 
@@ -2236,7 +2243,7 @@ function createLeaf(titulo, servidor, params, options){
                                             })
                                         );   
 
-                                        featureGridpanel.setHeight(146);
+                                        featureGridpanel.setHeight(171);
                                         featureGridpanel.getSelectionModel().bind(wfsLayer);
                                         
                                         if (wfsReconocerControl != null){
