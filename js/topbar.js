@@ -1,5 +1,3 @@
-var tbar = [];
-
 var toolbar1;
 
 function getTopBar(){        
@@ -105,60 +103,20 @@ function getTopBar(){
                      icon: "img/cursor-info.png",
                      toggleGroup: "nav",
                      tooltip: "Obtener información"
-             }),                      
+             }),    
+             "&nbsp",
+             new GeoExt.form.GeocoderComboBox({       
+                layer: locationLayer,
+                emptyText: "Buscar un lugar ..",
+                map: map,                
+                bounds: max_bounds,
+                border: false,
+                width: 246,
+                heigh:100,
+                boxMaxHeight: 100,
+                boxMinHeight: 100
+            }),
              "->",
-//             new Ext.Button({
-//                tooltip: "Mostrar/Ocultar capas",
-//                icon: "img/panel-left.png",
-//                handler: function(){     
-//                    var treepanelcss = document.getElementById("layersPanelDiv").style;
-//                    if(treepanelcss.display == "block" || treepanelcss.display == ""){
-//                        treepanelcss.display = "none";
-//                    }else{
-//                        treepanelcss.display = "block";                          
-//                    }
-//                    acomodarNavegador();
-//                    acomodarScaleline();
-//                    acomodarResolucion(); 
-//                    acomodarGeocoder();
-//                    acomodarHerramientas();
-//                    acomodarStatusBar();
-//                }
-//             }),
-//             new Ext.Button({
-//                tooltip: "Mostrar/Ocultar atributos",
-//                icon: "img/panel-bottom.png",
-//                handler: function(){      
-//                    var attributepanelcss = document.getElementById("wfsdiv").style;
-//                    if(attributepanelcss.display == "block"){
-//                        attributepanelcss.display = "none";
-//                    }else{
-//                        attributepanelcss.display = "block";
-//                    }
-//                    acomodarResolucion();
-//                    acomodarScaleline();
-//                    acomodarPosicion();
-//                    acomodarMinimap();                    
-//                }
-//             }),             
-//             new Ext.Button({
-//                tooltip: "Mostrar/Ocultar leyenda",
-//                icon: "img/panel-right.png",
-//                handler: function(){        
-//                    var legendpanelcss = document.getElementById("legenddiv").style;
-//                    
-//                    if(legendpanelcss.marginRight == "0px" || legendpanelcss.marginRight == ""){
-//                        legendpanelcss.marginRight = "-280px";
-//                    }else{
-//                        legendpanelcss.marginRight = "0px";
-//                    }                    
-//                    acomodarMinimap();
-//                    acomodarRosa();    
-//                    acomodarHerramientas();
-//                    acomodarStatusBar();
-//
-//                }
-//             }),
              {
                 icon: 'img/gear.png',
                 tooltip: 'Configuración',
@@ -223,13 +181,13 @@ function getTopBar(){
                                 var legenddiv = document.getElementById("legenddiv");
                                 if (this.checked){
                                     legenddiv.style.display = "block";
+                                    Ext.getCmp("legendPanel").setHeight(mapPanel.getHeight() - 74);
                                 }else{
                                     legenddiv.style.display = "none";
                                 }
-                                Ext.getCmp("legendPanel").setHeight(mapPanel.getHeight() - 20);
                                 acomodarScaleline();
-                                acomodarResolucion();
-                                acomodarGeocoder();
+//                                acomodarResolucion();
+//                                acomodarGeocoder();
                                 acomodarNavegador();
                             }
                         },                          
@@ -244,19 +202,19 @@ function getTopBar(){
                                 }
                             }
                         },
-                        {
-                            text: 'Localizador',
-                            checked: true,
-                            checkHandler: function(){                                          
-                                var geocoderdiv = document.getElementById("geocoderdiv");
-                                if (this.checked){
-                                    geocoderdiv.style.display = "block";
-                                }else{
-                                    geocoderdiv.style.display = "none";
-                                }
-                                acomodarNavegador();
-                            }
-                        },                                
+//                        {
+//                            text: 'Localizador',
+//                            checked: true,
+//                            checkHandler: function(){                                          
+//                                var geocoderdiv = document.getElementById("geocoderdiv");
+//                                if (this.checked){
+//                                    geocoderdiv.style.display = "block";
+//                                }else{
+//                                    geocoderdiv.style.display = "none";
+//                                }
+//                                acomodarNavegador();
+//                            }
+//                        },                                
                         {
                             text: 'Escala',
                             checked: true,
@@ -269,31 +227,31 @@ function getTopBar(){
                                 }
                             }
                         },
-                        {
-                            text: 'Resolucion',
-                            checked: true,
-                            checkHandler: function(){
-                                var scalecombodiv = document.getElementById("scalecombodiv");
-                                if (this.checked){
-                                    scalecombodiv.style.display = "block";                                    
-                                }else{
-                                    scalecombodiv.style.display = "none";
-                                }
-                                acomodarScaleline();
-                            }
-                        },
-                        {
-                            text: 'Posición',
-                            checked: true,
-                            checkHandler: function(){
-                                var posicioncontainer = document.getElementById("position");
-                                if (this.checked){
-                                    posicioncontainer.style.display = "block";
-                                }else{
-                                    posicioncontainer.style.display = "none";
-                                }
-                            }
-                        },
+//                        {
+//                            text: 'Resolucion',
+//                            checked: true,
+//                            checkHandler: function(){
+//                                var scalecombodiv = document.getElementById("scalecombodiv");
+//                                if (this.checked){
+//                                    scalecombodiv.style.display = "block";                                    
+//                                }else{
+//                                    scalecombodiv.style.display = "none";
+//                                }
+//                                acomodarScaleline();
+//                            }
+//                        },
+//                        {
+//                            text: 'Posición',
+//                            checked: true,
+//                            checkHandler: function(){
+//                                var posicioncontainer = document.getElementById("position");
+//                                if (this.checked){
+//                                    posicioncontainer.style.display = "block";
+//                                }else{
+//                                    posicioncontainer.style.display = "none";
+//                                }
+//                            }
+//                        },
                         {
                             text: 'Minimapa',
                             checked: true,
@@ -338,11 +296,10 @@ function getTopBar(){
 
             new Ext.Toolbar.Button({
                  tooltip: 'Imprimir',
-        //         text: "Imprimir",
                  icon: 'img/printer.png',
                  handler: function(){
 
-                    var divmap = document.getElementById("mapPanel").parentNode;
+                    var divmap = document.getElementById("mapPanel").getElementsByClassName('x-panel-body')[0];
                     var mapp = Ext.getCmp("mapPanel");
                     var height = mapp.lastSize.height;
                     var width = mapp.lastSize.width;
@@ -353,7 +310,6 @@ function getTopBar(){
                     mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/ext-all.css">');
                     mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/xtheme-gray.css">');                                                    
                     mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers-2.12/theme/default/style.css">');
-        //            mywindow.document.write('<style type="text/css">body {width: 1280px;height: 100px;}</style>');
                     mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
                     mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
                     mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
@@ -367,7 +323,6 @@ function getTopBar(){
 
              new Ext.Toolbar.Button({
                  tooltip: 'Ayuda',
-        //         text: "Ayuda",
                  icon: 'img/question.png',
                  handler: function(){
                      var window = new Ext.Window({
@@ -416,7 +371,7 @@ function getTopBar(){
                  }
              })               
 
-    ]
+    ];
     
     return toolbar1;
    
@@ -427,63 +382,66 @@ function acomodarScaleline(){
     
     var legendpanelcss = document.getElementById("legenddiv").style;
     var scalelinecss = document.getElementById("scalelinediv").style;
-    var scalecombocss = document.getElementById("scalecombodiv").style;
+//    var scalecombocss = document.getElementById("scalecombodiv").style;
     var left;
     var bottom;
-    if(legendpanelcss.display == "block" || legendpanelcss.display == ""){
+    if(legendpanelcss.display == "block"){
         left = "270px";                        
     }else{
         left = "10px";       
     }
     
-    if(scalecombocss.display == "block" || scalecombocss.display == ""){
-        bottom = "35px";
-    }else{
-        bottom = "5px";
-    }      
+    bottom = "5px";
+    
+//    if(scalecombocss.display == "block" || scalecombocss.display == ""){
+//        bottom = "35px";
+//    }else{
+//        bottom = "5px";
+//    }      
 
     scalelinecss.left = left;
     scalelinecss.bottom = bottom;    
     
 }
 
-function acomodarResolucion(){
-
-    var legendpanelcss = document.getElementById("legenddiv").style;
-    var scalecombocss = document.getElementById("scalecombodiv").style;
-    var left;
-
-    if(legendpanelcss.display == "block" || legendpanelcss.display == ""){
-        left = "270px";                        
-    }else{
-        left = "10px";       
-    }
-
-    scalecombocss.left = left;
-    
-}
+//function acomodarResolucion(){
+//
+//    var legendpanelcss = document.getElementById("legenddiv").style;
+//    var scalecombocss = document.getElementById("scalecombodiv").style;
+//    var left;
+//
+//    if(legendpanelcss.display == "block"){
+//        left = "270px";                        
+//    }else{
+//        left = "10px";       
+//    }
+//
+//    scalecombocss.left = left;
+//    
+//}
 
 function acomodarNavegador(){
 
     var legendpanelcss = document.getElementById("legenddiv").style;
-    var geocodercss = document.getElementById("geocoderdiv").style;
+//    var geocodercss = document.getElementById("geocoderdiv").style;
     var existeNavegador = map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0];
     var left;
     var top;
     
     if(existeNavegador != null){
         
-        if(legendpanelcss.display == "block" || legendpanelcss.display == ""){
+        if(legendpanelcss.display == "block"){
             left = 134;                        
         }else{
             left = 6;       
         }
+        top = 2;
         
-        if(geocodercss.display == "block" || geocodercss.display == ""){
-            top = 17;
-        }else{
-            top = 2;
-        }           
+//        if(geocodercss.display == "block" || geocodercss.display == ""){
+//            top = 17;
+//        }else{
+//            top = 2;
+//        }           
         
         map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);   
         map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(left,top));                                             
@@ -493,18 +451,18 @@ function acomodarNavegador(){
     
 }
 
-function acomodarGeocoder(){
-    
-    var legendpanelcss = document.getElementById("legenddiv").style;
-    var geocodercss = document.getElementById("geocoderdiv").style;
-    var left;
-    
-    if(legendpanelcss.display == "block" || legendpanelcss.display == ""){
-        left = "270px";                        
-    }else{
-        left = "10px";       
-    }
-    
-    geocodercss.left = left;
-        
-}
+//function acomodarGeocoder(){
+//    
+//    var legendpanelcss = document.getElementById("legenddiv").style;
+//    var geocodercss = document.getElementById("geocoderdiv").style;
+//    var left;
+//    
+//    if(legendpanelcss.display == "block"){
+//        left = "270px";                        
+//    }else{
+//        left = "10px";       
+//    }
+//    
+//    geocodercss.left = left;
+//        
+//}

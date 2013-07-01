@@ -19,7 +19,7 @@ function getCapabilitiesUrl(wms_url){
         cap_url = wms_url + "&service=wms&request=GetCapabilities";
     }    
     
-    return cap_url;ge
+    return cap_url;
     
 }
 
@@ -1005,113 +1005,6 @@ function createLeaf(titulo, servidor, params, options){
 
                         }
                     }
-//                    ,{
-//                        text: 'Información',
-//                        icon: "img/information-italic.png",
-//                        handler: function(){
-//
-//                            var layer = map.getLayersByName(e.attributes.layer)[0];
-//                            var layerfullname = layer.params.LAYERS;
-//                            var layername = layerfullname.substr(layerfullname.indexOf(":") + 1);
-//                            var nombre = numerarNombre("wfs" + layer.name);
-//                            
-//                            var protocolo = new OpenLayers.Protocol.WFS({
-//                                url: layer.url,
-//                                version: "1.1.0",
-//                                featureType: layername,
-//                                srsName: 'EPSG:900913',
-//                                defaultFilter: new OpenLayers.Filter.Spatial({
-//                                    type: OpenLayers.Filter.Spatial.BBOX,
-//                                    value: map.getExtent()
-//                                })
-//                            });
-//                            
-//                            protocolo.read({
-//                                readOptions: {output: "object"},
-//                                maxFeatures: 100,
-//                                callback: function(resp){
-//
-//                                    if(resp.error){
-//                                        Ext.MessageBox.alert('Error', 'Ha ocurrido un error al tratar de obtener la información solicitada');
-//                                    }else{
-//                                        
-//                                        var attributesJSON = resp.features[0].attributes;
-//                                        var columns = [];
-//                                        var fields = [];
-//
-//                                        for(attribute in attributesJSON){
-//                                            columns.push({header: attribute, dataIndex: attribute, sortable: true});
-//                                            if(isNaN(parseFloat(attributesJSON[attribute]))){
-//                                                fields.push({name: attribute, type: Ext.data.Types.STRING});
-//                                            }else{
-//                                                fields.push({name: attribute, type: Ext.data.Types.FLOAT});
-//                                            }
-//
-//                                        }                                      
-//
-//                                        var wfslayer = new OpenLayers.Layer.Vector(nombre, {
-//                                            displayInLayerSwitcher: false
-//                                        });
-//
-//                                        map.addLayer(wfslayer);  
-//
-//                                        wfslayer.addFeatures(resp.features);
-//
-//                                        var grid = new Ext.grid.GridPanel({
-//                                            viewConfig: {forceFit: false},
-//                                            border: false,
-//                                            store: new GeoExt.data.FeatureStore({
-//                                                fields: fields,
-//                                                layer: wfslayer                                   
-//                                            }),
-//                                            sm: new GeoExt.grid.FeatureSelectionModel(),
-//                                            columns: columns
-//                                        });           
-//
-//                                        var window = new Ext.Window({
-//                                            title: layer.name,
-//                                            iconCls: 'informacionIcon',
-//                                            layout: "fit",
-//                                            width: (mapPanel.getWidth()),
-//                                            height: (mapPanel.getHeight()) / 4,
-//                                            x: mapPanel.getPosition()[0],
-//                                            y: mapPanel.getPosition()[1] + ((mapPanel.getHeight()) * 3 / 4),
-//                                            resizable: false,
-//                                            autoScroll: true,
-//                                            tbar:[
-//                                                
-//                                                new Ext.Toolbar.Button({
-//                                                    tooltip: 'Reconocer',
-//                                                    icon: 'img/layers6.png',
-//                                                    handler: function(){
-//                                                        
-//                                                    }
-//                                                }),
-//                                                new Ext.Toolbar.Button({
-//                                                    tooltip: 'Seleccionar',
-//                                                    icon: 'img/layers6.png',
-//                                                    handler: function(){
-//                                                        
-//                                                    }
-//                                                })
-//                                                
-//                                            ],
-//                                            items:[grid]
-//                                        }).show();  
-//
-//                                        window.on('close',function(){
-//                                            map.removeLayer(wfslayer);
-//                                        });                                        
-//
-//                                    }
-//
-//
-//
-//                                }
-//                            });
-//
-//                        }
-//                    }
                 ]
                 });
 

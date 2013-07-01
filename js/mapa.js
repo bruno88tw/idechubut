@@ -11,22 +11,9 @@
 
 OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
-//Ext.Loader.setConfig({
-//    enabled: true
-//});
-//Ext.Loader.setPath('Ext.ux', '../ux');
-//
-//Ext.require([
-//    'Ext.grid.*',
-//    'Ext.data.*',
-//    'Ext.ux.RowExpander',
-//    'Ext.selection.CheckboxModel'
-//]);
-
 Ext.onReady(function() {
     
-    Ext.QuickTips.init();  //initialize quick tips   
-//    wmsServerStore.loadData(servidoresWMS); //inicializa el almacen de servidores                  
+    Ext.QuickTips.init();  //initialize quick tips          
     createMap();    //crea el mapa
     generateViewport(); //crea el viewport   
     finalConfig();  // configuración final
@@ -40,7 +27,6 @@ function createMap(){
         {
             controls: [
                 new OpenLayers.Control.NavigationHistory(),
-//                new OpenLayers.Control.PanZoomBar(),
                 new OpenLayers.Control.Navigation(),                   
                 new OpenLayers.Control.WMSGetFeatureInfo(featureInfoOptions)        
             ],
@@ -52,7 +38,7 @@ function createMap(){
         }
     );     
         
-    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,17));    
+    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,2));    
         
 //    map.addLayer(new OpenLayers.Layer.CloudMade(
 //        'Cloudmade', 
@@ -120,41 +106,23 @@ function generateViewport(){
         region: "center",
         stateId: "map",
         border:false,
-        prettyStateKeys: true // for pretty permalinks
+        prettyStateKeys: true, // for pretty permalinks,
+        tbar: getTopBar(),
+        bbar: [
+            "<div id='scalecombodiv'></div>",
+            "->",
+            "<div id='position'></div>"
+        ]
     });
     
-//    rootnode.appendChild(new GeoExt.tree.BaseLayerContainer({
-//        text: "Capas Base",
-//        map: map,
-//        expanded: false               
-//    }));
-    
     agregarDescendencia(rootnode,tree);
-    restoreIndex(index);
-    
-    layerTreePanel2 = new Ext.tree.TreePanel({
-        title: 'Orden',
-        iconCls: "layers-arrangeIcon",
-        autoScroll: true,
-        root: new GeoExt.tree.OverlayLayerContainer({
-            text: "Solo overlays",
-            icon: "img/layers.png",
-            map: map,
-            expanded: false
-        }),
-        rootVisible: false,
-        border: false,
-        enableDD: true,
-        useArrows: true,
-        width: 300,
-        height: 500
-    });     
+    restoreIndex(index);       
     
     layerTreePanel = new Ext.tree.TreePanel({
         autoScroll: true,
         region: "center",
-//        iconCls: "layerStackIcon",
-//        title: 'Capas',
+        iconCls: "layers-headerIcon",
+        title: 'Capas',
         id: "myTreePanel",
         root: rootnode,
         rootVisible: false,
@@ -234,13 +202,6 @@ function generateViewport(){
                 text: "Mapa Base",
                 menu: new Ext.menu.Menu({
                     items: [
-//                        {
-//                            text: "IGN",
-//                            iconCls: "ignIcon",
-//                            handler: function(){
-//                                map.setBaseLayer(map.getLayersByName("IGN")[0]);
-//                            }
-//                        },
                         {
                             text: "Google Streets",
                             iconCls: "googleIcon",
@@ -334,16 +295,12 @@ function generateViewport(){
     
     legendPanel = new GeoExt.LegendPanel({
         title: 'Leyenda',
-//        flex:1,
         id: "legendRightPanel",
         region: "center",
         iconCls: "legendIcon",
         autoScroll: true,
         width: 250,
-//        collapsible: false,
-//        collapsed: false,
         border: false,
-//        bbar:[],
         defaults: {
             style: 'padding:5px',
             baseParams: {
@@ -354,6 +311,7 @@ function generateViewport(){
     });    
         
     featureGridpanel = new Ext.grid.GridPanel({
+        id: "featureGridPanel",
         viewConfig: {forceFit: false},
         border: false,
         columnLines: true,
@@ -440,15 +398,6 @@ function generateViewport(){
                     region: 'center',
                     border:false,
                     items:[
-//                        {
-//                            region: 'north',
-//                            collapseMode: 'mini',
-//                            split: true,
-//                            height: 25,
-//                            maxHeight: 25,
-//                            minHeight: 25,
-//                            border:false,                            
-//                        },
                         {
                             region: 'west',
                             collapseMode: 'mini',
@@ -457,6 +406,7 @@ function generateViewport(){
                             width: 255,
                             maxWidth: 255,
                             minWidth: 255,
+                            border: false,
                             items:[layerTreePanel]
                         },
                         {
@@ -468,95 +418,58 @@ function generateViewport(){
                             width: 255,
                             maxWidth: 255,
                             minWidth: 255,
+                            border:false,
                             items:[legendPanel]
                         },                        
-//                        {
-//                            region: 'west',
-//                            layout: "border",
-//                            collapseMode: 'mini',
-//                            split: true,                            
-//                            width: 280,
-//                            maxWidth: 280,
-//                            minWidth: 280,
-//                            items: [
-//                                new Ext.TabPanel({
-//                                    region: "center",
-//                                    activeTab: 0,
-//                                    resizeTabs: true,
-////                                    autoHeight: true,
-//                                    border: false,
-//                                    tabWidth: 110,                                
-//                                    items: [layerTreePanel,layerTreePanel2]
-//                                })                                                              
-//                            ]
-//                        },
-//                        {
-//                            region: 'east',
-//                            collapseMode: 'mini',
-//                            split: true,
-//                            layout: {
-//                                type: 'vbox',
-//                                align: 'stretch'
-//                            },
-//                            width: 250,
-//                            maxWidth: 250,
-//                            minWidth: 250,
-//                            items:[legendPanel]
-//                        },
                         {
                             region: 'center',
                             border:false,
                             layout: 'border',
-//                            tbar: getTopBar(),
                             items: [
-                                {
-                                    region: 'north',
-                                    collapseMode: 'mini',
-                                    collapsed: false,
-                                    split: true,
-                                    border: false,
-                                    tbar: getTopBar()
-                                },
-                                mapPanel,
-                                {
-                                    id: "wfsPanel",
-//                                    title: "Atributos",
-                                    region: 'south',
-                                    collapseMode: 'mini',
-                                    collapsed: true,
-                                    split: true,
-                                    height: 200,
-                                    minHeight: 200,
-                                    maxHeight: 200,
-                                    tbar: [
-                                        wfsReconocer, 
-                                        wfsSeleccionar, 
-                                        wfsBorrar,
-                                        "->",
-                                        new Ext.ux.Exporter.Button({store: wfsStoreExport})
-                                    ],
-                                    items:[featureGridpanel],
-//                                    bbar:[]
-                                }                                
+//                                {
+//                                    region: 'north',
+//                                    collapseMode: 'mini',
+//                                    collapsed: false,
+//                                    split: true,
+//                                    border: false,
+//                                    tbar: getTopBar()
+//                                },
+                                mapPanel                               
                             ]
-                        }
+                        },
+                        {
+                            id: "wfsPanel",
+                            region: 'south',
+                            collapseMode: 'mini',
+                            collapsed: true,
+                            split: true,
+                            height: 200,
+                            minHeight: 200,
+                            maxHeight: 200,
+                            tbar: [
+                                wfsReconocer, 
+                                wfsSeleccionar, 
+                                wfsBorrar,
+                                "->",
+                                new Ext.ux.Exporter.Button({store: wfsStoreExport})
+                            ],
+                            items:[featureGridpanel]
+                        }                         
 
                     ]
                 }
             ]
-    });    
+    });  
+    
+    featureGridpanel.setWidth(mapPanel.getWidth() - 3);
     
 }
 
 function finalConfig(){
 
-    var mapdiv = document.getElementById('mapPanel').firstChild.firstChild.firstChild;
+    var mapdiv = document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild;
     mapdiv.appendChild(document.getElementById('scalelinediv'));
-    mapdiv.appendChild(document.getElementById('scalecombodiv'));
-    mapdiv.appendChild(document.getElementById('geocoderdiv'));
-    mapdiv.appendChild(document.getElementById('position'));
     mapdiv.appendChild(document.getElementById('minimapcontainer'));
-//    mapdiv.appendChild(document.getElementById('mapBackground'));
     mapdiv.appendChild(document.getElementById('rosa'));
     mapdiv.appendChild(document.getElementById('titulodiv'));
     mapdiv.appendChild(document.getElementById('subtitulodiv'));
@@ -567,34 +480,12 @@ function finalConfig(){
     
     map.addControl(new OpenLayers.Control.MousePosition({
         div: document.getElementById('position'),
-//        prefix: '<b>lon:</b> ',
-//        separator: '&nbsp; <b>lat:</b> ',
-//        displayProjection: projection4326,
-//        numDigits: 2,
         formatOutput: function(lonLat) {
             var markup = convertDMS(lonLat.lat, "LAT");
             markup += " " + convertDMS(lonLat.lon, "LON");
             return markup
         }
-    }));     
-    
-    var geocoder = new Ext.Toolbar({
-        width: 250,    
-        renderTo: document.getElementById("geocoderdiv"),  
-        items:[
-            new GeoExt.form.GeocoderComboBox({       
-                layer: locationLayer,
-                emptyText: "Buscar un lugar ..",
-                map: map,                
-                bounds: max_bounds,
-                border: false,
-                width: 246,
-                heigh:100,
-                boxMaxHeight: 100,
-                boxMinHeight: 100
-            })
-        ]
-    });  
+    }));        
 
     var scaleCombo = new Ext.form.ComboBox({
         width: 130,
@@ -632,12 +523,11 @@ function finalConfig(){
     
     legendPanel2 = new GeoExt.LegendPanel({
         title: 'Leyenda',
-        flex:1,
         iconCls: "legendIcon",
         id: "legendPanel",
         autoScroll: true,
         width: 250,
-        height: mapPanel.getHeight() - 20,
+//        height: mapPanel.getHeight() - 203,
         collapsible: false,
         collapsed: false,
         border: false,
@@ -651,31 +541,20 @@ function finalConfig(){
             }
         }
     });  
-    
+
     mapPanel.on("bodyresize", function(){
-        legendPanel2.setHeight(mapPanel.getHeight() - 20);
+        legendPanel2.setHeight(mapPanel.getHeight() - 73);
+        Ext.getCmp("featureGridPanel").setWidth(Ext.getCmp("wfsPanel").getWidth() - 3);
     });
     
-    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].style.height = "31px";
-    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].style.backgroundColor = "#7193CB";
-//    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].style.height = "33px";
-//    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].style.backgroundColor = "#7193CB";
-    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-header')[0].style.height = "21px";
-    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-header')[0].style.backgroundColor = "#7193CB";
-//    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingTop = "1px";
-//    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingBottom = "2px";
-//    document.getElementById("wfsPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingTop = "1px";
-//    document.getElementById("wfsPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingBottom = "2px";
-    
-    var geocoderdivcss = document.getElementById('geocoderdiv').firstChild;
-    geocoderdivcss.style.backgroundColor = 'rgba(255, 255, 255, 0)';
-    geocoderdivcss.style.backgroundImage = 'none';
-    geocoderdivcss.style.borderStyle = 'none';       
-    
-    var geocodercombocss = document.getElementById('geocoderdiv').getElementsByClassName('x-form-field-wrap')[0];
-    geocodercombocss.firstChild.style.padding = "3px 3px";
-    geocodercombocss.firstChild.style.backgroundImage = "none";
-    geocodercombocss.lastChild.style.height = "21px";    
+    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
+    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
+    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.backgroundColor = "#BACAE6";
+    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.borderTopColor = "#BACAE6";
+    document.getElementById("myTreePanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
+    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
+  
+//    legendPanel2.setHeight(mapPanel.getHeight() - 73);
     
 
        
