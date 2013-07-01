@@ -26,17 +26,26 @@ var wfsLayer = null;
 var wfsReconocerControl = null;
 var wfsSelectControl = null;
 
-var servidoresWMS = [
-    ["Dirección General de Estadística y Censos","http://172.158.1.0/geoserver/wms"],
-    ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
-    ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
-    ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
-    ["Ministerio de Educación","http://www.chubut.edu.ar:8080/geoserver/wms"],
-    ["Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"]
-];
+var wfsStore = new GeoExt.data.FeatureStore({
+    fields: [],
+    layer: wfsLayer
+});
+var wfsStoreExport = new GeoExt.data.FeatureStore({
+    fields: [],
+    layer: wfsLayer
+});
 
+//WMS
 var wmsServerStore = new Ext.data.ArrayStore({
     fields: ['nombre', 'url'],
+    data: [
+        ["Dirección General de Estadística y Censos","http://172.158.1.0/geoserver/wms"],
+        ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
+        ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
+        ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
+        ["Ministerio de Educación","http://www.chubut.edu.ar:8080/geoserver/wms"],
+        ["Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"]
+    ],
     idIndex: 0 // id for eache record will be the first element (in this case, 'nombre')
 });
 

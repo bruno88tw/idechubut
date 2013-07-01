@@ -26,7 +26,7 @@ OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 Ext.onReady(function() {
     
     Ext.QuickTips.init();  //initialize quick tips   
-    wmsServerStore.loadData(servidoresWMS); //inicializa el almacen de servidores                  
+//    wmsServerStore.loadData(servidoresWMS); //inicializa el almacen de servidores                  
     createMap();    //crea el mapa
     generateViewport(); //crea el viewport   
     finalConfig();  // configuración final
@@ -52,7 +52,7 @@ function createMap(){
         }
     );     
         
-//    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(5,3));    
+    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,17));    
         
 //    map.addLayer(new OpenLayers.Layer.CloudMade(
 //        'Cloudmade', 
@@ -119,7 +119,7 @@ function generateViewport(){
         extent: max_bounds.clone().transform(projection4326, projectionMercator),
         region: "center",
         stateId: "map",
-        border:true,
+        border:false,
         prettyStateKeys: true // for pretty permalinks
     });
     
@@ -165,6 +165,7 @@ function generateViewport(){
             new Ext.Toolbar.Button({
                 tooltip: 'Agregar capa',
                 icon: 'img/map-plus.png',
+                id: "treePanelTopbarAgregar",
                 handler: function(){
                     agregarCapas(null);
                 }
@@ -172,39 +173,38 @@ function generateViewport(){
             new Ext.Toolbar.Button({
                 tooltip: 'Orden',
                 icon: 'img/maps-stack.png',
-                handler: function(){                        
-                    new Ext.Window({
-                        title: "Orden de las capas",
-                        iconCls: 'layers-arrangeIcon',
-                        layout: "border",
-                        resizable: false,
-                        height: mapPanel.getHeight(),
-                        x: mapPanel.getPosition()[0],
-                        y: mapPanel.getPosition()[1],
-                        shadow: false,
-                        items:[new Ext.tree.TreePanel({
-                            region:"center",
-                            iconCls: "layers-arrangeIcon",
-                            autoScroll: true,
-                            root: new GeoExt.tree.OverlayLayerContainer({
-                                text: "Solo overlays",
-                                icon: "img/layers.png",
-                                map: map,
-                                expanded: false
-                            }),
-                            rootVisible: false,
-                            border: false,
-                            enableDD: true,
-                            useArrows: true,
-                            width: 300,
-//                            height: 800
-                        })]
-                    }).show();
+                enableToggle: true,
+                allowDepress: true,
+                handler: function(){        
+                    if(this.pressed){
+                        Ext.getCmp("treePanelTopbarAgregar").disable();
+                        Ext.getCmp("treePanelTopbarAgregarCarpeta").disable();
+                        Ext.getCmp("treePanelTopbarExpandir").disable();
+                        Ext.getCmp("treePanelTopbarColapsar").disable();
+                        Ext.getCmp("treePanelBottombarImportar").disable();
+                        Ext.getCmp("treePanelBottombarExportar").disable();  
+                        Ext.getCmp("myTreePanel").root = null;
+                        Ext.getCmp("myTreePanel").setRootNode(new GeoExt.tree.OverlayLayerContainer({
+                            text: "Solo overlays",
+                            icon: "img/layers.png",
+                            map: map,
+                            expanded: false
+                        }));
+                    }else{
+                        Ext.getCmp("treePanelTopbarAgregar").enable();
+                        Ext.getCmp("treePanelTopbarAgregarCarpeta").enable();
+                        Ext.getCmp("treePanelTopbarExpandir").enable();
+                        Ext.getCmp("treePanelTopbarColapsar").enable();
+                        Ext.getCmp("treePanelBottombarImportar").enable();
+                        Ext.getCmp("treePanelBottombarExportar").enable();
+                        Ext.getCmp("myTreePanel").setRootNode(rootnode);
+                    }
                 }
             }),
             new Ext.Toolbar.Button({
                 tooltip: 'Agregar carpeta',
                 icon: 'img/folder-add.png',
+                id: "treePanelTopbarAgregarCarpeta",
                 handler: function(){
                    var newFolder = createNode("Nueva carpeta");
                    Ext.getCmp("myTreePanel").getRootNode().appendChild(newFolder);
@@ -214,6 +214,7 @@ function generateViewport(){
             new Ext.Toolbar.Button({
                 tooltip: 'Expandir todo',
                 icon: 'img/list-add.png',
+                id: "treePanelTopbarExpandir",
                 handler: function(){
                    expandAll(Ext.getCmp("myTreePanel").getRootNode());
                 }
@@ -221,6 +222,7 @@ function generateViewport(){
             new Ext.Toolbar.Button({
                 tooltip: 'Colapsar todo',
                 icon: 'img/list-remove.png',
+                id: "treePanelTopbarColapsar", 
                 handler: function(){
                    collapseAll(Ext.getCmp("myTreePanel").getRootNode());
                 }
@@ -316,11 +318,13 @@ function generateViewport(){
             new Ext.Toolbar.Button({
                 tooltip: 'Importar capas',
                 icon: 'img/folder-open.png',
+                id: "treePanelBottombarImportar",
                 handler: onImportarCapas
             }),
             new Ext.Toolbar.Button({
                 tooltip: 'Guardar capas',
                 icon: 'img/folder-save.png',
+                id: "treePanelBottombarExportar",
                 handler: onGuardarCapas
             })        
         ]
@@ -330,13 +334,16 @@ function generateViewport(){
     
     legendPanel = new GeoExt.LegendPanel({
         title: 'Leyenda',
-        flex:1,
+//        flex:1,
+        id: "legendRightPanel",
+        region: "center",
         iconCls: "legendIcon",
         autoScroll: true,
         width: 250,
-        collapsible: false,
-        collapsed: false,
+//        collapsible: false,
+//        collapsed: false,
         border: false,
+//        bbar:[],
         defaults: {
             style: 'padding:5px',
             baseParams: {
@@ -433,26 +440,36 @@ function generateViewport(){
                     region: 'center',
                     border:false,
                     items:[
-                        {
-                            region: 'north',
-                            collapseMode: 'mini',
-                            split: true,
-                            height: 25,
-                            maxHeight: 25,
-                            minHeight: 25,
-                            border:false,
-                            tbar: getTopBar()
-                        },
+//                        {
+//                            region: 'north',
+//                            collapseMode: 'mini',
+//                            split: true,
+//                            height: 25,
+//                            maxHeight: 25,
+//                            minHeight: 25,
+//                            border:false,                            
+//                        },
                         {
                             region: 'west',
                             collapseMode: 'mini',
                             split: true,
                             layout: "border",
-                            width: 280,
-                            maxWidth: 280,
-                            minWidth: 280,
+                            width: 255,
+                            maxWidth: 255,
+                            minWidth: 255,
                             items:[layerTreePanel]
                         },
+                        {
+                            region: 'east',
+                            collapseMode: 'mini',
+                            collapsed: true,
+                            split: true,
+                            layout: "border",
+                            width: 255,
+                            maxWidth: 255,
+                            minWidth: 255,
+                            items:[legendPanel]
+                        },                        
 //                        {
 //                            region: 'west',
 //                            layout: "border",
@@ -490,7 +507,16 @@ function generateViewport(){
                             region: 'center',
                             border:false,
                             layout: 'border',
+//                            tbar: getTopBar(),
                             items: [
+                                {
+                                    region: 'north',
+                                    collapseMode: 'mini',
+                                    collapsed: false,
+                                    split: true,
+                                    border: false,
+                                    tbar: getTopBar()
+                                },
                                 mapPanel,
                                 {
                                     id: "wfsPanel",
@@ -505,9 +531,12 @@ function generateViewport(){
                                     tbar: [
                                         wfsReconocer, 
                                         wfsSeleccionar, 
-                                        wfsBorrar
+                                        wfsBorrar,
+                                        "->",
+                                        new Ext.ux.Exporter.Button({store: wfsStoreExport})
                                     ],
-                                    items:[featureGridpanel]
+                                    items:[featureGridpanel],
+//                                    bbar:[]
                                 }                                
                             ]
                         }
@@ -549,13 +578,22 @@ function finalConfig(){
         }
     }));     
     
-    var geocoder = new GeoExt.form.GeocoderComboBox({       
-        layer: locationLayer,
-        emptyText: "Buscar",
-        map: map,
-        renderTo: document.getElementById("geocoderdiv"),
-        bounds: max_bounds,
-        width: 250
+    var geocoder = new Ext.Toolbar({
+        width: 250,    
+        renderTo: document.getElementById("geocoderdiv"),  
+        items:[
+            new GeoExt.form.GeocoderComboBox({       
+                layer: locationLayer,
+                emptyText: "Buscar un lugar ..",
+                map: map,                
+                bounds: max_bounds,
+                border: false,
+                width: 246,
+                heigh:100,
+                boxMaxHeight: 100,
+                boxMinHeight: 100
+            })
+        ]
     });  
 
     var scaleCombo = new Ext.form.ComboBox({
@@ -582,7 +620,7 @@ function finalConfig(){
     
     map.addControl(new OpenLayers.Control.OverviewMap({
         layers:[new OpenLayers.Layer.OSM("OSM",null,null,{isBaseLayer: true, maxZoomLevel: 20})],
-        size: new OpenLayers.Size(180, 155),
+        size: new OpenLayers.Size(150, 130),
         div: document.getElementById('minimap')            
     }));       
     
@@ -596,8 +634,10 @@ function finalConfig(){
         title: 'Leyenda',
         flex:1,
         iconCls: "legendIcon",
+        id: "legendPanel",
         autoScroll: true,
         width: 250,
+        height: mapPanel.getHeight() - 20,
         collapsible: false,
         collapsed: false,
         border: false,
@@ -611,6 +651,33 @@ function finalConfig(){
             }
         }
     });  
+    
+    mapPanel.on("bodyresize", function(){
+        legendPanel2.setHeight(mapPanel.getHeight() - 20);
+    });
+    
+    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].style.height = "31px";
+    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].style.backgroundColor = "#7193CB";
+//    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].style.height = "33px";
+//    document.getElementById("myTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].style.backgroundColor = "#7193CB";
+    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-header')[0].style.height = "21px";
+    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-header')[0].style.backgroundColor = "#7193CB";
+//    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingTop = "1px";
+//    document.getElementById("legendRightPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingBottom = "2px";
+//    document.getElementById("wfsPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingTop = "1px";
+//    document.getElementById("wfsPanel").getElementsByClassName('x-panel-bbar')[0].firstChild.style.paddingBottom = "2px";
+    
+    var geocoderdivcss = document.getElementById('geocoderdiv').firstChild;
+    geocoderdivcss.style.backgroundColor = 'rgba(255, 255, 255, 0)';
+    geocoderdivcss.style.backgroundImage = 'none';
+    geocoderdivcss.style.borderStyle = 'none';       
+    
+    var geocodercombocss = document.getElementById('geocoderdiv').getElementsByClassName('x-form-field-wrap')[0];
+    geocodercombocss.firstChild.style.padding = "3px 3px";
+    geocodercombocss.firstChild.style.backgroundImage = "none";
+    geocodercombocss.lastChild.style.height = "21px";    
+    
+
        
 }
 
