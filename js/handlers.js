@@ -47,11 +47,11 @@ function onImportarCapas(){
 
                         var loadtree = JSON.parse(inputTextArea.getValue());
 
-                        removeLayers(Ext.getCmp("myTreePanel").getRootNode());
-                        for(var i = 0; i < Ext.getCmp("myTreePanel").getRootNode().childNodes.length; i++){
-                            Ext.getCmp("myTreePanel").getRootNode().childNodes[i].remove();
+                        removeLayers(Ext.getCmp("layerTreePanel").getRootNode());
+                        for(var i = 0; i < Ext.getCmp("layerTreePanel").getRootNode().childNodes.length; i++){
+                            Ext.getCmp("layerTreePanel").getRootNode().childNodes[i].remove();
                         }
-                        agregarDescendencia(Ext.getCmp("myTreePanel").getRootNode(),loadtree[0]);   
+                        agregarDescendencia(Ext.getCmp("layerTreePanel").getRootNode(),loadtree[0]);   
                         restoreIndex(loadtree[1]);
                         window.close();
 
@@ -70,9 +70,9 @@ function onImportarCapas(){
 
 function onGuardarCapas(){
     
-    savetree = [];
+    var savetree = [];
     index = [];
-    saveLayerTree(savetree,Ext.getCmp("myTreePanel").getRootNode().childNodes); 
+    saveLayerTree(savetree,Ext.getCmp("layerTreePanel").getRootNode().childNodes); 
     index = saveLayerIndex();
     var jsonobject = JSON.stringify([savetree,index]);
 

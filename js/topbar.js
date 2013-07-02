@@ -106,10 +106,10 @@ function getTopBar(){
              }),    
              "&nbsp",
              new GeoExt.form.GeocoderComboBox({       
-                layer: locationLayer,
+                layer: map.getLayersByName("Location")[0],
                 emptyText: "Buscar un lugar ..",
                 map: map,                
-                bounds: max_bounds,
+                bounds: global.max_bounds,
                 border: false,
                 width: 246,
                 heigh:100,
@@ -181,13 +181,11 @@ function getTopBar(){
                                 var legenddiv = document.getElementById("legenddiv");
                                 if (this.checked){
                                     legenddiv.style.display = "block";
-                                    Ext.getCmp("legendPanel").setHeight(mapPanel.getHeight() - 74);
+                                    Ext.getCmp("legendPanelOnMap").setHeight(Ext.getCmp("mapPanel").getHeight() - 74);
                                 }else{
                                     legenddiv.style.display = "none";
                                 }
                                 acomodarScaleline();
-//                                acomodarResolucion();
-//                                acomodarGeocoder();
                                 acomodarNavegador();
                             }
                         },                          
@@ -201,20 +199,7 @@ function getTopBar(){
                                     map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]); 
                                 }
                             }
-                        },
-//                        {
-//                            text: 'Localizador',
-//                            checked: true,
-//                            checkHandler: function(){                                          
-//                                var geocoderdiv = document.getElementById("geocoderdiv");
-//                                if (this.checked){
-//                                    geocoderdiv.style.display = "block";
-//                                }else{
-//                                    geocoderdiv.style.display = "none";
-//                                }
-//                                acomodarNavegador();
-//                            }
-//                        },                                
+                        },                             
                         {
                             text: 'Escala',
                             checked: true,
@@ -227,31 +212,6 @@ function getTopBar(){
                                 }
                             }
                         },
-//                        {
-//                            text: 'Resolucion',
-//                            checked: true,
-//                            checkHandler: function(){
-//                                var scalecombodiv = document.getElementById("scalecombodiv");
-//                                if (this.checked){
-//                                    scalecombodiv.style.display = "block";                                    
-//                                }else{
-//                                    scalecombodiv.style.display = "none";
-//                                }
-//                                acomodarScaleline();
-//                            }
-//                        },
-//                        {
-//                            text: 'Posición',
-//                            checked: true,
-//                            checkHandler: function(){
-//                                var posicioncontainer = document.getElementById("position");
-//                                if (this.checked){
-//                                    posicioncontainer.style.display = "block";
-//                                }else{
-//                                    posicioncontainer.style.display = "none";
-//                                }
-//                            }
-//                        },
                         {
                             text: 'Minimapa',
                             checked: true,
@@ -382,7 +342,6 @@ function acomodarScaleline(){
     
     var legendpanelcss = document.getElementById("legenddiv").style;
     var scalelinecss = document.getElementById("scalelinediv").style;
-//    var scalecombocss = document.getElementById("scalecombodiv").style;
     var left;
     var bottom;
     if(legendpanelcss.display == "block"){
@@ -391,39 +350,16 @@ function acomodarScaleline(){
         left = "10px";       
     }
     
-    bottom = "5px";
-    
-//    if(scalecombocss.display == "block" || scalecombocss.display == ""){
-//        bottom = "35px";
-//    }else{
-//        bottom = "5px";
-//    }      
+    bottom = "5px";      
 
     scalelinecss.left = left;
     scalelinecss.bottom = bottom;    
     
 }
 
-//function acomodarResolucion(){
-//
-//    var legendpanelcss = document.getElementById("legenddiv").style;
-//    var scalecombocss = document.getElementById("scalecombodiv").style;
-//    var left;
-//
-//    if(legendpanelcss.display == "block"){
-//        left = "270px";                        
-//    }else{
-//        left = "10px";       
-//    }
-//
-//    scalecombocss.left = left;
-//    
-//}
-
 function acomodarNavegador(){
 
     var legendpanelcss = document.getElementById("legenddiv").style;
-//    var geocodercss = document.getElementById("geocoderdiv").style;
     var existeNavegador = map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0];
     var left;
     var top;
@@ -435,13 +371,7 @@ function acomodarNavegador(){
         }else{
             left = 6;       
         }
-        top = 2;
-        
-//        if(geocodercss.display == "block" || geocodercss.display == ""){
-//            top = 17;
-//        }else{
-//            top = 2;
-//        }           
+        top = 2;                  
         
         map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);   
         map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(left,top));                                             
@@ -450,19 +380,3 @@ function acomodarNavegador(){
      
     
 }
-
-//function acomodarGeocoder(){
-//    
-//    var legendpanelcss = document.getElementById("legenddiv").style;
-//    var geocodercss = document.getElementById("geocoderdiv").style;
-//    var left;
-//    
-//    if(legendpanelcss.display == "block"){
-//        left = "270px";                        
-//    }else{
-//        left = "10px";       
-//    }
-//    
-//    geocodercss.left = left;
-//        
-//}
