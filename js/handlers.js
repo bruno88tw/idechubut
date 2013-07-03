@@ -9,6 +9,9 @@
  * 
  */
 
+/*
+ * Handler para la herramienta importar capas
+ */
 function onImportarCapas(){
     
     var inputTextArea = new Ext.form.TextArea({
@@ -68,6 +71,9 @@ function onImportarCapas(){
         
 }
 
+/*
+ * Handler para la herramienta exportar capas
+ */
 function onGuardarCapas(){
     
     var savetree = [];

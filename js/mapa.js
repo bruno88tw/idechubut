@@ -9,6 +9,32 @@
  * 
  */
 
+/*
+ * Variable de acceso global
+ * 
+ * @type array
+ */
+var app = {};
+
+/*
+ * Variable de acceso global para acceder a las componentes toolbar de la aplicación
+ * 
+ * @type type
+ */
+var toolbars = {};
+
+/*
+ * Variable de acceso global para acceder a los componentes de la aplicación
+ * 
+ * @type type
+ */
+var componentes = {};
+
+/*
+ * Ubicación del proxy cgi
+ * 
+ * @type String
+ */
 OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
 /*
@@ -17,9 +43,11 @@ OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 Ext.onReady(function() {
     
     Ext.QuickTips.init();  //initialize quick tips          
-    createMap();    //crea el mapa
-    generateViewport(); //crea el viewport   
-    finalConfig();  // configuración final
+    app.crearMapa();    //crea el mapa
+    app.agregarControles();
+    app.agregarCapasBase();
+    app.generarViewport(); //crea el viewport   
+    app.configuracionFinal();  // configuración final
     
 });
 
@@ -28,67 +56,84 @@ Ext.onReady(function() {
  * 
  * @returns {undefined}
  */
-function createMap(){               
+app.crearMapa = function(){               
 
     /*
      * Creo el mapa
      */
-    map = new OpenLayers.Map(
+    app.map = new OpenLayers.Map(
         "divMapa",
         {
             controls: [],
-            resolutions: resolutions,
-            restrictedExtent: global.max_bounds.clone().transform(projection4326, projectionMercator),  
-            projection: projectionMercator,
-            displayProjection: projection4326, 
+            resolutions: app.resolutions,
+            restrictedExtent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),  
+            projection: app.projection900913,
+            displayProjection: app.projection4326, 
             units: 'm'
         }
-    );     
+    );   
         
-    /*
-     * Agrego los controles al mapa
-     */
-    map.addControl(new OpenLayers.Control.NavigationHistory());
-    map.addControl(new OpenLayers.Control.Navigation());
-    map.addControl(new OpenLayers.Control.WMSGetFeatureInfo(featureInfoOptions));
-    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,2));            
+};
 
+/*
+ * Agrega controles básicos al mapa
+ * 
+ * @returns {undefined}
+ */
+app.agregarControles = function(){
+    
+    /*
+     * Agrego control de historia de navegación
+     */
+    app.map.addControl(new OpenLayers.Control.NavigationHistory());
+    
+    /*
+     * Agrego el control de navegación
+     */
+    app.map.addControl(new OpenLayers.Control.Navigation());
+    
+    /*
+     * Agrego el control para consultas a través de WMSGetFeatureInfo
+     */
+    app.map.addControl(new OpenLayers.Control.WMSGetFeatureInfo(app.featureInfoOptions));
+    
+    /*
+     * Agrego el control de panzoombar
+     */
+    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,2));        
+    
+};
+
+/*
+ * Agrega capas base al mapa y capas vectoriales
+ * 
+ * @returns {undefined}
+ */
+app.agregarCapasBase = function(){
+    
     /*
      * Agrego capas base al mapa
      */
-
-    map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
-    map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
-    map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
-    map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 6, maxZoomLevel: 19}));
-    map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 6, resolutions: resolutions, isBaseLayer:true, sphericalMercator: true}));    
-    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: global.bingApiKey, type: "Road", zoomOffset: 6, resolutions: resolutions}));
-    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: global.bingApiKey, type: "Aerial", zoomOffset: 6, resolutions: resolutions}));
-    map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: global.bingApiKey, type: "AerialWithLabels", zoomOffset: 6, resolutions: resolutions}));
-    map.addLayer(new OpenLayers.Layer.OSM("mapquest",
-        ["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
-        "http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
-        "http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg",
-        "http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],
-        {zoomOffset: 6, resolutions: resolutions, isBaseLayer:true, sphericalMercator: true}
-    ));  
-    map.addLayer(new OpenLayers.Layer.OSM("mapquestAerial",
-        ["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-        "http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-        "http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg",
-        "http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],
-        {zoomOffset: 6, resolutions: resolutions2, isBaseLayer:true, sphericalMercator: true}
-    ));            
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 6, maxZoomLevel: 19}));
+    app.map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));    
+    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Road", zoomOffset: 6, resolutions: app.resolutions}));
+    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Aerial", zoomOffset: 6, resolutions: app.resolutions}));
+    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "AerialWithLabels", zoomOffset: 6, resolutions: app.resolutions}));
+    app.map.addLayer(new OpenLayers.Layer.OSM("mapquest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));  
+    app.map.addLayer(new OpenLayers.Layer.OSM("mapquestAerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions2, isBaseLayer:true, sphericalMercator: true}));            
 
     /*
      * Vector layer para las consultas wfs
      */             
-    map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {displayInLayerSwitcher: false}));
+    app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {displayInLayerSwitcher: false}));
     
     /*
      * Vector layer para el localizador
      */
-    map.addLayer(new OpenLayers.Layer.Vector("Location", {
+    app.map.addLayer(new OpenLayers.Layer.Vector("Location", {
         styleMap: new OpenLayers.Style({
             externalGraphic: "http://openlayers.org/api/img/marker.png",
             graphicYOffset: -25,
@@ -96,26 +141,16 @@ function createMap(){
             graphicTitle: "${name}"
         }),
         displayInLayerSwitcher: false
-    }));
+    }));    
     
-}
+};
 
 /*
  * Genera el vieport y le incorpora todos los paneles necesarios
  * 
  * @returns {undefined}
  */
-function generateViewport(){
-    
-    /*
-     * Raíz del árbol de capas
-     */
-    global.rootnode = new Ext.tree.TreeNode({
-        text: "Capas",
-        icon: "img/layers.png",
-        leaf:false,
-        expanded: true          
-    });  
+app.generarViewport = function(){         
     
     /*
      * Panel del mapa
@@ -123,55 +158,14 @@ function generateViewport(){
     new GeoExt.MapPanel({
         region: 'center',
         border:false,
-        map: map,  
-        center: new OpenLayers.LonLat(-69, -44).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()),
+        map: app.map,  
+        center: new OpenLayers.LonLat(-69, -44).transform(new OpenLayers.Projection("EPSG:4326"), app.map.getProjectionObject()),
         id: "mapPanel",
-        extent: global.max_bounds.clone().transform(projection4326, projectionMercator),
+        extent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),
         stateId: "map",
-        tbar: getTopBar(),
-        bbar: [
-            /*
-             * Herramienta de resolución
-             */
-            new Ext.form.ComboBox({
-                id: "scaleCombo",
-                width: 130,
-                mode: "local", // keep the combo box from forcing a lot of unneeded data refreshes
-                emptyText: "Scale",
-                triggerAction: "all", // needed so that the combo box doesn't filter by its current content
-                displayField: "scale",
-                editable: false,
-                tpl: '<tpl for="."><div class="x-combo-list-item">1 : {[parseInt(values.scale)]}</div></tpl>',
-                store: new GeoExt.data.ScaleStore({map: map}),
-                listeners: {
-                    select: function(combo, record) {
-                        Ext.getCmp("mapPanel").map.zoomTo(record.get("level"));
-                        Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(map.getScale()));
-                    }
-                }
-            }),
-            "->",
-            "<div id='position'></div>"
-        ]
-    });   
-    
-    /*
-     * Reescribe el contenido del combobox de resolución para darle un determinado formato
-     */
-    Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(map.getScale()));      
-    
-    /*
-     * Agrega un manejador al evento cambio de zoom del mapa de modo que reescriba el contenido del combobox de resolución
-     */
-    map.events.register("zoomend", this, function() {
-        Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(map.getScale()));
-    });
-
-    /*
-     * Importo las capas definidas en tree y el orden definido en index
-     */
-    agregarDescendencia(global.rootnode,tree);
-    restoreIndex(index);     
+        tbar: toolbars.getMapPanelTopBar(),
+        bbar: toolbars.getMapPanelBottomBar()
+    });               
     
     /*
      * Panel del árbol de capas
@@ -188,173 +182,11 @@ function generateViewport(){
         iconCls: "layers-headerIcon",
         title: 'Capas',
         id: "layerTreePanel",
-        root: global.rootnode,
+        root: app.rootnode,
         rootVisible: false,
         enableDD: true,
-        tbar:[ 
-            /*
-             * Botón para agregar nuevas capas
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Agregar capa',
-                icon: 'img/map-plus.png',
-                id: "treePanelTopbarAgregar",
-                handler: function(){
-                    agregarCapas(null);
-                }
-            }),
-            /*
-             * Botón para visualizar y modificar el orden de las capas
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Orden',
-                icon: 'img/maps-stack.png',
-                enableToggle: true,
-                allowDepress: true,
-                handler: function(){        
-                    if(this.pressed){
-                        Ext.getCmp("treePanelTopbarAgregar").disable();
-                        Ext.getCmp("treePanelTopbarAgregarCarpeta").disable();
-                        Ext.getCmp("treePanelTopbarExpandir").disable();
-                        Ext.getCmp("treePanelTopbarColapsar").disable();
-                        Ext.getCmp("treePanelBottombarImportar").disable();
-                        Ext.getCmp("treePanelBottombarExportar").disable();  
-                        Ext.getCmp("layerTreePanel").root = null;
-                        Ext.getCmp("layerTreePanel").setRootNode(new GeoExt.tree.OverlayLayerContainer({
-                            text: "Solo overlays",
-                            icon: "img/layers.png",
-                            map: map,
-                            expanded: false
-                        }));
-                    }else{
-                        Ext.getCmp("treePanelTopbarAgregar").enable();
-                        Ext.getCmp("treePanelTopbarAgregarCarpeta").enable();
-                        Ext.getCmp("treePanelTopbarExpandir").enable();
-                        Ext.getCmp("treePanelTopbarColapsar").enable();
-                        Ext.getCmp("treePanelBottombarImportar").enable();
-                        Ext.getCmp("treePanelBottombarExportar").enable();
-                        Ext.getCmp("layerTreePanel").setRootNode(global.rootnode);
-                    }
-                }
-            }),
-            /*
-             * Botón para agregar una nueva carpeta al árbol de capas
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Agregar carpeta',
-                icon: 'img/folder-add.png',
-                id: "treePanelTopbarAgregarCarpeta",
-                handler: function(){
-                   var newFolder = createNode("Nueva carpeta");
-                   Ext.getCmp("layerTreePanel").getRootNode().appendChild(newFolder);
-                   setFolderName(newFolder);
-                }
-            }),  
-            /*
-             * Botón para expandir todo el árbol de capas
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Expandir todo',
-                icon: 'img/list-add.png',
-                id: "treePanelTopbarExpandir",
-                handler: function(){
-                   expandAll(Ext.getCmp("layerTreePanel").getRootNode());
-                }
-            }),
-            /*
-             * Botón para colapsar todo el árbol de capas
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Colapsar todo',
-                icon: 'img/list-remove.png',
-                id: "treePanelTopbarColapsar", 
-                handler: function(){
-                   collapseAll(Ext.getCmp("layerTreePanel").getRootNode());
-                }
-            })
-        ],
-        bbar: [ 
-            /*
-             * Menú de selección de capa base
-             */
-            {
-                icon: "img/map.png",
-                text: "Mapa Base",
-                menu: new Ext.menu.Menu({
-                    items: [
-                        {
-                            text: "Google Streets",
-                            iconCls: "googleIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("Google Streets")[0]);}
-                        },
-                        {
-                            text: "Google Terrain",
-                            iconCls: "googleIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("Google Terrain")[0]);}
-                        },
-                        {
-                            text: "Google Satellite",
-                            iconCls: "googleIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("Google Satellite")[0]);}
-                        },
-                        {
-                            text: "Google Hybrid",
-                            iconCls: "googleIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("Google Hybrid")[0]);}
-                        },
-                        {
-                            text: "OpenStreetMap",
-                            iconCls: "osmIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("OpenStreetMap")[0]);}
-                        },                                
-                        {
-                            text: "Bing Road",
-                            iconCls: "bingIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("Bing Road")[0]);}
-                        },
-                        {
-                            text: "Bing Aerial",
-                            iconCls: "bingIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("Bing Aerial")[0]);}
-                        },
-                        {
-                            text: "Bing Hybrid",
-                            iconCls: "bingIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("Bing Hybrid")[0]);}
-                        },
-                        {
-                            text: "mapquest",
-                            iconCls: "mapQuestIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("mapquest")[0]);}
-                        },
-                        {
-                            text: "mapquestAerial",
-                            iconCls: "mapQuestIcon",
-                            handler: function(){map.setBaseLayer(map.getLayersByName("mapquestAerial")[0]);}
-                        }                       
-                    ]
-                })
-            },
-            "->",
-            /*
-             * Herramienta para importar el árbol de capas
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Importar capas',
-                icon: 'img/folder-open.png',
-                id: "treePanelBottombarImportar",
-                handler: onImportarCapas
-            }),
-            /*
-             * Herramientas para exportar el árbol de capas
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Guardar capas',
-                icon: 'img/folder-save.png',
-                id: "treePanelBottombarExportar",
-                handler: onGuardarCapas
-            })        
-        ]
+        tbar: toolbars.getTreePanelTopBar(),
+        bbar: toolbars.getTreePanelBottomBar()
     });     
 
     /*
@@ -400,70 +232,7 @@ function generateViewport(){
         store: [],
         sm: new GeoExt.grid.FeatureSelectionModel(),
         columns: [],
-        tbar: [
-            /*
-             * Herramienta de reconocimiento
-             */
-            new Ext.Toolbar.Button({
-                id: "wfsReconocerButton",
-                tooltip: 'Reconocer',
-                text:"Reconocer",
-                icon: 'img/cursor-question.png',
-                toggleGroup: "nav", 
-                allowDepress: true,
-                listeners: {
-                   toggle: function(){
-
-                       if(wfsReconocerControl != null){
-                           if(this.pressed){
-                               wfsReconocerControl.activate();
-                           }else{
-                               wfsReconocerControl.deactivate();
-                           }                    
-                       }
-
-                   }
-                }
-            }), 
-            /*
-             * Herramienta de selección
-             */
-            new Ext.Toolbar.Button({
-                id: "wfsSeleccionarButton",
-                tooltip: 'Seleccionar',
-                text:"Seleccionar",
-                icon: 'img/cursor.png',
-                toggleGroup: "nav", 
-                allowDepress: true,
-                listeners: {
-                   toggle: function(){
-                       if(wfsSelectControl != null){
-                           if(this.pressed){
-                               wfsSelectControl.activate();
-                           }else{
-                               wfsSelectControl.deactivate();
-                           }                    
-                       }
-                   }
-                }
-            }), 
-            /*
-             * Herramienta de limpieza
-             */
-            new Ext.Toolbar.Button({
-                tooltip: 'Limpiar',
-                text:"Limpiar",
-                icon: 'img/broom.png',
-                handler: function(){
-                   wfsLayer.removeAllFeatures();
-                }
-            }),
-            "->",
-            /*
-             * Herramienta de exportación a excel
-             */
-            new Ext.ux.Exporter.Button({store: wfsStoreExport})
-        ]     
+        tbar: toolbars.getFeatureGridPanelTopBar()    
     });       
     
     /*
@@ -486,12 +255,20 @@ function generateViewport(){
             ]
     });  
     
-}
+};
 
 /*
  * Configuración final de la aplicación, agrega elementos al mapPanel y realiza modificaciones sobre el css de algunos componentes
  */
-function finalConfig(){
+app.configuracionFinal = function(){
+
+    /*
+     * Importo las capas definidas en app.tree y el orden definido en app.index
+     */
+    if(app.tree != null){
+        restoreTree(app.rootnode,app.tree);
+        restoreIndex(app.index);          
+    }  
 
     /*
      * Agrego al mapPanel los div sobre los cuales se renderizarán los siguientes componentes
@@ -502,11 +279,11 @@ function finalConfig(){
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('titulodiv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('subtitulodiv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('legenddiv'));                              
-    
+
     /*
      * Agrego el control de posición del mouse 
      */
-    map.addControl(new OpenLayers.Control.MousePosition({
+    app.map.addControl(new OpenLayers.Control.MousePosition({
         div: document.getElementById('position'),
         formatOutput: function(lonLat) {
             var markup = convertDMS(lonLat.lat, "LAT");
@@ -518,14 +295,14 @@ function finalConfig(){
     /*
      * Agrego el control de escala
      */
-    map.addControl(new OpenLayers.Control.ScaleLine({
+    app.map.addControl(new OpenLayers.Control.ScaleLine({
         div: document.getElementById("scalelinediv")
     }));
     
     /*
      * Agrego el control de minimapa
      */
-    map.addControl(new OpenLayers.Control.OverviewMap({
+    app.map.addControl(new OpenLayers.Control.OverviewMap({
         layers:[new OpenLayers.Layer.OSM("OSM",null,null,{isBaseLayer: true, maxZoomLevel: 20})],
         size: new OpenLayers.Size(150, 130),
         div: document.getElementById('minimap')            
@@ -571,5 +348,5 @@ function finalConfig(){
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
     document.getElementById("legendPanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
        
-}
+};
 

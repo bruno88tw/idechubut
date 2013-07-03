@@ -9,6 +9,12 @@
  * 
  */
 
+/*
+ * Dada una url de un servidor wms devuelve la url del getCapabilities
+ * 
+ * @param {type} wms_url: url del servidor wms
+ * @returns {String}
+ */
 function getCapabilitiesUrl(wms_url){
 
     var cap_url;
@@ -23,9 +29,15 @@ function getCapabilitiesUrl(wms_url){
     
 }
 
+/*
+ * Dado un nombre de capa corrobora si existe o no en el mapa
+ * 
+ * @param {type} nombre: nombre de la capa
+ * @returns {Boolean}: verdadero si existe el nombre de capa, falso si no existe
+ */
 function existeNombreCapa(nombre){
     
-    if (map.getLayersByName(nombre)[0] == null){
+    if (app.map.getLayersByName(nombre)[0] == null){
         return false;
     }else{
         return true;
@@ -33,6 +45,12 @@ function existeNombreCapa(nombre){
     
 }
 
+/*
+ * Dado un nombre de capa lo numera en caso de que ya exista una capa con el mismo nombre
+ * 
+ * @param {type} nombre: nombre de capa
+ * @returns {Number}
+ */
 function numerarNombre(nombre){
     
     var nombrecapa = nombre;
@@ -47,6 +65,12 @@ function numerarNombre(nombre){
     
 }
 
+/*
+ * Gestiona el control de agregar nuevas capas
+ * 
+ * @param {type} node: nodo sobre el que se agregarán las nuevas capas. Si es null, las nuevas capas se agregarán al raíz
+ * @returns {undefined}
+ */
 function agregarCapas(node){
 
    var mask, capStore, capabilitiesGrid, capabilitiesCombo, window;
@@ -100,7 +124,7 @@ function agregarCapas(node){
 
 
     capabilitiesCombo = new Ext.form.ComboBox({
-        store: wmsServerStore,
+        store: app.wmsServerStore,
         width: 455,
         valueField: 'url',
         displayField: 'nombre', 
@@ -138,7 +162,7 @@ function agregarCapas(node){
                         viewConfig: {
                           forceFit: false
                         },
-                        store: wmsServerStore,
+                        store: app.wmsServerStore,
                         columns: [
                             {
                               header: "Nombre",
@@ -358,11 +382,11 @@ function agregarCapas(node){
                                     Ext.MessageBox.prompt('Agregar servidor WMS', 'Nombre del servidor', function(btn, text){
                                         if (btn == "ok"){
                                             nombre = text;
-                                            if(wmsServerStore.getById(nombre) == null){
+                                            if(app.wmsServerStore.getById(nombre) == null){
                                                 Ext.MessageBox.prompt('Agregar servidor WMS', 'URL del servidor', function(btn, text){
                                                     if (btn == "ok"){
                                                         wms_url = text;
-                                                        wmsServerStore.loadData([[nombre,wms_url]],true);
+                                                        app.wmsServerStore.loadData([[nombre,wms_url]],true);
                                                     }
                                                 })
                                             }else{
@@ -381,7 +405,7 @@ function agregarCapas(node){
 
                                     wmsServersGridPanel.getSelectionModel().each(function(record){
 
-                                            wmsServerStore.remove(wmsServerStore.getById(record.id));
+                                            app.wmsServerStore.remove(app.wmsServerStore.getById(record.id));
 
                                     });                            
 
@@ -419,8 +443,8 @@ function agregarCapas(node){
                                 Ext.getCmp("layerTreePanel").getRootNode().findChild("id",node.attributes.id,true).appendChild(newLeaf);  
                             }    
                             
-                            map.raiseLayer(map.getLayersByName("wfsLayer")[0],1);
-                            map.raiseLayer(map.getLayersByName("Location")[0],1);
+                            app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
+                            app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
                             
                     });
                 }
@@ -430,6 +454,13 @@ function agregarCapas(node){
     }).show(); 
  }
 
+/*
+ * Da formato a la información obtenida del control mouseposition 
+ * 
+ * @param {type} coordinate
+ * @param {type} type
+ * @returns {String}
+ */
 function convertDMS(coordinate, type) {
     var coords;
 
@@ -462,9 +493,9 @@ function convertDMS(coordinate, type) {
     return coords;
 }
 
-  /**
-   * Return the hemisphere abbreviation for this coordinate.
-   */
+/*
+ * Devuelve la abreviación de hemisferio para una coordenada dada
+ */
 function getHemi(coordinate, type) {
     var coordinatehemi = "";
     if (type == 'LAT') {

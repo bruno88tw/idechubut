@@ -1,8 +1,11 @@
+/*
+ * crea el archivo de exportación del árbol de capas 
+ */
 function saveLayerTree(father, children){
     
     for(var i = 0; i < children.length; i++){
         if(children[i].isLeaf()){
-            var layer = map.getLayersByName(children[i].attributes.layer)[0];
+            var layer = app.map.getLayersByName(children[i].attributes.layer)[0];
             father.push({"type":"leaf", "title":children[i].attributes.text, "server":layer.url, "options":layer.options, "params":layer.params});
         }else{
             var grandchildren = [];
@@ -14,28 +17,37 @@ function saveLayerTree(father, children){
     
 }
 
+/*
+ * crea el archivo de exportación del índice de las capas 
+ */
 function saveLayerIndex(){
     
     var index = [];
     
-    for(var i = 0; i < map.layers.length; i++){
-        index[i] = map.layers[i].name;
+    for(var i = 0; i < app.map.layers.length; i++){
+        index[i] = app.map.layers[i].name;
     }    
     
     return index;
     
 }
 
+/*
+ * restaura el índice de las capas dado un archivo de resguardo
+ */
 function restoreIndex(index){
     
     var layer;
     for(var i = 0; i < index.length; i++){
-        layer = map.getLayersByName(index[i])[0];
-        map.setLayerIndex(layer,i);
+        layer = app.map.getLayersByName(index[i])[0];
+        app.map.setLayerIndex(layer,i);
     }      
     
 }
 
+/*
+ * Dado un nodo, expande todos sus nodos hijos
+ */
 function expandAll(node){
     if (!node.isLeaf()){
         node.expand();
@@ -45,6 +57,9 @@ function expandAll(node){
     }
 }
 
+/*
+ * Dado un nodo, colapsa todos sus nodos hijos
+ */
 function collapseAll(node){
     if (!node.isLeaf()){
         node.collapse();
@@ -54,11 +69,14 @@ function collapseAll(node){
     }    
 }
 
+/*
+ * Dado un nodo, elimina todos sus nodos hijos y a sí mismo
+ */
 function removeLayers(node){
     
     node.eachChild(function(childnode){
         if (childnode.isLeaf()){
-            map.removeLayer(map.getLayersByName(childnode.attributes.layer)[0]);        
+            app.map.removeLayer(app.map.getLayersByName(childnode.attributes.layer)[0]);        
         }else{
             removeLayers(childnode);
         } 
@@ -66,6 +84,9 @@ function removeLayers(node){
     
 }
 
+/*
+ * Dado un nodo, le asigna un nombre
+ */
 function setFolderName(e){       
     
     var folder = e;
@@ -78,6 +99,9 @@ function setFolderName(e){
         
 }
 
+/*
+ * Crea una instancia de un nodo que no es hoja
+ */
 function createNode(text){
     
     var node = new Ext.tree.TreeNode({
@@ -145,9 +169,12 @@ function createNode(text){
     
 }
 
+/*
+ * Crea una instancia de un nodo hoja
+ */
 function createLeaf(titulo, servidor, params, options){    
     
-    map.addLayer(new OpenLayers.Layer.WMS(
+    app.map.addLayer(new OpenLayers.Layer.WMS(
         titulo, 
         servidor, 
         params, 
@@ -168,7 +195,7 @@ function createLeaf(titulo, servidor, params, options){
                         icon: "img/zoom-to-map.png",                        
                         handler: function(){     
                             var capurl;
-                            var layer = map.getLayersByName(e.attributes.layer)[0];
+                            var layer = app.map.getLayersByName(e.attributes.layer)[0];
                             var url = layer.url;
                             
                             if (url.indexOf("?") == -1){
@@ -194,33 +221,33 @@ function createLeaf(titulo, servidor, params, options){
                                         var east = this.data.items[item].data.llbbox[2];
                                         var north = this.data.items[item].data.llbbox[3];
                                         var bounds = new OpenLayers.Bounds(west, south, east, north);
-                                        map.zoomToExtent(bounds.clone().transform(projection4326, projectionMercator));
+                                        app.map.zoomToExtent(bounds.clone().transform(app.projection4326, app.projection900913));
                                     }
                                 }
                             });
                             
                             
-                            var layer = map.getLayersByName(e.attributes.layer)[0];
-                            map.zoomToExtent(layer.maxExtent,true);
+                            var layer = app.map.getLayersByName(e.attributes.layer)[0];
+                            app.map.zoomToExtent(layer.maxExtent,true);
                         }
                     },{
                         text: 'Eliminar capa',
                         icon: "img/map-minus.png",
                         handler: function(){
                             e.remove();
-                            map.removeLayer(map.getLayersByName(e.attributes.layer)[0]);   
+                            app.map.removeLayer(app.map.getLayersByName(e.attributes.layer)[0]);   
                         }
                     },{
                         text: 'Subir capa',
                         icon: "img/subir-capa.png",
                         handler: function(){
-                            map.raiseLayer(map.getLayersByName(e.attributes.layer)[0],1);   
+                            app.map.raiseLayer(app.map.getLayersByName(e.attributes.layer)[0],1);   
                         }
                     },{
                         text: 'Bajar capa',
                         icon: "img/bajar-capa.png",
                         handler: function(){
-                            map.raiseLayer(map.getLayersByName(e.attributes.layer)[0],-1);   
+                            app.map.raiseLayer(app.map.getLayersByName(e.attributes.layer)[0],-1);   
                         }
                     },{
                         text: 'Propiedades',
@@ -234,7 +261,7 @@ function createLeaf(titulo, servidor, params, options){
                             var styledata = [];
                             var styleabstract = {};
                             var capurl;
-                            var layer = map.getLayersByName(e.attributes.layer)[0];
+                            var layer = app.map.getLayersByName(e.attributes.layer)[0];
                             var url = layer.url;
                             
                             if (url.indexOf("?") == -1){
@@ -328,7 +355,7 @@ function createLeaf(titulo, servidor, params, options){
                                                                  items:[
                                                                      indiceField = new Ext.form.TextField({
                                                                          fieldLabel: 'Índice',
-                                                                         value: map.getLayerIndex(layer),
+                                                                         value: app.map.getLayerIndex(layer),
                                                                          width: 175,
                                                                          readOnly: true
                                                                      }),
@@ -336,16 +363,16 @@ function createLeaf(titulo, servidor, params, options){
                                                                          tooltip: 'Subir capa',
                                                                          icon: 'img/arrow-up.png',
                                                                          handler: function(){
-                                                                             map.raiseLayer(map.getLayersByName(e.attributes.layer)[0],1);   
-                                                                             indiceField.setValue(map.getLayerIndex(layer));
+                                                                             app.map.raiseLayer(app.map.getLayersByName(e.attributes.layer)[0],1);   
+                                                                             indiceField.setValue(app.map.getLayerIndex(layer));
                                                                          }
                                                                      }),
                                                                      new Ext.Toolbar.Button({
                                                                          tooltip: 'Bajar capa',
                                                                          icon: 'img/arrow-down.png',
                                                                          handler: function(){
-                                                                             map.raiseLayer(map.getLayersByName(e.attributes.layer)[0],-1);  
-                                                                             indiceField.setValue(map.getLayerIndex(layer));
+                                                                             app.map.raiseLayer(app.map.getLayersByName(e.attributes.layer)[0],-1);  
+                                                                             indiceField.setValue(app.map.getLayerIndex(layer));
                                                                          }
                                                                      })
                                                                  ]
@@ -361,32 +388,6 @@ function createLeaf(titulo, servidor, params, options){
                                                                      })                                                        
                                                                  ]
                                                              })
-//                                                             new Ext.form.Checkbox({
-//                                                                fieldLabel: 'Single Tile',
-//                                                                checked: layer.singleTile,
-//                                                                listeners:{
-//                                                                   check: function(){
-//                                                                       if (layer.singleTile == true){
-//                                                                            layer.singleTile = false;
-//                                                                            layer.addOptions({singleTile:false});
-//                                                                       }else{
-//                                                                            layer.singleTile = true;
-//                                                                            layer.addOptions({singleTile:true});
-//                                                                       }
-//                                                                       layer.initResolutions();
-//                                                                       layer.setTileSize();
-//                                                                       layer.redraw();
-//                                                                   }
-//                                                                }
-//                                                            }),
-//                                                            new Ext.Toolbar.Button({
-//                                                                fieldLabel: 'Refrescar',
-//                                                                tooltip: 'Refrescar',
-//                                                                icon: 'img/refresh.png',
-//                                                                handler: function(){
-//                                                                    layer.redraw();
-//                                                                }
-//                                                            })
                                                          ]
                                                      })
                                                 })
@@ -457,33 +458,33 @@ function createLeaf(titulo, servidor, params, options){
 
                                         }                                      
                                                        
-                                        map.getLayersByName("wfsLayer")[0].removeAllFeatures();
+                                        app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
 
                                         var x = 3;
-                                        while(x < wfsStoreExport.fields.items.length){
-                                            wfsStoreExport.fields.removeAt(x);
+                                        while(x < app.wfsStoreExport.fields.items.length){
+                                            app.wfsStoreExport.fields.removeAt(x);
                                         }
-                                        wfsStoreExport.fields.addAll(fields);
-                                        wfsStoreExport.bind(map.getLayersByName("wfsLayer")[0]);
+                                        app.wfsStoreExport.fields.addAll(fields);
+                                        app.wfsStoreExport.bind(app.map.getLayersByName("wfsLayer")[0]);
 
                                         Ext.getCmp("featureGridPanel").reconfigure(
                                             new GeoExt.data.FeatureStore({
                                                 fields: fields,
-                                                layer: map.getLayersByName("wfsLayer")[0]
+                                                layer: app.map.getLayersByName("wfsLayer")[0]
                                             }),
                                             new Ext.grid.ColumnModel({
                                                 columns: columns
                                             })
                                         );  
 
-                                        Ext.getCmp("featureGridPanel").getSelectionModel().bind(map.getLayersByName("wfsLayer")[0]);
+                                        Ext.getCmp("featureGridPanel").getSelectionModel().bind(app.map.getLayersByName("wfsLayer")[0]);
                                         
-                                        if (wfsReconocerControl != null){
-                                            wfsReconocerControl.deactivate();
-                                            map.removeControl(wfsReconocerControl);
+                                        if (app.wfsReconocerControl != null){
+                                            app.wfsReconocerControl.deactivate();
+                                            app.map.removeControl(app.wfsReconocerControl);
                                         }
                                             
-                                        wfsReconocerControl = new OpenLayers.Control.GetFeature({
+                                        app.wfsReconocerControl = new OpenLayers.Control.GetFeature({
                                             protocol: new OpenLayers.Protocol.WFS({
                                                 url: e.layer.url,
                                                 version: "1.1.0",
@@ -497,28 +498,28 @@ function createLeaf(titulo, servidor, params, options){
                                             maxFeatures:100
                                         });
 
-                                        wfsReconocerControl.events.register("featureselected", this, function(e) {
+                                        app.wfsReconocerControl.events.register("featureselected", this, function(e) {
 
-                                            map.getLayersByName("wfsLayer")[0].addFeatures([e.feature]);
+                                            app.map.getLayersByName("wfsLayer")[0].addFeatures([e.feature]);
 
                                         });
 
-                                        wfsReconocerControl.events.register("featureunselected", this, function(e) {
-                                            map.getLayersByName("wfsLayer")[0].removeFeatures([e.feature]);
+                                        app.wfsReconocerControl.events.register("featureunselected", this, function(e) {
+                                            app.map.getLayersByName("wfsLayer")[0].removeFeatures([e.feature]);
                                         });
 
-                                        map.addControl(wfsReconocerControl);
-                                        wfsReconocerControl.deactivate();                                           
+                                        app.map.addControl(app.wfsReconocerControl);
+                                        app.wfsReconocerControl.deactivate();                                           
                                         
-                                        var selectControls = map.getControlsByClass('OpenLayers.Control.SelectFeature')
+                                        var selectControls = app.map.getControlsByClass('OpenLayers.Control.SelectFeature')
                                         for(var i=0; i<selectControls.length; i++){
                                             if(selectControls[i].layer.name == "wfsLayer"){
-                                                wfsSelectControl = selectControls[i];
+                                                app.wfsSelectControl = selectControls[i];
                                                 break;
                                             }
                                         }
                                         
-                                        wfsSelectControl.deactivate();
+                                        app.wfsSelectControl.deactivate();
                                         
                                         Ext.getCmp("wfsReconocerButton").toggle(true);
 
@@ -542,14 +543,17 @@ function createLeaf(titulo, servidor, params, options){
                 Ext.getCmp("layerTreePanel").getRootNode().findChild("id",e.attributes.id,true).select();
             }
         },
-        map: map
+        map: app.map
     });
     
     return leaf;
  
 }
 
-function agregarDescendencia(father,children){
+/*
+ * Dado un archivo de resguardo de árbol de capas, agrega la descendencia a un nodo padre dado
+ */
+function restoreTree(father,children){
     
     var newNode;
     
@@ -557,7 +561,7 @@ function agregarDescendencia(father,children){
         if(children[x].type == "folder"){
             newNode = createNode(children[x].name);
             father.appendChild(newNode);
-            agregarDescendencia(newNode,children[x].children)
+            restoreTree(newNode,children[x].children);
         }else{
             newNode = createLeaf(children[x].title,children[x].server,children[x].params,children[x].options);
             father.appendChild(newNode);

@@ -1,35 +1,14 @@
-var toolbar1;
 
-function getTopBar(){        
+toolbars.getMapPanelTopBar = function(){
     
-    toolbar1 = [
-            new GeoExt.Action({
-                control: new OpenLayers.Control.Navigation(),
-                map: map,
-                icon: "img/move2.png",
-                toggleGroup: "nav",
-                tooltip: "Navegación",
-                checked: true
-            }),
-
-            new GeoExt.Action({
-                control: new OpenLayers.Control.ZoomToMaxExtent(),
-                map: map,
-                icon: "img/magnifier-zoom-fit.png",
-                tooltip: 'Zoom a la máxima extensión'
-            }),
-
-            new GeoExt.Action({
-                control: new OpenLayers.Control.ZoomBox(),
-                map: map,
-                icon: "img/magnifier-zoom-in.png",
-                toggleGroup: "nav",
-                tooltip: "Zoom in"
-            }),
+    var mapPanelToolbar = [
+            componentes.getNavegacionButton(),
+            componentes.getZoomToMaxExtentButton(),
+            componentes.getZoomInButton(),
 
             new GeoExt.Action({
                 control: new OpenLayers.Control.ZoomBox({out: true}),
-                map: map,
+                map: app.map,
                 icon: "img/magnifier-zoom-out.png",
                 toggleGroup: "nav",
                 tooltip: "Zoom out"
@@ -37,14 +16,14 @@ function getTopBar(){
 
             new GeoExt.Action({
                 icon: "img/history-zoom-left.png",
-                control: map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].previous,
+                control: app.map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].previous,
                 disabled: true,
                 tooltip: "Zoom anterior"
             }),
 
             new GeoExt.Action({
                 icon: "img/history-zoom-right.png",
-                control: map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].next,
+                control: app.map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].next,
                 disabled: true,
                 tooltip: "Zoom posterior"
             }),
@@ -67,7 +46,7 @@ function getTopBar(){
                          }
                      }
                  }),
-                 map: map,
+                 map: app.map,
                  toggleGroup: "nav",
                  icon: 'img/rulerline.png',
                  tooltip: "Medidor de distancias"
@@ -91,25 +70,25 @@ function getTopBar(){
                          }
                      }
                  }),
-                 map: map,
+                 map: app.map,
                  toggleGroup: "nav",
                  icon: 'img/rulerarea.png',
                  tooltip: "Medidor de superficie"
              }),
 
              new GeoExt.Action({
-                     control: map.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo')[0],
-                     map: map,
+                     control: app.map.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo')[0],
+                     map: app.map,
                      icon: "img/cursor-info.png",
                      toggleGroup: "nav",
                      tooltip: "Obtener información"
              }),    
              "&nbsp",
              new GeoExt.form.GeocoderComboBox({       
-                layer: map.getLayersByName("Location")[0],
+                layer: app.map.getLayersByName("Location")[0],
                 emptyText: "Buscar un lugar ..",
-                map: map,                
-                bounds: global.max_bounds,
+                map: app.map,                
+                bounds: app.max_bounds,
                 border: false,
                 width: 246,
                 heigh:100,
@@ -194,9 +173,9 @@ function getTopBar(){
                             checked: true,
                             checkHandler: function(){                                          
                                 if (this.checked){
-                                    map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(134,17)); 
+                                    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(134,17)); 
                                 }else{
-                                    map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]); 
+                                    app.map.removeControl(app.map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]); 
                                 }
                             }
                         },                             
@@ -243,10 +222,10 @@ function getTopBar(){
                             checked: false,
                             checkHandler: function(){
                                 if (this.checked){
-                                    map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false, labelSymbolizer: new OpenLayers.Symbolizer.Text({fontSize:9})}));
+                                    app.map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false, labelSymbolizer: new OpenLayers.Symbolizer.Text({fontSize:9})}));
                                 }else{
-                                    map.removeLayer(map.getLayersByName("Grilla")[0]);
-                                    map.removeControl(map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
+                                    app.map.removeLayer(app.map.getLayersByName("Grilla")[0]);
+                                    app.map.removeControl(app.map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
                                 }
                             }
                         }                                                          
@@ -333,11 +312,311 @@ function getTopBar(){
 
     ];
     
-    return toolbar1;
-   
-}
+    return mapPanelToolbar;
+    
+};
+
+toolbars.getMapPanelBottomBar = function(){
+    
+    var mapPanelBottomBar = [
+        /*
+         * Herramienta de resolución
+         */
+        new Ext.form.ComboBox({
+            id: "scaleCombo",
+            width: 130,
+            mode: "local", // keep the combo box from forcing a lot of unneeded data refreshes
+            emptyText: "Scale",
+            triggerAction: "all", // needed so that the combo box doesn't filter by its current content
+            displayField: "scale",
+            editable: false,
+            tpl: '<tpl for="."><div class="x-combo-list-item">1 : {[parseInt(values.scale)]}</div></tpl>',
+            store: new GeoExt.data.ScaleStore({map: app.map}),
+            listeners: {
+                select: function(combo, record) {
+                    Ext.getCmp("mapPanel").map.zoomTo(record.get("level"));
+                    Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(app.map.getScale()));
+                }
+            }
+        }),
+        "->",
+        "<div id='position'></div>"
+    ];
+    
+    /*
+     * Reescribe el contenido del combobox de resolución para darle un determinado formato
+     */
+    Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(app.map.getScale()));      
+    
+    /*
+     * Agrega un manejador al evento cambio de zoom del mapa de modo que reescriba el contenido del combobox de resolución
+     */
+    app.map.events.register("zoomend", this, function() {
+        Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(app.map.getScale()));
+    });    
+    
+    return mapPanelBottomBar;
+    
+};
+
+toolbars.getTreePanelTopBar = function(){
+    
+    var treePanelTopBar = [ 
+        /*
+         * Botón para agregar nuevas capas
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Agregar capa',
+            icon: 'img/map-plus.png',
+            id: "treePanelTopbarAgregar",
+            handler: function(){
+                agregarCapas(null);
+            }
+        }),
+        /*
+         * Botón para visualizar y modificar el orden de las capas
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Orden',
+            icon: 'img/maps-stack.png',
+            enableToggle: true,
+            allowDepress: true,
+            handler: function(){        
+                if(this.pressed){
+                    Ext.getCmp("treePanelTopbarAgregar").disable();
+                    Ext.getCmp("treePanelTopbarAgregarCarpeta").disable();
+                    Ext.getCmp("treePanelTopbarExpandir").disable();
+                    Ext.getCmp("treePanelTopbarColapsar").disable();
+                    Ext.getCmp("treePanelBottombarImportar").disable();
+                    Ext.getCmp("treePanelBottombarExportar").disable();  
+                    Ext.getCmp("layerTreePanel").root = null;
+                    Ext.getCmp("layerTreePanel").setRootNode(new GeoExt.tree.OverlayLayerContainer({
+                        text: "Solo overlays",
+                        icon: "img/layers.png",
+                        map: app.map,
+                        expanded: false
+                    }));
+                }else{
+                    Ext.getCmp("treePanelTopbarAgregar").enable();
+                    Ext.getCmp("treePanelTopbarAgregarCarpeta").enable();
+                    Ext.getCmp("treePanelTopbarExpandir").enable();
+                    Ext.getCmp("treePanelTopbarColapsar").enable();
+                    Ext.getCmp("treePanelBottombarImportar").enable();
+                    Ext.getCmp("treePanelBottombarExportar").enable();
+                    Ext.getCmp("layerTreePanel").setRootNode(app.rootnode);
+                }
+            }
+        }),
+        /*
+         * Botón para agregar una nueva carpeta al árbol de capas
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Agregar carpeta',
+            icon: 'img/folder-add.png',
+            id: "treePanelTopbarAgregarCarpeta",
+            handler: function(){
+               var newFolder = createNode("Nueva carpeta");
+               Ext.getCmp("layerTreePanel").getRootNode().appendChild(newFolder);
+               setFolderName(newFolder);
+            }
+        }),  
+        /*
+         * Botón para expandir todo el árbol de capas
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Expandir todo',
+            icon: 'img/list-add.png',
+            id: "treePanelTopbarExpandir",
+            handler: function(){
+               expandAll(Ext.getCmp("layerTreePanel").getRootNode());
+            }
+        }),
+        /*
+         * Botón para colapsar todo el árbol de capas
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Colapsar todo',
+            icon: 'img/list-remove.png',
+            id: "treePanelTopbarColapsar", 
+            handler: function(){
+               collapseAll(Ext.getCmp("layerTreePanel").getRootNode());
+            }
+        })
+    ];
+    
+    return treePanelTopBar;
+    
+};
+
+toolbars.getTreePanelBottomBar = function(){
+    
+    var treePanelBottomBar = [ 
+        /*
+         * Menú de selección de capa base
+         */
+        {
+            icon: "img/map.png",
+            text: "Mapa Base",
+            menu: new Ext.menu.Menu({
+                items: [
+                    {
+                        text: "Google Streets",
+                        iconCls: "googleIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("Google Streets")[0]);}
+                    },
+                    {
+                        text: "Google Terrain",
+                        iconCls: "googleIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("Google Terrain")[0]);}
+                    },
+                    {
+                        text: "Google Satellite",
+                        iconCls: "googleIcon",
+                        handler: function(){map.setBaseLayer(map.getLayersByName("Google Satellite")[0]);}
+                    },
+                    {
+                        text: "Google Hybrid",
+                        iconCls: "googleIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("Google Hybrid")[0]);}
+                    },
+                    {
+                        text: "OpenStreetMap",
+                        iconCls: "osmIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("OpenStreetMap")[0]);}
+                    },                                
+                    {
+                        text: "Bing Road",
+                        iconCls: "bingIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("Bing Road")[0]);}
+                    },
+                    {
+                        text: "Bing Aerial",
+                        iconCls: "bingIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("Bing Aerial")[0]);}
+                    },
+                    {
+                        text: "Bing Hybrid",
+                        iconCls: "bingIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("Bing Hybrid")[0]);}
+                    },
+                    {
+                        text: "mapquest",
+                        iconCls: "mapQuestIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("mapquest")[0]);}
+                    },
+                    {
+                        text: "mapquestAerial",
+                        iconCls: "mapQuestIcon",
+                        handler: function(){app.map.setBaseLayer(app.map.getLayersByName("mapquestAerial")[0]);}
+                    }                       
+                ]
+            })
+        },
+        "->",
+        /*
+         * Herramienta para importar el árbol de capas
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Importar capas',
+            icon: 'img/folder-open.png',
+            id: "treePanelBottombarImportar",
+            handler: onImportarCapas
+        }),
+        /*
+         * Herramientas para exportar el árbol de capas
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Guardar capas',
+            icon: 'img/folder-save.png',
+            id: "treePanelBottombarExportar",
+            handler: onGuardarCapas
+        })        
+    ];
+    
+    return treePanelBottomBar;
+    
+};
+
+toolbars.getFeatureGridPanelTopBar = function(){
+    
+    featureGridPanelTopBar = [
+        /*
+         * Herramienta de reconocimiento
+         */
+        new Ext.Toolbar.Button({
+            id: "wfsReconocerButton",
+            tooltip: 'Reconocer',
+            text:"Reconocer",
+            icon: 'img/cursor-question.png',
+            toggleGroup: "nav", 
+            allowDepress: true,
+            listeners: {
+               toggle: function(){
+
+                   if(app.wfsReconocerControl != null){
+                       if(this.pressed){
+                           app.wfsReconocerControl.activate();
+                       }else{
+                           app.wfsReconocerControl.deactivate();
+                       }                    
+                   }
+
+               }
+            }
+        }), 
+        /*
+         * Herramienta de selección
+         */
+        new Ext.Toolbar.Button({
+            id: "wfsSeleccionarButton",
+            tooltip: 'Seleccionar',
+            text:"Seleccionar",
+            icon: 'img/cursor.png',
+            toggleGroup: "nav", 
+            allowDepress: true,
+            listeners: {
+               toggle: function(){
+                   if(app.wfsSelectControl != null){
+                       if(this.pressed){
+                           app.wfsSelectControl.activate();
+                       }else{
+                           app.wfsSelectControl.deactivate();
+                       }                    
+                   }
+               }
+            }
+        }), 
+        /*
+         * Herramienta de limpieza
+         */
+        new Ext.Toolbar.Button({
+            tooltip: 'Limpiar',
+            text:"Limpiar",
+            icon: 'img/broom.png',
+            handler: function(){
+               app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
+            }
+        }),
+        "->",
+        /*
+         * Herramienta de exportación a excel
+         */
+        new Ext.ux.Exporter.Button({store: app.wfsStoreExport})
+    ];
+    
+    return featureGridPanelTopBar;
+    
+};
 
 
+
+
+
+
+
+/*
+ * Posiciona la escala en el mapa de acuerdo a la configuración de componentes actuales
+ */
 function acomodarScaleline(){
     
     var legendpanelcss = document.getElementById("legenddiv").style;
@@ -357,10 +636,13 @@ function acomodarScaleline(){
     
 }
 
+/*
+ * Posiciona el navegador en el mapa de acuerdo a la configuración de componentes actuales
+ */
 function acomodarNavegador(){
 
     var legendpanelcss = document.getElementById("legenddiv").style;
-    var existeNavegador = map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0];
+    var existeNavegador = app.map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0];
     var left;
     var top;
     
@@ -373,8 +655,8 @@ function acomodarNavegador(){
         }
         top = 2;                  
         
-        map.removeControl(map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);   
-        map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(left,top));                                             
+        app.map.removeControl(app.map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);   
+        app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(left,top));                                             
              
     }
      
