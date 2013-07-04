@@ -314,10 +314,26 @@ handler.onAgregarCapas = function(node){
         resizable: false,
         autoScroll: true,
         shadow: false,
-        items: [componentes.capabilitiesGridPanel()]
+        items: [componentes.capabilitiesGridPanel(node)]
     }).show(); 
     
  };
+ 
+ handler.onServidoresWmsButton = function(){
+     
+    new Ext.Window({
+        title: "Servidores WMS",
+        iconCls: 'serverIcon',
+        layout: "fit",
+        width: 500,
+        height:300,
+        resizable: false,
+        autoScroll: true,
+        shadow: false,
+        items: [componentes.wmsServersGridPanel()]                
+    }).show();
+
+ }
  
 handler.onOrdenDeCapasButton = function(){
      

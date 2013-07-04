@@ -635,20 +635,7 @@ componentes.capabilitiesStore = function(capabilitiesGridPanel){
     var mask;
     var capabilitiesStore = new GeoExt.data.WMSCapabilitiesStore({  
         url: "asdf",
-        autoLoad: false,
-        listeners:{
-            beforeload: function(){
-                mask = new Ext.LoadMask(capabilitiesGridPanel.getEl(), {msg:"Conectando..."});
-                mask.show();
-            },
-            load: function(){
-                mask.hide();
-            },
-            exception: function(){
-                mask.hide();
-                Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-            }
-        }
+        autoLoad: false
     });
     
     return capabilitiesStore;
@@ -667,70 +654,15 @@ componentes.rowExpander = function(){
     
 };
 
-componentes.capabilitiesGridPanel = function(){
+componentes.confirmarAgregarCapasButton = function(){
     
-    var capabilitiesCombo = componentes.capabilitiesCombo();
-    
-    var capabilitiesGrid = new Ext.grid.GridPanel({
-        border: false,
-        viewConfig: {
-          forceFit: true
-        },
-        store: componentes.capabilitiesStore(this),
-        columnLines: true,
-        columns: [
-            componentes.rowExpander(),
-            {
-              header: "Título",
-              dataIndex: "title",
-              sortable: true
-            },
-            {
-              header: "Nombre",
-              dataIndex: "name",
-              sortable: true
-            }            
-        ],
-        plugins: componentes.rowExpander(),
-        tbar: [                  
-            componentes.servidoresWmsButton(),
-            componentes.separador(),
-            capabilitiesCombo
-        ],
-        bbar: [
-            componentes.separador(),
-            new Ext.Toolbar.Button({
-                tooltip: 'Agregar capas',
-                text: "Agregar",
-                icon: 'img/mas.png',
-                handler: function(){
-
-                    capabilitiesGrid.getSelectionModel().each(function(record){
-
-                            var nombrecapa = record.data.title;
-                            var servidorWMS = capabilitiesCombo.getValue();
-
-                            if (existeNombreCapa(nombrecapa) == true){
-                                nombrecapa = numerarNombre(nombrecapa)                            
-                            }
-
-                            var newLeaf = createLeaf(nombrecapa, servidorWMS, {layers: record.data.name, transparent: 'true', format: 'image/png'},{isBaseLayer: false, visibility: false, singleTile: false});
-                            if (node == null){
-                                Ext.getCmp("layerTreePanel").getRootNode().appendChild(newLeaf);  
-                            }else{
-                                Ext.getCmp("layerTreePanel").getRootNode().findChild("id",node.attributes.id,true).appendChild(newLeaf);  
-                            }    
-
-                            app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
-                            app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
-
-                    });
-                }
-            })
-        ]        
+    var confirmarAgregarCapasButton = new Ext.Button({
+        tooltip: 'Agregar capas',
+        text: "Agregar",
+        icon: 'img/mas.png',
     });
     
-    return capabilitiesGrid;
+    return confirmarAgregarCapasButton;
     
 };
 
@@ -744,289 +676,369 @@ componentes.capabilitiesCombo = function(){
         emptyText: "Servidores WMS",
         editable: false,
         triggerAction: 'all', // needed so that the combo box doesn't filter by its current content
-        mode: 'local', // keep the combo box from forcing a lot of unneeded data refreshes
-        listeners: {
-            select: function() {  
-                var store = capabilitiesGrid.getStore();
-                store.proxy.conn.url = getCapabilitiesUrl(capabilitiesCombo.getValue());
-                store.load();
-            }
-        }
+        mode: 'local' // keep the combo box from forcing a lot of unneeded data refreshes
     });
     
     return capabilitiesCombo;
     
 };
 
+componentes.capabilitiesGridPanel = function(node){
+    
+    var mask;
+    var capabilitiesStore = componentes.capabilitiesStore();
+    var capabilitiesCombo = componentes.capabilitiesCombo();
+    var agregarCapasButton = componentes.confirmarAgregarCapasButton()
+    
+    var capabilitiesGridPanel = new Ext.grid.GridPanel({
+        border: false,
+        viewConfig: {forceFit: true},
+        store: capabilitiesStore,
+        columnLines: true,
+        columns: [
+            componentes.rowExpander(),
+            {header: "Título", dataIndex: "title", sortable: true},
+            {header: "Nombre", dataIndex: "name", sortable: true}            
+        ],
+        plugins: componentes.rowExpander(),
+        tbar: [                  
+            componentes.servidoresWmsButton(),
+            componentes.separador(),
+            capabilitiesCombo
+        ],
+        bbar: [
+            componentes.separador(),
+            agregarCapasButton
+        ]        
+    });
+
+    capabilitiesStore.on("beforeload",function(){
+        mask = new Ext.LoadMask(capabilitiesGridPanel.getEl(), {msg:"Conectando..."});
+        mask.show();        
+    });
+    capabilitiesStore.on("load",function(){
+        mask.hide();
+    });
+    capabilitiesStore.on("exception",function(){
+        mask.hide();
+        Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');        
+    });
+    
+    capabilitiesCombo.on("select",function(){
+        capabilitiesStore.proxy.conn.url = getCapabilitiesUrl(capabilitiesCombo.getValue());
+        capabilitiesStore.load();        
+    });
+    
+    agregarCapasButton.setHandler(function(){
+        capabilitiesGridPanel.getSelectionModel().each(function(record){
+
+                var nombrecapa = record.data.title;
+                var servidorWMS = capabilitiesCombo.getValue();
+
+                if (existeNombreCapa(nombrecapa) == true){
+                    nombrecapa = numerarNombre(nombrecapa)                            
+                }
+
+                var newLeaf = createLeaf(nombrecapa, servidorWMS, {layers: record.data.name, transparent: 'true', format: 'image/png'},{isBaseLayer: false, visibility: false, singleTile: false});
+                if (node == null){
+                    Ext.getCmp("layerTreePanel").getRootNode().appendChild(newLeaf);  
+                }else{
+                    Ext.getCmp("layerTreePanel").getRootNode().findChild("id",node.attributes.id,true).appendChild(newLeaf);  
+                }    
+
+                app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
+                app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
+
+        });        
+    });
+    
+    return capabilitiesGridPanel;
+    
+};
+
 componentes.servidoresWmsButton = function(){
     
-    var servidoresWmsButton = new Ext.Toolbar.Button({
+    var servidoresWmsButton = new Ext.Button({
         tooltip: 'Servidores WMS',
         icon: 'img/server.png',
-        handler: function(){
-
-           var wmsServersGridPanel = new Ext.grid.GridPanel({
-               border: false,
-               sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-               viewConfig: {
-                 forceFit: false
-               },
-               store: app.wmsServerStore,
-               columns: [
-                   {
-                     header: "Nombre",
-                     dataIndex: "nombre",
-                     sortable: true,
-                     width: 150
-                   },
-                   {
-                     header: "Url",
-                     dataIndex: "url",
-                     sortable: true,
-                     width: 334
-                   } 
-               ]
-           }); 
-
-           var informationButton = new Ext.Toolbar.Button({
-               text:"Información",
-               tooltip: 'Información',
-               icon: 'img/information.png',
-               handler: function(){
-
-                  var url = wmsServersGridPanel.getSelectionModel().getSelected().data.url;                            
-
-                  var service, name, title, abstract, contactPerson, contactOrganization, contactPosition;
-                  var addressType, address, city, stateOrProvince, postCode, country, contactVoiceTelephone;
-                  var contactFacsimileTelephone, contactElectronicMailAddress;
-
-                  var infomask = new Ext.LoadMask(servidoresWindow.el, {msg:"Conectando..."});
-                  infomask.show();
-
-                  Ext.Ajax.request({
-                      url : getCapabilitiesUrl(url), 
-                      method: 'GET',
-                      success: function ( result, request )
-                      { 
-                          infomask.hide();
-
-                          var parser = new DOMParser();
-                          var xmlDoc = parser.parseFromString(result.responseText,"text/xml");
-
-                          try{service = xmlDoc.getElementsByTagName("Service")[0];}catch(e){};
-                          try{name = service.getElementsByTagName("Name")[0].textContent;}catch(e){};
-                          try{title = service.getElementsByTagName("Title")[0].textContent;}catch(e){};
-                          try{abstract = service.getElementsByTagName("Abstract")[0].textContent;}catch(e){};
-                          try{contactPerson = service.getElementsByTagName("ContactPerson")[0].textContent;}catch(e){};
-                          try{contactOrganization = service.getElementsByTagName("ContactOrganization")[0].textContent;}catch(e){};
-                          try{contactPosition = service.getElementsByTagName("ContactPosition")[0].textContent;}catch(e){};
-                          try{addressType = service.getElementsByTagName("AddressType")[0].textContent;}catch(e){};
-                          try{address = service.getElementsByTagName("Address")[0].textContent;}catch(e){};
-                          try{city = service.getElementsByTagName("City")[0].textContent;}catch(e){};
-                          try{stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].textContent;}catch(e){};
-                          try{postCode = service.getElementsByTagName("PostCode")[0].textContent;}catch(e){};
-                          try{country = service.getElementsByTagName("Country")[0].textContent;}catch(e){};
-                          try{contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].textContent;}catch(e){};
-                          try{contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].textContent;}catch(e){};
-                          try{contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].textContent;}catch(e){};
-
-                          new Ext.Window({
-                              title: wmsServersGridPanel.getSelectionModel().getSelected().data.nombre,
-                              iconCls: 'configuracionIcon',
-                              layout: "anchor",
-                              resizable: false,   
-                              items: [
-                                  new Ext.Panel({
-                                      border: false,
-                                      autoScroll: true,
-                                      width: "100%",
-                                      heigth: "100%",
-                                      items: new Ext.FormPanel({
-                                           labelWidth: 85, // label settings here cascade unless overridden
-                                           frame:true,
-                                           border: false,
-                                           width: 380,
-                                           items: [
-                                               new Ext.form.FieldSet({
-                                                  title: "WMS",
-                                                  items: [
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Nombre',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: name
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Título',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: title
-                                                      }),   
-                                                      new Ext.form.TextArea({
-                                                          fieldLabel: 'Descripción',
-                                                          width: 255,
-                                                          readOnly: true,
-                                                          value: abstract
-                                                      })                                                 
-                                                  ]
-                                               }),
-                                               new Ext.form.FieldSet({
-                                                  title: "Contacto",
-                                                  items: [
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Nombre',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: contactPerson
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Organización',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: contactOrganization
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Posición',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: contactPosition
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Tipo de dirección',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: addressType
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Dirección',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: address
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Ciudad',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: city
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Provincia o estado',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: stateOrProvince
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Código Postal',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: postCode
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'País',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: country
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Teléfono',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: contactVoiceTelephone
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Fax',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: contactFacsimileTelephone
-                                                      }),  
-                                                      new Ext.form.TextField({
-                                                           fieldLabel: 'Email',
-                                                           width: 255,
-                                                           readOnly: true,
-                                                           value: contactElectronicMailAddress
-                                                      })
-                                                  ]
-                                               })                                         
-                                           ]
-                                       })
-                                  })
-
-                              ]                                            
-                          }).show();
-                      },
-                      failure: function(){
-                          infomask.hide();
-                          Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-                      },
-                      listeners: {
-                           requestexception: function(){
-                                infomask.hide();
-                                Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-                           }
-                      }
-                  });
-
-               }
-           });
-
-           var servidoresWindow = new Ext.Window({
-               title: "Servidores WMS",
-               iconCls: 'serverIcon',
-               layout: "fit",
-               width: 500,
-               height:300,
-               resizable: false,
-               autoScroll: true,
-               shadow: false,
-               bbar: [
-                   "->",
-                   informationButton,                            
-                   new Ext.Toolbar.Button({
-                       tooltip: 'Agregar servidor WMS',
-                       text: "Agregar",
-                       icon: 'img/server-plus.png',
-                       handler: function(){
-
-                           var nombre, wms_url;
-                           Ext.MessageBox.prompt('Agregar servidor WMS', 'Nombre del servidor', function(btn, text){
-                               if (btn == "ok"){
-                                   nombre = text;
-                                   if(app.wmsServerStore.getById(nombre) == null){
-                                       Ext.MessageBox.prompt('Agregar servidor WMS', 'URL del servidor', function(btn, text){
-                                           if (btn == "ok"){
-                                               wms_url = text;
-                                               app.wmsServerStore.loadData([[nombre,wms_url]],true);
-                                           }
-                                       })
-                                   }else{
-                                       Ext.MessageBox.alert('Error', 'Ya existe un servido con ese nombre');
-                                   }
-                               }
-                           });                            
-
-                       }
-                   }),
-                   new Ext.Toolbar.Button({
-                       tooltip: 'Eliminar servidor WMS',
-                       text: "Eliminar",
-                       icon: 'img/server-minus.png',
-                       handler: function(){
-
-                           wmsServersGridPanel.getSelectionModel().each(function(record){
-
-                                   app.wmsServerStore.remove(app.wmsServerStore.getById(record.id));
-
-                           });                            
-
-                       }
-                   })
-               ],
-               items: [wmsServersGridPanel]                
-           }).show();
-        }
+        handler: handler.onServidoresWmsButton
     });
     
     return servidoresWmsButton;
     
+    
+};
+
+componentes.wmsServersGridPanel = function(){
+   
+   var wmsServersInformationButton = componentes.wmsServersInformationButton();
+   var agregarServidorWmsButton = componentes.agregarServidorWmsButton();
+   var eliminarServidorWmsButton = componentes.eliminarServidorWmsButton();
+   
+   var wmsServersGridPanel = new Ext.grid.GridPanel({
+        border: false,
+        sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+        viewConfig: {
+          forceFit: false
+        },
+        store: app.wmsServerStore,
+        columns: [
+            {
+              header: "Nombre",
+              dataIndex: "nombre",
+              sortable: true,
+              width: 150
+            },
+            {
+              header: "Url",
+              dataIndex: "url",
+              sortable: true,
+              width: 334
+            } 
+        ],
+        bbar: [
+            componentes.separador(),
+            wmsServersInformationButton,                            
+            agregarServidorWmsButton,
+            eliminarServidorWmsButton
+        ]               
+    }); 
+    
+    wmsServersInformationButton.setHandler(function(){
+
+        var url = wmsServersGridPanel.getSelectionModel().getSelected().data.url;                            
+        var infomask = new Ext.LoadMask(wmsServersGridPanel.getEl(), {msg:"Conectando..."});
+        infomask.show();
+
+        Ext.Ajax.request({
+            url : getCapabilitiesUrl(url), 
+            method: 'GET',
+            success: function ( result, request )
+            { 
+                infomask.hide();
+
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString(result.responseText,"text/xml");
+
+                try{var service = xmlDoc.getElementsByTagName("Service")[0];}catch(e){};
+                try{var name = service.getElementsByTagName("Name")[0].textContent;}catch(e){};
+                try{var title = service.getElementsByTagName("Title")[0].textContent;}catch(e){};
+                try{var abstract = service.getElementsByTagName("Abstract")[0].textContent;}catch(e){};
+                try{var contactPerson = service.getElementsByTagName("ContactPerson")[0].textContent;}catch(e){};
+                try{var contactOrganization = service.getElementsByTagName("ContactOrganization")[0].textContent;}catch(e){};
+                try{var contactPosition = service.getElementsByTagName("ContactPosition")[0].textContent;}catch(e){};
+                try{var addressType = service.getElementsByTagName("AddressType")[0].textContent;}catch(e){};
+                try{var address = service.getElementsByTagName("Address")[0].textContent;}catch(e){};
+                try{var city = service.getElementsByTagName("City")[0].textContent;}catch(e){};
+                try{var stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].textContent;}catch(e){};
+                try{var postCode = service.getElementsByTagName("PostCode")[0].textContent;}catch(e){};
+                try{var country = service.getElementsByTagName("Country")[0].textContent;}catch(e){};
+                try{var contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].textContent;}catch(e){};
+                try{var contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].textContent;}catch(e){};
+                try{var contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].textContent;}catch(e){};
+
+                new Ext.Window({
+                    title: wmsServersGridPanel.getSelectionModel().getSelected().data.nombre,
+                    iconCls: 'configuracionIcon',
+                    layout: "anchor",
+                    resizable: false,   
+                    items: [
+                        new Ext.Panel({
+                            border: false,
+                            autoScroll: true,
+                            width: "100%",
+                            heigth: "100%",
+                            items: new Ext.FormPanel({
+                                 labelWidth: 85, // label settings here cascade unless overridden
+                                 frame:true,
+                                 border: false,
+                                 width: 380,
+                                 items: [
+                                     new Ext.form.FieldSet({
+                                        title: "WMS",
+                                        items: [
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Nombre',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: name
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Título',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: title
+                                            }),   
+                                            new Ext.form.TextArea({
+                                                fieldLabel: 'Descripción',
+                                                width: 255,
+                                                readOnly: true,
+                                                value: abstract
+                                            })                                                 
+                                        ]
+                                     }),
+                                     new Ext.form.FieldSet({
+                                        title: "Contacto",
+                                        items: [
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Nombre',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactPerson
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Organización',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactOrganization
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Posición',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactPosition
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Tipo de dirección',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: addressType
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Dirección',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: address
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Ciudad',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: city
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Provincia o estado',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: stateOrProvince
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Código Postal',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: postCode
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'País',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: country
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Teléfono',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactVoiceTelephone
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Fax',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactFacsimileTelephone
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Email',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactElectronicMailAddress
+                                            })
+                                        ]
+                                     })                                         
+                                 ]
+                             })
+                        })
+
+                    ]                                            
+                }).show();
+            },
+            failure: function(){
+                infomask.hide();
+                Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
+            },
+            listeners: {
+                 requestexception: function(){
+                      infomask.hide();
+                      Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
+                 }
+            }
+        });
+
+    });
+    
+    agregarServidorWmsButton.setHandler(function(){
+
+        var nombre, wms_url;
+        Ext.MessageBox.prompt('Agregar servidor WMS', 'Nombre del servidor', function(btn, text){
+            if (btn == "ok"){
+                nombre = text;
+                if(app.wmsServerStore.getById(nombre) == null){
+                    Ext.MessageBox.prompt('Agregar servidor WMS', 'URL del servidor', function(btn, text){
+                        if (btn == "ok"){
+                            wms_url = text;
+                            app.wmsServerStore.loadData([[nombre,wms_url]],true);
+                        }
+                    })
+                }else{
+                    Ext.MessageBox.alert('Error', 'Ya existe un servido con ese nombre');
+                }
+            }
+        });                            
+
+    });
+    
+    eliminarServidorWmsButton.setHandler(function(){
+        wmsServersGridPanel.getSelectionModel().each(function(record){
+            app.wmsServerStore.remove(app.wmsServerStore.getById(record.id));
+        });                            
+    });
+           
+    return wmsServersGridPanel;        
+   
+};
+
+componentes.wmsServersInformationButton = function(){
+    
+    var wmsServersInformationButton = new Ext.Toolbar.Button({
+        text:"Información",
+        tooltip: 'Información',
+        icon: 'img/information.png'
+    });
+            
+    return wmsServersInformationButton;        
+    
+};
+
+componentes.agregarServidorWmsButton = function(){
+    
+    var agregarServidorWmsButton = new Ext.Toolbar.Button({
+        tooltip: 'Agregar servidor WMS',
+        text: "Agregar",
+        icon: 'img/server-plus.png'
+    });
+    
+    return agregarServidorWmsButton;
+    
+    
+};
+
+componentes.eliminarServidorWmsButton = function(){
+    
+    var eliminarServidorWmsButton = new Ext.Toolbar.Button({
+        tooltip: 'Eliminar servidor WMS',
+        text: "Eliminar",
+        icon: 'img/server-minus.png'
+    });
+    
+    return eliminarServidorWmsButton;
     
 };
