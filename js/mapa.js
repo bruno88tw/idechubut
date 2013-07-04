@@ -17,11 +17,18 @@
 var app = {};
 
 /*
+ * Variable de acceso global para acceder a los paneles
+ * 
+ * @type type
+ */
+var panel = {};
+
+/*
  * Variable de acceso global para acceder a las componentes toolbar de la aplicación
  * 
  * @type type
  */
-var toolbars = {};
+var toolbar = {};
 
 /*
  * Variable de acceso global para acceder a los componentes de la aplicación
@@ -29,6 +36,20 @@ var toolbars = {};
  * @type type
  */
 var componentes = {};
+
+/*
+ * Variable de acceso global para acceder a los manejadores
+ * 
+ * @type type
+ */
+var handler = {};
+
+/*
+ * Variable de acceso global a las ventanas
+ * 
+ * @type type
+ */
+var windows = {};
 
 /*
  * Ubicación del proxy cgi
@@ -150,90 +171,7 @@ app.agregarCapasBase = function(){
  * 
  * @returns {undefined}
  */
-app.generarViewport = function(){         
-    
-    /*
-     * Panel del mapa
-     */
-    new GeoExt.MapPanel({
-        region: 'center',
-        border:false,
-        map: app.map,  
-        center: new OpenLayers.LonLat(-69, -44).transform(new OpenLayers.Projection("EPSG:4326"), app.map.getProjectionObject()),
-        id: "mapPanel",
-        extent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),
-        stateId: "map",
-        tbar: toolbars.getMapPanelTopBar(),
-        bbar: toolbars.getMapPanelBottomBar()
-    });               
-    
-    /*
-     * Panel del árbol de capas
-     */
-    new Ext.tree.TreePanel({
-        region: 'west',
-        collapseMode: 'mini',
-        split: true,
-        width: 255,
-        maxWidth: 255,
-        minWidth: 255,
-        border: false,      
-        autoScroll: true,
-        iconCls: "layers-headerIcon",
-        title: 'Capas',
-        id: "layerTreePanel",
-        root: app.rootnode,
-        rootVisible: false,
-        enableDD: true,
-        tbar: toolbars.getTreePanelTopBar(),
-        bbar: toolbars.getTreePanelBottomBar()
-    });     
-
-    /*
-     * Panel de leyenda
-     */
-    new GeoExt.LegendPanel({        
-        region: 'east',
-        collapseMode: 'mini',
-        collapsed: true,
-        split: true,
-        width: 255,
-        maxWidth: 255,
-        minWidth: 255,                                      
-        title: 'Leyenda',
-        id: "legendPanel",
-        iconCls: "legendIcon",
-        autoScroll: true,
-        border: false,
-        defaults: {
-            style: 'padding:5px',
-            baseParams: {
-                FORMAT: 'image/png',
-                LEGEND_OPTIONS: 'forceLabels:on'
-            }
-        }
-    });      
-    
-    /*
-     *  Panel de atributos 
-     */
-    new Ext.grid.GridPanel({
-        region: 'south',
-        collapseMode: 'mini',
-        collapsed: true,
-        split: true,
-        height: 200,
-        minHeight: 200,
-        maxHeight: 200,        
-        id: "featureGridPanel",
-        viewConfig: {forceFit: false},
-        border: false,
-        columnLines: true,
-        store: [],
-        sm: new GeoExt.grid.FeatureSelectionModel(),
-        columns: [],
-        tbar: toolbars.getFeatureGridPanelTopBar()    
-    });       
+app.generarViewport = function(){            
     
     /*
      * Layout para los componentes visuales
@@ -242,16 +180,11 @@ app.generarViewport = function(){
             layout: "border",  
             border:false,
             items:[
-                {region: 'north',
-                id:"banner",
-                height: 30,
-                bodyStyle:'background-color:black',
-                border:false,
-                html: '<img src="img/banner-dgeyc.jpg" alt="banner" style="height: 100%">'},
-                Ext.getCmp("layerTreePanel"),
-                Ext.getCmp("legendPanel"),                        
-                Ext.getCmp("mapPanel"),
-                Ext.getCmp("featureGridPanel")                         
+                panel.banner(),
+                panel.layerTreePanel(),
+                panel.legendPanel(),                        
+                panel.mapPanel(),
+                panel.featureGridPanel()                         
             ]
     });  
     

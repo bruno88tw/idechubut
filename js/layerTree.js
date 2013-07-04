@@ -117,7 +117,7 @@ function createNode(text){
                         text: 'Agregar capa',
                         icon: "img/map-plus.png",
                         handler: function(){
-                            agregarCapas(e);
+                            handler.onAgregarCapas(e);
                         }
                     },{
                         text: 'Renombrar carpeta',
