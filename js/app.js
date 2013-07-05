@@ -1,55 +1,58 @@
-/*
- * IDE Chubut
- * 
- * Escrito por Bruno J. Vecchietti
- * 
- * mapa.js
- * 
- * Script inicial
- * 
- */
+//  File        : js/app.js
+//  Project     : Mapviewer
+//  Author      : Bruno José Vecchietti
+//  Year        : 2012  
+//  Description : Archivo javascript de arranque de la aplicación
+//  
+//  Copyright (C) 2012  Bruno José Vecchietti
+//  
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
  * Variable de acceso global
  * 
- * @type array
+ * @type Array
  */
 var app = {};
 
 /*
  * Variable de acceso global para acceder a los paneles
  * 
- * @type type
+ * @type Array
  */
 var panel = {};
 
 /*
  * Variable de acceso global para acceder a las componentes toolbar de la aplicación
  * 
- * @type type
+ * @type Array
  */
 var toolbar = {};
 
 /*
  * Variable de acceso global para acceder a los componentes de la aplicación
  * 
- * @type type
+ * @type Array
  */
 var componentes = {};
 
 /*
  * Variable de acceso global para acceder a los manejadores
  * 
- * @type type
+ * @type Array
  */
 var handler = {};
-
-/*
- * Variable de acceso global a las ventanas
- * 
- * @type type
- */
-var windows = {};
 
 /*
  * Ubicación del proxy cgi
@@ -73,15 +76,12 @@ Ext.onReady(function() {
 });
 
 /*
- * Función que crea el mapa, agrega los controles, capas base y capas de vectores
+ * Crea el mapa de la aplicación. Inicializa app.map con una instancia de OpenLayers.Map.
  * 
  * @returns {undefined}
  */
 app.crearMapa = function(){               
-
-    /*
-     * Creo el mapa
-     */
+   
     app.map = new OpenLayers.Map(
         "divMapa",
         {
@@ -97,30 +97,15 @@ app.crearMapa = function(){
 };
 
 /*
- * Agrega controles básicos al mapa
+ * Agrega controles básicos al mapa.
  * 
  * @returns {undefined}
  */
 app.agregarControles = function(){
     
-    /*
-     * Agrego control de historia de navegación
-     */
     app.map.addControl(new OpenLayers.Control.NavigationHistory());
-    
-    /*
-     * Agrego el control de navegación
-     */
     app.map.addControl(new OpenLayers.Control.Navigation());
-    
-    /*
-     * Agrego el control para consultas a través de WMSGetFeatureInfo
-     */
     app.map.addControl(new OpenLayers.Control.WMSGetFeatureInfo(app.featureInfoOptions));
-    
-    /*
-     * Agrego el control de panzoombar
-     */
     app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,2));        
     
 };
@@ -132,9 +117,7 @@ app.agregarControles = function(){
  */
 app.agregarCapasBase = function(){
     
-    /*
-     * Agrego capas base al mapa
-     */
+    // Capas Base
     app.map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
     app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
     app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
@@ -146,14 +129,12 @@ app.agregarCapasBase = function(){
     app.map.addLayer(new OpenLayers.Layer.OSM("mapquest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));  
     app.map.addLayer(new OpenLayers.Layer.OSM("mapquestAerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions2, isBaseLayer:true, sphericalMercator: true}));            
 
-    /*
-     * Vector layer para las consultas wfs
-     */             
-    app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {displayInLayerSwitcher: false}));
+    // Vector layer para las consultas wfs            
+    app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {
+        displayInLayerSwitcher: false
+    }));
     
-    /*
-     * Vector layer para el localizador
-     */
+    // Vector layer para el localizador
     app.map.addLayer(new OpenLayers.Layer.Vector("Location", {
         styleMap: new OpenLayers.Style({
             externalGraphic: "http://openlayers.org/api/img/marker.png",
@@ -173,9 +154,6 @@ app.agregarCapasBase = function(){
  */
 app.generarViewport = function(){            
     
-    /*
-     * Layout para los componentes visuales
-     */
     new Ext.Viewport({
             layout: "border",  
             border:false,
@@ -195,17 +173,14 @@ app.generarViewport = function(){
  */
 app.configuracionFinal = function(){
 
-    /*
-     * Importo las capas definidas en app.tree y el orden definido en app.index
-     */
+
+    // Importa las capas definidas en app.tree y el orden definido en app.index
     if(app.tree != null){
         restoreTree(app.rootnode,app.tree);
         restoreIndex(app.index);          
     }  
 
-    /*
-     * Agrego al mapPanel los div sobre los cuales se renderizarán los siguientes componentes
-     */
+    //Agrega al mapPanel los div sobre los cuales se renderizarán los siguientes componentes
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('scalelinediv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('minimapcontainer'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('rosa'));
@@ -213,9 +188,7 @@ app.configuracionFinal = function(){
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('subtitulodiv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('legenddiv'));                              
 
-    /*
-     * Agrego el control de posición del mouse 
-     */
+    // Agrego el control de posición del mouse 
     app.map.addControl(new OpenLayers.Control.MousePosition({
         div: document.getElementById('position'),
         formatOutput: function(lonLat) {
@@ -225,25 +198,19 @@ app.configuracionFinal = function(){
         }
     }));     
     
-    /*
-     * Agrego el control de escala
-     */
+    // Agrega el control de escala
     app.map.addControl(new OpenLayers.Control.ScaleLine({
         div: document.getElementById("scalelinediv")
     }));
     
-    /*
-     * Agrego el control de minimapa
-     */
+    // Agrega el control de minimapa
     app.map.addControl(new OpenLayers.Control.OverviewMap({
         layers:[new OpenLayers.Layer.OSM("OSM",null,null,{isBaseLayer: true, maxZoomLevel: 20})],
         size: new OpenLayers.Size(150, 130),
         div: document.getElementById('minimap')            
     }));       
 
-    /*
-     * Agrego el legendPanel que se visualiza dentro del mapPanel
-     */
+    // Agrega el panel de leyenda que se visualiza dentro del mapa
     new GeoExt.LegendPanel({
         title: 'Leyenda',
         iconCls: "legendIcon",
@@ -278,8 +245,11 @@ app.configuracionFinal = function(){
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.backgroundColor = "#BACAE6";
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.borderTopColor = "#BACAE6";
+    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.height = "20px";
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
     document.getElementById("legendPanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
+    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
+    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
        
 };
 

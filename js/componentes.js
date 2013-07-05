@@ -1,21 +1,64 @@
+//  File        : js/componentes.js
+//  Project     : Mapviewer
+//  Author      : Bruno José Vecchietti
+//  Year        : 2012  
+//  Description : Se definen las funciones para la construcción y acceso 
+//  a los componentes de la aplicacón.
+//  
+//  Copyright (C) 2012  Bruno José Vecchietti
+//  
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+/*
+ * Devuelve un separador.
+ * 
+ * @returns {String}: "->"
+ */
 componentes.separador = function(){
     
     return "->";
     
 };
 
+/*
+ * Devuelve un espacio en blanco.
+ * 
+ * @returns {String}: "&nbsp" 
+ */
 componentes.blankSpace = function(){
     
     return "&nbsp";
     
 };
 
+/*
+ * Devuelve un elemento div con identificador igual a id.
+ * 
+ * @param {type} id: identificador del div.
+ * @returns {String}: elemento div.
+ */
 componentes.div = function(id){
     
     return "<div id='"+id+"'></div>";
     
 };
 
+/*
+ * Devuelve un botón vinculado al control de navegación del mapa.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.navegacionButton = function(){
     
     var navegacionButon = new GeoExt.Action({
@@ -31,6 +74,11 @@ componentes.navegacionButton = function(){
             
 };
 
+/*
+ * Devuelve un botón vinculado al control ZoomToMaxExtent del mapa.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.zoomToMaxExtentButton = function(){
     
     var zoomToMaxExtentButton = new GeoExt.Action({
@@ -44,6 +92,12 @@ componentes.zoomToMaxExtentButton = function(){
     
 };
 
+/*
+ * Devuelve un botón vinculado al control ZoomBox({out:false}) del mapa.
+ * Permite acercar el zoom al mapa.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.zoomInButton = function (){
     
     var zoomInButton = new GeoExt.Action({
@@ -58,6 +112,12 @@ componentes.zoomInButton = function (){
     
 };
 
+/*
+ * Devuelve un botón vinculado al control ZoomBox({out:true}) del mapa.
+ * Permite elejar el zoom al mapa.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.zoomOutButton = function(){
     
     var zoomOutButton = new GeoExt.Action({
@@ -72,6 +132,12 @@ componentes.zoomOutButton = function(){
     
 };
 
+/*
+ * Devuelve un botón vinculado al control NavigationHistory del mapa.
+ * Permite ir al zoom anterior en el historial de navegación.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.zoomAnteriorButton = function(){
     
     var zoomAnteriorButton = new GeoExt.Action({
@@ -85,6 +151,12 @@ componentes.zoomAnteriorButton = function(){
     
 };
 
+/*
+ * Devuelve un botón vinculado al control NavigationHistory del mapa.
+ * Permite ir al zoom siguiente en el historial de navegación.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.zoomPosteriorButton = function(){
     
     var zoomPosteriorButton = new GeoExt.Action({
@@ -98,6 +170,12 @@ componentes.zoomPosteriorButton = function(){
     
 };
 
+/*
+ * Devuelve un botón vinculado al control Measure del mapa.
+ * Permite medir distancias.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.distanciaButton = function(){
     
     var distanciaButton = new GeoExt.Action({
@@ -128,6 +206,12 @@ componentes.distanciaButton = function(){
     
 };
 
+/*
+ * Devuelve un botón vinculado al control Measure del mapa.
+ * Permite medir superficies.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.superficieButton = function(){
     
     var superficieButton = new GeoExt.Action({
@@ -158,6 +242,11 @@ componentes.superficieButton = function(){
     
 };
 
+/*
+ * Devuelve un botón vinculado al control WMSGetFeatureInfo del mapa.
+ * 
+ * @returns GeoExt.Action
+ */
 componentes.informacionButton = function(){
     
     var informacionButton = new GeoExt.Action({
@@ -172,6 +261,12 @@ componentes.informacionButton = function(){
     
 };
 
+/*
+ * Devuelve el coombobox el cual permite realizar consultas por topónimos y 
+ * retorna su posición en el mapa.
+ * 
+ * @returns GeoExt.form.GeocoderComboBox
+ */
 componentes.geocoderComboBox = function(){
     
     var geocoderComboBox = new GeoExt.form.GeocoderComboBox({       
@@ -190,9 +285,14 @@ componentes.geocoderComboBox = function(){
     
 };
 
+/*
+ * Devuelve un menú de opciones de configuración
+ * 
+ * @returns Ext.Button
+ */
 componentes.configuracionButton = function(){
     
-    var configuracionButton = {
+    var configuracionButton = new Ext.Button({
         icon: 'img/gear.png',
         tooltip: 'Configuración',
         menu: new Ext.menu.Menu({
@@ -213,27 +313,37 @@ componentes.configuracionButton = function(){
                 componentes.configuracionGrillaCheckbox()                                                         
             ]
         })
-    };
+    });
     
     return configuracionButton;
     
 };
 
+/*
+ * Devuelve un CheckItem que activa y desactiva el título del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionTituloCheckbox = function(){
     
-    var configuracionTituloCheckbox = {
+    var configuracionTituloCheckbox = new Ext.menu.CheckItem({
         text: 'Título',
         checked: false,
         checkHandler: handler.onConfiguracionTituloCheckbox
-    };
+    });
     
     return configuracionTituloCheckbox;
     
 };
 
+/*
+ * Devuelve un botón que permite cambiar el título del mapa
+ * 
+ * @returns Ext.Button
+ */
 componentes.configuracionCambiarTituloButton = function(){
     
-    var configuracionCambiarTituloButton = new Ext.Toolbar.Button({
+    var configuracionCambiarTituloButton = new Ext.Button({
         text: "Cambiar título",
         width: 105,
         handler: handler.onConfiguracionCambiarTituloButton
@@ -241,21 +351,30 @@ componentes.configuracionCambiarTituloButton = function(){
      
      return configuracionCambiarTituloButton;
     
-}
+};
 
+/*
+ * Devuelve un CheckItem que activa y desactiva el subtítulo del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionSubtituloCheckbox = function(){
     
-    var configuracionSubtituloCheckbox = {
+    var configuracionSubtituloCheckbox = new Ext.menu.CheckItem({
         text: 'Subtítulo',
         checked: false,
         checkHandler: handler.onConfiguracionSubtituloCheckbox
-    };
+    });
     
     return configuracionSubtituloCheckbox;
-    
-    
+        
 };
 
+/*
+ * Devuelve un botón que permite cambiar el subtítulo del mapa
+ * 
+ * @returns Ext.Button
+ */
 componentes.configuracionCambiarSubtituloButton = function(){
     
     var configuracionCambiarSubtituloButton = new Ext.Toolbar.Button({
@@ -265,85 +384,119 @@ componentes.configuracionCambiarSubtituloButton = function(){
      });
     
     return configuracionCambiarSubtituloButton;
-    
-    
+        
 };
 
+/*
+ * Devuelve un CheckItem que activa y desactiva la leyenda del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionLeyendaCheckbox = function(){
     
-    var configuracionLeyendaCheckbox = {
+    var configuracionLeyendaCheckbox = new Ext.menu.CheckItem({
         text: 'Leyenda',
         checked: false,
         checkHandler: handler.onConfiguracionLeyendaCheckbox
-    };
+    });
     
     return configuracionLeyendaCheckbox;
     
 };
 
+/*
+ * Devuelve un CheckItem que activa y desactiva el navegador del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionNavegadorCheckbox = function(){
     
-    var configuracionNavegadorCheckbox = {
+    var configuracionNavegadorCheckbox = new Ext.menu.CheckItem({
         text: 'Navegador',
         checked: true,
         checkHandler: handler.onConfiguracionNavegadorCheckbox
-    };
+    });
     
     return configuracionNavegadorCheckbox;
     
 };
 
+/*
+ * Devuelve un CheckItem que activa y desactiva la escala del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionEscalaCheckbox = function(){
     
-    var configuracionEscalaCheckbox = {
+    var configuracionEscalaCheckbox = new Ext.menu.CheckItem({
         text: 'Escala',
         checked: true,
         checkHandler: handler.onConfiguracionEscalaCheckbox
-    };
+    });
     
     return configuracionEscalaCheckbox;
     
 };
 
+/*
+ * Devuelve un CheckItem que activa y desactiva el minimapa del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionMinimapaCheckbox = function(){
     
-    var configuracionMinimapaCheckbox = {
+    var configuracionMinimapaCheckbox = new Ext.menu.CheckItem({
         text: 'Minimapa',
         checked: true,
         checkHandler: handler.ConfiguracionMinimapaCheckbox
-    };
+    });
     
     return configuracionMinimapaCheckbox;
     
 };
 
+/*
+ * Devuelve un CheckItem que activa y desactiva la rosa de los vientos del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionNorteCheckbox = function(){
     
-    var configuracionNorteCheckbox = {
+    var configuracionNorteCheckbox = new Ext.menu.CheckItem({
         text: 'Norte',
         checked: true,
         checkHandler: handler.ConfiguracionNorteCheckbox
-    };
+    });
     
     return configuracionNorteCheckbox;
     
 };
 
+/*
+ * Devuelve un CheckItem que activa y desactiva la grilla de lat lon del mapa
+ * 
+ * @returns Ext.menu.CheckItem
+ */
 componentes.configuracionGrillaCheckbox = function(){
     
-    var configuracionGrillaCheckbox = {
+    var configuracionGrillaCheckbox = new Ext.menu.CheckItem({
         text: 'Grilla',
         checked: false,
         checkHandler: handler.ConfiguracionGrillaCheckbox
-    };
+    });
     
     return configuracionGrillaCheckbox;
     
 };
 
+/*
+ * Devuelve un botón que permite imprimir el mapa y sus componentes
+ * 
+ * @returns Ext.Button
+ */
 componentes.imprimirButton = function(){
     
-    var imprimirButton = new Ext.Toolbar.Button({
+    var imprimirButton = new Ext.Button({
         tooltip: 'Imprimir',
         icon: 'img/printer.png',
         handler: handler.onImprimirButton
@@ -353,9 +506,14 @@ componentes.imprimirButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que muestra una ventana con ayuda acerca del funcionamiento del programa
+ * 
+ * @returns Ext.Button
+ */
 componentes.ayudaButton = function(){
     
-    var ayudaButton = new Ext.Toolbar.Button({
+    var ayudaButton = new Ext.Button({
         tooltip: 'Ayuda',
         icon: 'img/question.png',
         handler: handler.onAyudaButton
@@ -365,6 +523,11 @@ componentes.ayudaButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que muestra una ventana con información acerca del programa
+ * 
+ * @returns Ext.Button
+ */
 componentes.acercaDeButton = function(){
     
     var acercaDeButton = new Ext.Toolbar.Button({
@@ -377,6 +540,11 @@ componentes.acercaDeButton = function(){
     
 };
 
+/*
+ * Devuelve un combobox que contiene las resoluciones del mapa
+ * 
+ * @returns Ext.form.ComboBox
+ */
 componentes.scaleComboBox = function(){
     
     var scaleComboBox = new Ext.form.ComboBox({
@@ -397,14 +565,10 @@ componentes.scaleComboBox = function(){
         }
     });
     
-    /*
-     * Reescribe el contenido del combobox de resolución para darle un determinado formato
-     */
+    // Reescribe el contenido del combobox de resolución para darle un determinado formato
     Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(app.map.getScale()));      
     
-    /*
-     * Agrega un manejador al evento cambio de zoom del mapa de modo que reescriba el contenido del combobox de resolución
-     */
+    // Agrega un manejador al evento cambio de zoom del mapa de modo que reescriba el contenido del combobox de resolución
     app.map.events.register("zoomend", this, function() {
         Ext.getCmp("scaleCombo").setValue("1 : " + parseInt(app.map.getScale()));
     });     
@@ -413,9 +577,14 @@ componentes.scaleComboBox = function(){
     
 };
 
+/*
+ * Devuelve un botón que abre una ventana que permite agregar nuevas capas de servidores WMS
+ * 
+ * @returns Ext.Button
+ */
 componentes.agregarCapasButton = function(){
     
-    var agregarCapasButton = new Ext.Toolbar.Button({
+    var agregarCapasButton = new Ext.Button({
         tooltip: 'Agregar capa',
         icon: 'img/map-plus.png',
         id: "treePanelTopbarAgregar",
@@ -426,9 +595,14 @@ componentes.agregarCapasButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que muestra en el árbol de capas el orden de las capas
+ * 
+ * @returns Ext.Button
+ */
 componentes.ordenDeCapasButton = function(){
     
-    var ordenDeCapasButton = new Ext.Toolbar.Button({
+    var ordenDeCapasButton = new Ext.Button({
         tooltip: 'Orden',
         icon: 'img/maps-stack.png',
         enableToggle: true,
@@ -440,9 +614,14 @@ componentes.ordenDeCapasButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que permite agregar una nueva carpeta al árbol de capas
+ * 
+ * @returns Ext.Button
+ */
 componentes.agregarCarpetaButton = function(){
     
-    var agregarCarpetaButton = new Ext.Toolbar.Button({
+    var agregarCarpetaButton = new Ext.Button({
         tooltip: 'Agregar carpeta',
         icon: 'img/folder-add.png',
         id: "treePanelTopbarAgregarCarpeta",
@@ -453,9 +632,14 @@ componentes.agregarCarpetaButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que expande todas las carpetas y subcarpetas del árbol de capas a partir del nodo raiz
+ * 
+ * @returns Ext.Button
+ */
 componentes.expandirTodoButton = function(){
     
-    var expandirTodoButton = new Ext.Toolbar.Button({
+    var expandirTodoButton = new Ext.Button({
         tooltip: 'Expandir todo',
         icon: 'img/list-add.png',
         id: "treePanelTopbarExpandir",
@@ -466,6 +650,11 @@ componentes.expandirTodoButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que colapsa todas las carpetas y subcarpetas del árbol de capas a partir del nodo raiz
+ * 
+ * @returns Ext.Button
+ */
 componentes.colapsarTodoButton = function(){
     
     var colapsarTodoButton = new Ext.Toolbar.Button({
@@ -479,74 +668,84 @@ componentes.colapsarTodoButton = function(){
     
 };
 
+/*
+ * Devuelve un menú que permite cambiar el mapa base
+ * 
+ * @returns Ext.Button
+ */
 componentes.mapaBaseMenuButton = function(){
     
-    var mapaBaseMenuButton = {
+    var mapaBaseMenuButton = new Ext.Button({
         icon: "img/map.png",
         text: "Mapa Base",
         menu: new Ext.menu.Menu({
             items: [
-                {
+                new Ext.menu.Item({
                     text: "Google Streets",
                     iconCls: "googleIcon",
                     handler: handler.onGoogleStreets
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "Google Terrain",
                     iconCls: "googleIcon",
                     handler: handler.onGoogleTerrain
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "Google Satellite",
                     iconCls: "googleIcon",
                     handler: handler.onGoogleSatellite
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "Google Hybrid",
                     iconCls: "googleIcon",
                     handler: handler.onGoogleHibryd
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "OpenStreetMap",
                     iconCls: "osmIcon",
                     handler: handler.onOpenStreetMap
-                },                                
-                {
+                }),                                
+                new Ext.menu.Item({
                     text: "Bing Road",
                     iconCls: "bingIcon",
                     handler: handler.onBingRoad
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "Bing Aerial",
                     iconCls: "bingIcon",
                     handler: handler.onBingAerial
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "Bing Hybrid",
                     iconCls: "bingIcon",
                     handler: handler.onBingHibryd
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "mapquest",
                     iconCls: "mapQuestIcon",
                     handler: handler.onMapQuest
-                },
-                {
+                }),
+                new Ext.menu.Item({
                     text: "mapquestAerial",
                     iconCls: "mapQuestIcon",
                     handler: handler.onMapQuestAerial
-                }                       
+                })                       
             ]
         })
-    };
+    });
     
     return mapaBaseMenuButton;
     
 };
 
+/*
+ * Devuelve un botón que permite importar capas al árbol de capas.
+ * 
+ * @returns Ext.Button
+ */
 componentes.importarCapasButton = function(){
     
-    var importarCapasButton = new Ext.Toolbar.Button({
+    var importarCapasButton = new Ext.Button({
         tooltip: 'Importar capas',
         icon: 'img/folder-open.png',
         id: "treePanelBottombarImportar",
@@ -557,9 +756,14 @@ componentes.importarCapasButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que exportar importar capas del árbol de capas.
+ * 
+ * @returns Ext.Button
+ */
 componentes.exportarCapasButton = function(){
     
-    var exportarCapasButton = new Ext.Toolbar.Button({
+    var exportarCapasButton = new Ext.Button({
         tooltip: 'Guardar capas',
         icon: 'img/folder-save.png',
         id: "treePanelBottombarExportar",
@@ -570,9 +774,14 @@ componentes.exportarCapasButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que permite ejecutar el reconocimiento WFS en el mapa
+ * 
+ * @returns Ext.Button
+ */
 componentes.wfsReconocerButton = function(){
     
-    var wfsReconocerButton = new Ext.Toolbar.Button({
+    var wfsReconocerButton = new Ext.Button({
         id: "wfsReconocerButton",
         tooltip: 'Reconocer',
         text:"Reconocer",
@@ -589,9 +798,14 @@ componentes.wfsReconocerButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que permite seleccionar vectores en la capa wfsLayer
+ * 
+ * @returns Ext.Button
+ */
 componentes.wfsSeleccionarButton = function(){
    
-   var wfsSeleccionarButton = new Ext.Toolbar.Button({
+   var wfsSeleccionarButton = new Ext.Button({
         id: "wfsSeleccionarButton",
         tooltip: 'Seleccionar',
         text:"Seleccionar",
@@ -607,9 +821,14 @@ componentes.wfsSeleccionarButton = function(){
    
 };
 
+/*
+ * Devuelve un botón que permite limpiar los vectores de la capa wfsLayer
+ * 
+ * @returns Ext.Button
+ */
 componentes.wfsLimpiarButton = function(){
    
-   var wfsLimpiarButton = new Ext.Toolbar.Button({
+   var wfsLimpiarButton = new Ext.Button({
         tooltip: 'Limpiar',
         text:"Limpiar",
         icon: 'img/broom.png',
@@ -620,6 +839,11 @@ componentes.wfsLimpiarButton = function(){
     
 };
 
+/*
+ * Devuelve un link que permite exportar a excel el contenido del featureGridPanel
+ * 
+ * @returns Ext.ux.Exporter.Button
+ */
 componentes.wfsExportarAExcelLink = function(){
     
     var wfsExportarAExcelLink = new Ext.ux.Exporter.Button({
@@ -630,9 +854,13 @@ componentes.wfsExportarAExcelLink = function(){
     
 };
 
-componentes.capabilitiesStore = function(capabilitiesGridPanel){
-    
-    var mask;
+/*
+ * Devuelve un store para utilizar en el capabilitiesGridPanel
+ * 
+ * @returns GeoExt.data.WMSCapabilitiesStore
+ */
+componentes.capabilitiesStore = function(){
+
     var capabilitiesStore = new GeoExt.data.WMSCapabilitiesStore({  
         url: "asdf",
         autoLoad: false
@@ -642,6 +870,11 @@ componentes.capabilitiesStore = function(capabilitiesGridPanel){
     
 };
 
+/*
+ * Devuelve componente rowExpandeer para utilizar en el capabilitiesGridPanel
+ * 
+ * @returns new Ext.ux.grid.RowExpander
+ */
 componentes.rowExpander = function(){
     
     var rowExpander = new Ext.ux.grid.RowExpander({
@@ -654,18 +887,28 @@ componentes.rowExpander = function(){
     
 };
 
+/*
+ * Devuelve un botón que agrega las capas seleccionadas del capabilitiesGridPanel
+ * 
+ * @returns Ext.Button
+ */
 componentes.confirmarAgregarCapasButton = function(){
     
     var confirmarAgregarCapasButton = new Ext.Button({
         tooltip: 'Agregar capas',
         text: "Agregar",
-        icon: 'img/mas.png',
+        icon: 'img/mas.png'
     });
     
     return confirmarAgregarCapasButton;
     
 };
 
+/*
+ * Devuelve un combobox que contiene los servidores WMS
+ * 
+ * @returns Ext.form.ComboBox
+ */
 componentes.capabilitiesCombo = function(){
     
     var capabilitiesCombo = new Ext.form.ComboBox({
@@ -683,12 +926,17 @@ componentes.capabilitiesCombo = function(){
     
 };
 
+/*
+ * Devuelve un gridPanel que muestra las capas ofrecidas por un servidor WMS determinado
+ * 
+ * @returns Ext.grid.GridPanel
+ */
 componentes.capabilitiesGridPanel = function(node){
     
     var mask;
     var capabilitiesStore = componentes.capabilitiesStore();
     var capabilitiesCombo = componentes.capabilitiesCombo();
-    var agregarCapasButton = componentes.confirmarAgregarCapasButton()
+    var agregarCapasButton = componentes.confirmarAgregarCapasButton();
     
     var capabilitiesGridPanel = new Ext.grid.GridPanel({
         border: false,
@@ -729,33 +977,17 @@ componentes.capabilitiesGridPanel = function(node){
         capabilitiesStore.load();        
     });
     
-    agregarCapasButton.setHandler(function(){
-        capabilitiesGridPanel.getSelectionModel().each(function(record){
-
-                var nombrecapa = record.data.title;
-                var servidorWMS = capabilitiesCombo.getValue();
-
-                if (existeNombreCapa(nombrecapa) == true){
-                    nombrecapa = numerarNombre(nombrecapa)                            
-                }
-
-                var newLeaf = createLeaf(nombrecapa, servidorWMS, {layers: record.data.name, transparent: 'true', format: 'image/png'},{isBaseLayer: false, visibility: false, singleTile: false});
-                if (node == null){
-                    Ext.getCmp("layerTreePanel").getRootNode().appendChild(newLeaf);  
-                }else{
-                    Ext.getCmp("layerTreePanel").getRootNode().findChild("id",node.attributes.id,true).appendChild(newLeaf);  
-                }    
-
-                app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
-                app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
-
-        });        
-    });
+    agregarCapasButton.setHandler(function(){handler.onAgregarCapasButton(node, capabilitiesGridPanel, capabilitiesCombo)});
     
     return capabilitiesGridPanel;
     
 };
 
+/*
+ * Devuelve un botón que abre una ventana que permite gestionar la lista de servidores WMS
+ * 
+ * @returns Ext.Button
+ */
 componentes.servidoresWmsButton = function(){
     
     var servidoresWmsButton = new Ext.Button({
@@ -769,6 +1001,11 @@ componentes.servidoresWmsButton = function(){
     
 };
 
+/*
+ * Devuelve un gridPanel que muestra los servidores WMS definidos en la aplicación
+ * 
+ * @returns Ext.grid.GridPanel
+ */
 componentes.wmsServersGridPanel = function(){
    
    var wmsServersInformationButton = componentes.wmsServersInformationButton();
@@ -804,211 +1041,22 @@ componentes.wmsServersGridPanel = function(){
         ]               
     }); 
     
-    wmsServersInformationButton.setHandler(function(){
-
-        var url = wmsServersGridPanel.getSelectionModel().getSelected().data.url;                            
-        var infomask = new Ext.LoadMask(wmsServersGridPanel.getEl(), {msg:"Conectando..."});
-        infomask.show();
-
-        Ext.Ajax.request({
-            url : getCapabilitiesUrl(url), 
-            method: 'GET',
-            success: function ( result, request )
-            { 
-                infomask.hide();
-
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(result.responseText,"text/xml");
-
-                try{var service = xmlDoc.getElementsByTagName("Service")[0];}catch(e){};
-                try{var name = service.getElementsByTagName("Name")[0].textContent;}catch(e){};
-                try{var title = service.getElementsByTagName("Title")[0].textContent;}catch(e){};
-                try{var abstract = service.getElementsByTagName("Abstract")[0].textContent;}catch(e){};
-                try{var contactPerson = service.getElementsByTagName("ContactPerson")[0].textContent;}catch(e){};
-                try{var contactOrganization = service.getElementsByTagName("ContactOrganization")[0].textContent;}catch(e){};
-                try{var contactPosition = service.getElementsByTagName("ContactPosition")[0].textContent;}catch(e){};
-                try{var addressType = service.getElementsByTagName("AddressType")[0].textContent;}catch(e){};
-                try{var address = service.getElementsByTagName("Address")[0].textContent;}catch(e){};
-                try{var city = service.getElementsByTagName("City")[0].textContent;}catch(e){};
-                try{var stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].textContent;}catch(e){};
-                try{var postCode = service.getElementsByTagName("PostCode")[0].textContent;}catch(e){};
-                try{var country = service.getElementsByTagName("Country")[0].textContent;}catch(e){};
-                try{var contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].textContent;}catch(e){};
-                try{var contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].textContent;}catch(e){};
-                try{var contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].textContent;}catch(e){};
-
-                new Ext.Window({
-                    title: wmsServersGridPanel.getSelectionModel().getSelected().data.nombre,
-                    iconCls: 'configuracionIcon',
-                    layout: "anchor",
-                    resizable: false,   
-                    items: [
-                        new Ext.Panel({
-                            border: false,
-                            autoScroll: true,
-                            width: "100%",
-                            heigth: "100%",
-                            items: new Ext.FormPanel({
-                                 labelWidth: 85, // label settings here cascade unless overridden
-                                 frame:true,
-                                 border: false,
-                                 width: 380,
-                                 items: [
-                                     new Ext.form.FieldSet({
-                                        title: "WMS",
-                                        items: [
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Nombre',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: name
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Título',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: title
-                                            }),   
-                                            new Ext.form.TextArea({
-                                                fieldLabel: 'Descripción',
-                                                width: 255,
-                                                readOnly: true,
-                                                value: abstract
-                                            })                                                 
-                                        ]
-                                     }),
-                                     new Ext.form.FieldSet({
-                                        title: "Contacto",
-                                        items: [
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Nombre',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: contactPerson
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Organización',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: contactOrganization
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Posición',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: contactPosition
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Tipo de dirección',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: addressType
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Dirección',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: address
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Ciudad',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: city
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Provincia o estado',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: stateOrProvince
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Código Postal',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: postCode
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'País',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: country
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Teléfono',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: contactVoiceTelephone
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Fax',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: contactFacsimileTelephone
-                                            }),  
-                                            new Ext.form.TextField({
-                                                 fieldLabel: 'Email',
-                                                 width: 255,
-                                                 readOnly: true,
-                                                 value: contactElectronicMailAddress
-                                            })
-                                        ]
-                                     })                                         
-                                 ]
-                             })
-                        })
-
-                    ]                                            
-                }).show();
-            },
-            failure: function(){
-                infomask.hide();
-                Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-            },
-            listeners: {
-                 requestexception: function(){
-                      infomask.hide();
-                      Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-                 }
-            }
-        });
-
-    });
-    
-    agregarServidorWmsButton.setHandler(function(){
-
-        var nombre, wms_url;
-        Ext.MessageBox.prompt('Agregar servidor WMS', 'Nombre del servidor', function(btn, text){
-            if (btn == "ok"){
-                nombre = text;
-                if(app.wmsServerStore.getById(nombre) == null){
-                    Ext.MessageBox.prompt('Agregar servidor WMS', 'URL del servidor', function(btn, text){
-                        if (btn == "ok"){
-                            wms_url = text;
-                            app.wmsServerStore.loadData([[nombre,wms_url]],true);
-                        }
-                    })
-                }else{
-                    Ext.MessageBox.alert('Error', 'Ya existe un servido con ese nombre');
-                }
-            }
-        });                            
-
-    });
-    
-    eliminarServidorWmsButton.setHandler(function(){
-        wmsServersGridPanel.getSelectionModel().each(function(record){
-            app.wmsServerStore.remove(app.wmsServerStore.getById(record.id));
-        });                            
-    });
+    wmsServersInformationButton.setHandler(function(){handler.onWmsServersInformationButton(wmsServersGridPanel);});    
+    agregarServidorWmsButton.setHandler(function(){handler.onAgregarServidorWmsButton();});    
+    eliminarServidorWmsButton.setHandler(function(){handler.onEliminarServidorWmsButton(wmsServersGridPanel);});
            
     return wmsServersGridPanel;        
    
 };
 
+/*
+ * Devuelve un botón que obtiene y muestra la información de un servidor WMS seleccionado
+ * 
+ * @returns Ext.Button
+ */
 componentes.wmsServersInformationButton = function(){
     
-    var wmsServersInformationButton = new Ext.Toolbar.Button({
+    var wmsServersInformationButton = new Ext.Button({
         text:"Información",
         tooltip: 'Información',
         icon: 'img/information.png'
@@ -1018,22 +1066,31 @@ componentes.wmsServersInformationButton = function(){
     
 };
 
+/*
+ * Devuelve un botón que permite agregar un servidor WMS a la lista de servidores
+ * 
+ * @returns Ext.Button
+ */
 componentes.agregarServidorWmsButton = function(){
     
-    var agregarServidorWmsButton = new Ext.Toolbar.Button({
+    var agregarServidorWmsButton = new Ext.Button({
         tooltip: 'Agregar servidor WMS',
         text: "Agregar",
         icon: 'img/server-plus.png'
     });
     
     return agregarServidorWmsButton;
-    
-    
+        
 };
 
+/*
+ * Devuelve un botón que permite eliminar un servidor WMS de la lista de servidores
+ * 
+ * @returns Ext.Button
+ */
 componentes.eliminarServidorWmsButton = function(){
     
-    var eliminarServidorWmsButton = new Ext.Toolbar.Button({
+    var eliminarServidorWmsButton = new Ext.Button({
         tooltip: 'Eliminar servidor WMS',
         text: "Eliminar",
         icon: 'img/server-minus.png'

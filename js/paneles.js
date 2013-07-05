@@ -1,3 +1,30 @@
+//  File        : js/paneles.js
+//  Project     : Mapviewer
+//  Author      : Bruno José Vecchietti
+//  Year        : 2012  
+//  Description : Se definen las funciones para la construcción y acceso 
+//  a los paneles de la aplicacón.
+//  
+//  Copyright (C) 2012  Bruno José Vecchietti
+//  
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+/*
+ * Devuelve el panel norte correspondiente al banner.
+ * 
+ * @returns Array
+ */
 panel.banner = function(){
     
     var banner = {
@@ -13,6 +40,11 @@ panel.banner = function(){
     
 };
 
+/*
+ * Devuelve el panel central correspondiente al mapa. 
+ * 
+ * @returns GeoExt.MapPanel
+ */
 panel.mapPanel = function(){
     
     var mapPanel = new GeoExt.MapPanel({
@@ -32,6 +64,11 @@ panel.mapPanel = function(){
     
 };
 
+/*
+ * Devuelve el panel oeste correspondiente al árbol de capas. 
+ * 
+ * @returns Ext.tree.TreePanel
+ */
 panel.layerTreePanel = function(){
     
     var layerTreePanel = new Ext.tree.TreePanel({
@@ -57,6 +94,11 @@ panel.layerTreePanel = function(){
     
 };
 
+/*
+ * Devuelve el panel este correspondiente a la leyenda. 
+ * 
+ * @returns GeoExt.LegendPanel
+ */
 panel.legendPanel = function(){
     
     var legendPanel = new GeoExt.LegendPanel({        
@@ -85,10 +127,16 @@ panel.legendPanel = function(){
     
 };
 
+/*
+ * Devuelve el panel sur correspondiente al panel de atributos. 
+ * 
+ * @returns Ext.grid.GridPanel
+ */
 panel.featureGridPanel = function(){
     
     var featureGridPanel = new Ext.grid.GridPanel({
         region: 'south',
+        title: 'Atributos',
         collapseMode: 'mini',
         collapsed: true,
         split: true,

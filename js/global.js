@@ -1,34 +1,60 @@
-/*
- * IDE Chubut
- * 
- * Escrito por Bruno J. Vecchietti
- * 
- * global.js
- * 
- * Contiene variables y definiciones globales
- * 
- */
+//  File        : js/global.js
+//  Project     : Mapviewer
+//  Author      : Bruno José Vecchietti
+//  Year        : 2012  
+//  Description : Se definen variables utilizadas en ámbito global.
+//  
+//  Copyright (C) 2012  Bruno José Vecchietti
+//  
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-app.max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38); // (west, south, east, north)
+// Boundaries para la máxima extensión del mapa. (west, south, east, north).
+app.max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38);
+
+// Proyección EPSG:4326.
 app.projection4326 = new OpenLayers.Projection("EPSG:4326");
+
+// Proyección EPSG:900913 (Google Mercator).
 app.projection900913 = new OpenLayers.Projection("EPSG:900913");
+
+// Resoluciones para los niveles de zoom de las capas base.
 app.resolutions = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 19);
+
+// Resoluciones para los niveles de zoom de la capa base MapQuest Aerial.
 app.resolutions2 = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 12);
+
+// Control de reconocimiento WFS.
 app.wfsReconocerControl = null;
+
+// Control de selección WFS.
 app.wfsSelectControl = null;
-/*
-* Raíz del árbol de capas
-*/
+
+// Nodo raíz del árbol de capas.
 app.rootnode = new Ext.tree.TreeNode({
    text: "Capas",
    icon: "img/layers.png",
    leaf:false,
    expanded: true          
 }); 
+
+// Store para exportar a excel el contenido del gridPanel de atributos.
 app.wfsStoreExport = new GeoExt.data.FeatureStore({
     fields: [],
     layer: Ext.getCmp("wfsLayer")
 });
+
+// Store de servidores WMS.
 app.wmsServerStore = new Ext.data.ArrayStore({
     fields: ['nombre', 'url'],
     data: [
@@ -41,7 +67,8 @@ app.wmsServerStore = new Ext.data.ArrayStore({
     ],
     idIndex: 0 // id for eache record will be the first element (in this case, 'nombre')
 });
-//this are the options applied to WMSGetFeatureInfo control            
+
+// Opciones para el control WMSGetFeatureInfo        
 app.featureInfoOptions = {
     queryVisible: true,
     drillDown: true,
@@ -78,6 +105,8 @@ app.featureInfoOptions = {
         }
     }
 };
+
+// Árbol de capas que se carga en el inicio de la aplicación. Si no se usa se debe fijar en null.
 app.tree = [    
     {"type":"folder","name":"DGEyC","children":[               
             {"type":"leaf", "title":"Departamentos", "server":"http://eycchubut.sytes.net/geoserver/wms", "params":{layers: "rural:Departamentos", transparent: 'true', format: 'image/png'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
@@ -100,6 +129,8 @@ app.tree = [
             ]}            
     ]}    
 ];
+
+// Índice del orden de las capas cargada al inicio de la aplicación.
 app.index = [
     "OpenStreetMap","Google Streets","Google Terrain",
     "Google Satellite","Google Hybrid","Bing Road",
