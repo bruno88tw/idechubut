@@ -1,84 +1,132 @@
-//  File        : js/app.js
-//  Project     : Mapviewer
-//  Author      : Bruno José Vecchietti
-//  Year        : 2012  
-//  Description : Archivo javascript de arranque de la aplicación
-//  
-//  Copyright (C) 2012  Bruno José Vecchietti
-//  
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ *  @file js/app.js
+ *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
+ *  @fileOverview Archivo javascript de arranque de la aplicación. Contiene el algoritmo de ejecución principal de la aplicación.
+ *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  <p>
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  <p>
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {@link http://www.gnu.org/licenses/}. 
+ */
 
-/*
- * Variable de acceso global
- * 
- * @type Array
+/**
+ * Namespace de acceso a la aplicación.
+ * @namespace
  */
 var app = {};
 
-/*
- * Variable de acceso global para acceder a los paneles
- * 
+/**
+ * Límites para la máxima extensión del mapa. (west, south, east, north).
+ * @type OpenLayers.Bounds
+ */
+app.max_bounds = new OpenLayers.Bounds(-76, -49, -60, -38);
+
+/**
+ * Proyección EPSG:4326.
+ * @type OpenLayers.Projection
+ */
+app.projection4326 = new OpenLayers.Projection("EPSG:4326");
+
+/**
+ * Proyección EPSG:900913 (Google Mercator).
+ * @type OpenLayers.Projection
+ */
+app.projection900913 = new OpenLayers.Projection("EPSG:900913");
+
+/**
+ * Resoluciones para los niveles de zoom de las capas base.
  * @type Array
  */
-var panel = {};
+app.resolutions = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 19);
 
-/*
- * Variable de acceso global para acceder a las componentes toolbar de la aplicación
- * 
+/**
+ * Resoluciones para los niveles de zoom de la capa base MapQuest Aerial.
  * @type Array
  */
-var toolbar = {};
+app.resolutions2 = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 12);
 
-/*
- * Variable de acceso global para acceder a los componentes de la aplicación
- * 
- * @type Array
+/**
+ * Control de reconocimiento WFS.
+ * @type OpenLayers.Control.GetFeature
  */
-var componentes = {};
+app.wfsReconocerControl = null;
 
-/*
- * Variable de acceso global para acceder a los manejadores
- * 
- * @type Array
+/**
+ * Control de selección WFS.
+ * @type OpenLayers.Control.SelectFeature
  */
-var handler = {};
+app.wfsSelectControl = null;
 
-/*
- * Ubicación del proxy cgi
- * 
+/**
+ * Nodo raíz del árbol de capas.
+ * @type Ext.tree.TreeNode
+ */
+app.rootnode = new Ext.tree.TreeNode({
+   text: "Capas",
+   icon: "img/layers.png",
+   leaf:false,
+   expanded: true          
+}); 
+
+/**
+ * Store para exportar a excel el contenido del gridPanel de atributos.
+ * @type GeoExt.data.FeatureStore
+ */
+app.wfsStoreExport = new GeoExt.data.FeatureStore({
+    fields: [],
+    layer: Ext.getCmp("wfsLayer")
+});
+
+/**
+ * Store de servidores WMS.
+ * @type Ext.data.ArrayStore
+ */
+app.wmsServerStore = new Ext.data.ArrayStore({
+    fields: ['nombre', 'url'],
+    data: [
+        ["Dirección General de Estadística y Censos","http://eycchubut.sytes.net/geoserver/wms"],
+        ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
+        ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
+        ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
+        ["Ministerio de Educación","http://www.chubut.edu.ar:8080/geoserver/wms"],
+        ["Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"]
+    ],
+    idIndex: 0 // id for eache record will be the first element (in this case, 'nombre')
+});
+
+/**
+ * Ubicación del proxy cgi.
  * @type String
  */
 OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
-/*
- * Función de inicio de aplicación
+/**
+ * Función de inicio de aplicación. 
+ * Declara el algoritmo de ejecución principal de la aplicación.
  */
 Ext.onReady(function() {
     
-    Ext.QuickTips.init();  //initialize quick tips          
-    app.crearMapa();    //crea el mapa
+    Ext.QuickTips.init();         
+    app.crearMapa();
     app.agregarControles();
     app.agregarCapasBase();
-    app.generarViewport(); //crea el viewport   
-    app.configuracionFinal();  // configuración final
+    app.generarViewport();   
+    app.configuracionFinal();
     
 });
 
-/*
- * Crea el mapa de la aplicación. Inicializa app.map con una instancia de OpenLayers.Map.
- * 
- * @returns {undefined}
+/**
+ * Crea el mapa de la aplicación. 
+ * Inicializa app.map con una instancia de OpenLayers.Map.
  */
 app.crearMapa = function(){               
    
@@ -96,24 +144,26 @@ app.crearMapa = function(){
         
 };
 
-/*
+/**
  * Agrega controles básicos al mapa.
- * 
- * @returns {undefined}
  */
 app.agregarControles = function(){
     
     app.map.addControl(new OpenLayers.Control.NavigationHistory());
     app.map.addControl(new OpenLayers.Control.Navigation());
-    app.map.addControl(new OpenLayers.Control.WMSGetFeatureInfo(app.featureInfoOptions));
+    app.map.addControl(new OpenLayers.Control.WMSGetFeatureInfo({
+        queryVisible: true,
+        drillDown: true,
+        infoFormat: "application/vnd.ogc.gml",
+        maxFeatures: 20,
+        eventListeners: {"getfeatureinfo": function(e){handler.onGetFeatureInfo(e)}}
+    }));
     app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,2));        
     
 };
 
-/*
- * Agrega capas base al mapa y capas vectoriales
- * 
- * @returns {undefined}
+/**
+ * Agrega capas base y capas vectoriales al mapa.
  */
 app.agregarCapasBase = function(){
     
@@ -129,7 +179,7 @@ app.agregarCapasBase = function(){
     app.map.addLayer(new OpenLayers.Layer.OSM("mapquest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));  
     app.map.addLayer(new OpenLayers.Layer.OSM("mapquestAerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions2, isBaseLayer:true, sphericalMercator: true}));            
 
-    // Vector layer para las consultas wfs            
+    // Vector layer para las consultas WFS            
     app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {
         displayInLayerSwitcher: false
     }));
@@ -147,10 +197,8 @@ app.agregarCapasBase = function(){
     
 };
 
-/*
- * Genera el vieport y le incorpora todos los paneles necesarios
- * 
- * @returns {undefined}
+/**
+ * Genera el vieport y le incorpora todos los paneles necesarios.
  */
 app.generarViewport = function(){            
     
@@ -168,16 +216,17 @@ app.generarViewport = function(){
     
 };
 
-/*
- * Configuración final de la aplicación, agrega elementos al mapPanel y realiza modificaciones sobre el css de algunos componentes
+/**
+ * Configuración final de la aplicación. 
+ * Agrega elementos al mapPanel y realiza modificaciones sobre el css de algunos componentes.
  */
 app.configuracionFinal = function(){
 
 
     // Importa las capas definidas en app.tree y el orden definido en app.index
-    if(app.tree != null){
-        restoreTree(app.rootnode,app.tree);
-        restoreIndex(app.index);          
+    if(config.tree != null){
+        restoreTree(app.rootnode,config.tree);
+        restoreIndex(config.index);          
     }  
 
     //Agrega al mapPanel los div sobre los cuales se renderizarán los siguientes componentes
@@ -231,16 +280,13 @@ app.configuracionFinal = function(){
         }
     });  
 
-    /*
-     * Agrego un manejador sobre el evento de resize del mapPanel para acomodar el tamaño del legendPanelOnMap
-     */
+
+    // Agrego un manejador sobre el evento de resize del mapPanel para acomodar el tamaño del legendPanelOnMap
     Ext.getCmp("mapPanel").on("bodyresize", function(){
         Ext.getCmp("legendPanelOnMap").setHeight(Ext.getCmp("mapPanel").getHeight() - 73);
-    });
-    
-    /*
-     * Modifico las propiedades css de algunos componentes para perfeccionar la estética de la aplicación
-     */
+    });    
+
+    // Modifico las propiedades css de algunos componentes para perfeccionar la estética de la aplicación
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
     document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.backgroundColor = "#BACAE6";

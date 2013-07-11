@@ -1,29 +1,27 @@
-//  File        : js/functions.js
-//  Project     : Mapviewer
-//  Author      : Bruno José Vecchietti
-//  Year        : 2012  
-//  Description : Se definen funciones de variada utilidad.
-//  
-//  Copyright (C) 2012  Bruno José Vecchietti
-//  
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ *  @file js/functions.js
+ *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
+ *  @fileOverview Se definen funciones de variada utilidad.
+ *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  <p>
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  <p>
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {@link http://www.gnu.org/licenses/}. 
+ */
 
-/*
- * Dada una url de un servidor wms devuelve la url del getCapabilities
- * 
- * @param {type} wms_url: url del servidor wms
- * @returns {String}
+/**
+ * Dada una url de un servidor wms devuelve la url del getCapabilities.
+ * @param {String} wms_url URL del servidor wms.
+ * @returns {String} URL del protocolo WMS getCapabilities del servidor WMS dado.
  */
 function getCapabilitiesUrl(wms_url){
 
@@ -37,13 +35,12 @@ function getCapabilitiesUrl(wms_url){
     
     return cap_url;
     
-}
+};
 
-/*
- * Dado un nombre de capa corrobora si existe o no en el mapa
- * 
- * @param {type} nombre: nombre de la capa
- * @returns {Boolean}: verdadero si existe el nombre de capa, falso si no existe
+/**
+ * Dado un nombre de capa corrobora si existe o no en el mapa.
+ * @param {String} nombre nombre de la capa.
+ * @returns {Boolean} verdadero si existe el nombre de capa, falso si no existe.
  */
 function existeNombreCapa(nombre){
     
@@ -53,13 +50,12 @@ function existeNombreCapa(nombre){
         return true;
     }    
     
-}
+};
 
-/*
- * Dado un nombre de capa lo numera en caso de que ya exista una capa con el mismo nombre
- * 
- * @param {type} nombre: nombre de capa
- * @returns {Number}
+/**
+ * Dado un nombre de capa lo numera en caso de que ya exista una capa con el mismo nombre.
+ * @param {String} nombre nombre de capa
+ * @returns {String} El nombre de la capa numerado.
  */
 function numerarNombre(nombre){
     
@@ -73,19 +69,10 @@ function numerarNombre(nombre){
     
     return nombrecapa;
     
-}
+};
 
-/*
- * Gestiona el control de agregar nuevas capas
- * 
- * @param {type} node: nodo sobre el que se agregarán las nuevas capas. Si es null, las nuevas capas se agregarán al raíz
- * @returns {undefined}
- */
-
-
-/*
- * Da formato a la información obtenida del control mouseposition 
- * 
+/**
+ * Da formato a la información obtenida del control mouseposition.
  * @param {type} coordinate
  * @param {type} type
  * @returns {String}
@@ -93,7 +80,7 @@ function numerarNombre(nombre){
 function convertDMS(coordinate, type) {
     var coords;
 
-    abscoordinate = Math.abs(coordinate)
+    abscoordinate = Math.abs(coordinate);
     coordinatedegrees = Math.floor(abscoordinate);
 
     coordinateminutes = (abscoordinate - coordinatedegrees)/(1/60);
@@ -120,10 +107,13 @@ function convertDMS(coordinate, type) {
       }            
 
     return coords;
-}
+};
 
-/*
- * Devuelve la abreviación de hemisferio para una coordenada dada
+/**
+ * Devuelve la abreviación de hemisferio para una coordenada dada.
+ * @param {type} coordinate
+ * @param {type} type
+ * @returns {String}
  */
 function getHemi(coordinate, type) {
     var coordinatehemi = "";
@@ -144,10 +134,11 @@ function getHemi(coordinate, type) {
     }
 
     return coordinatehemi;
-}
+};
 
-/*
+/**
  * Posiciona la escala en el mapa de acuerdo a la configuración de componentes actuales
+ * @returns {undefined}
  */
 function acomodarScaleline(){
     
@@ -168,8 +159,9 @@ function acomodarScaleline(){
     
 }
 
-/*
- * Posiciona el navegador en el mapa de acuerdo a la configuración de componentes actuales
+/**
+ * Posiciona el navegador en el mapa de acuerdo a la configuración de componentes actuales.
+ * @returns {undefined}
  */
 function acomodarNavegador(){
 
@@ -195,8 +187,9 @@ function acomodarNavegador(){
     
 };
 
-/*
- * crea el archivo de exportación del árbol de capas 
+/**
+ * Crea el archivo de exportación del árbol de capas.
+ * @returns {undefined}
  */
 function saveLayerTree(father, children){
     
@@ -212,10 +205,11 @@ function saveLayerTree(father, children){
         }
     }    
     
-}
+};
 
-/*
- * crea el archivo de exportación del índice de las capas 
+/**
+ * Crea el archivo de exportación del índice de las capas.
+ * @returns {undefined}
  */
 function saveLayerIndex(){
     
@@ -227,10 +221,12 @@ function saveLayerIndex(){
     
     return index;
     
-}
+};
 
-/*
- * restaura el índice de las capas dado un archivo de resguardo
+/**
+ * Restaura el índice de las capas dado un archivo de resguardo.
+ * @param {type} index
+ * @returns {undefined}
  */
 function restoreIndex(index){
     
@@ -240,10 +236,13 @@ function restoreIndex(index){
         app.map.setLayerIndex(layer,i);
     }      
     
-}
+};
 
-/*
+/**
  * Dado un archivo de resguardo de árbol de capas, agrega la descendencia a un nodo padre dado
+ * @param {type} father
+ * @param {type} children
+ * @returns {undefined}
  */
 function restoreTree(father,children){
     
@@ -260,10 +259,12 @@ function restoreTree(father,children){
         }          
     }
     
-}
+};
 
-/*
- * Dado un nodo, expande todos sus nodos hijos
+/**
+ * Dado un nodo, expande todos sus nodos hijos.
+ * @param {type} node
+ * @returns {undefined}
  */
 function expandAll(node){
     if (!node.isLeaf()){
@@ -272,10 +273,12 @@ function expandAll(node){
             expandAll(childnode);
         });
     }
-}
+};
 
-/*
- * Dado un nodo, colapsa todos sus nodos hijos
+/**
+ * Dado un nodo, colapsa todos sus nodos hijos.
+ * @param {type} node
+ * @returns {undefined}
  */
 function collapseAll(node){
     if (!node.isLeaf()){
@@ -284,10 +287,12 @@ function collapseAll(node){
             collapseAll(childnode);
         });
     }    
-}
+};
 
-/*
- * Dado un nodo, elimina todos sus nodos hijos y a sí mismo
+/**
+ * Dado un nodo, elimina todos sus nodos hijos y a sí mismo.
+ * @param {type} node
+ * @returns {undefined}
  */
 function removeLayers(node){
     
@@ -299,10 +304,12 @@ function removeLayers(node){
         } 
     });
     
-}
+};
 
-/*
- * Dado un nodo, le asigna un nombre
+/**
+ * Dado un nodo, le asigna un nombre.
+ * @param {type} e
+ * @returns {undefined}
  */
 function setFolderName(e){       
     
@@ -314,10 +321,12 @@ function setFolderName(e){
         }
     });
         
-}
+};
 
-/*
- * Crea una instancia de un nodo que no es hoja
+/**
+ * Crea una instancia de un nodo que no es hoja.
+ * @param {type} text
+ * @returns {Ext.tree.TreeNode}
  */
 function createNode(text){
     
@@ -333,10 +342,15 @@ function createNode(text){
 
     return node;
     
-}
+};
 
-/*
- * Crea una instancia de un nodo hoja
+/**
+ * Crea una instancia de un nodo hoja.
+ * @param {type} titulo
+ * @param {type} servidor
+ * @param {type} params
+ * @param {type} options
+ * @returns {GeoExt.tree.LayerNode}
  */
 function createLeaf(titulo, servidor, params, options){    
     
@@ -361,8 +375,4 @@ function createLeaf(titulo, servidor, params, options){
     
     return leaf;
  
-}
-
-
-
-
+};

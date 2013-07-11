@@ -1,29 +1,32 @@
-//  File        : js/componentes.js
-//  Project     : Mapviewer
-//  Author      : Bruno José Vecchietti
-//  Year        : 2012  
-//  Description : Se definen las funciones para la construcción y acceso 
-//  a los componentes de la aplicacón.
-//  
-//  Copyright (C) 2012  Bruno José Vecchietti
-//  
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ *  @file js/componentes.js
+ *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
+ *  @fileOverview Se definen las funciones para la construcción y acceso a los componentes de la aplicacón.
+ *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  <p>
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  <p>
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {@link http://www.gnu.org/licenses/}. 
+ */
 
-/*
+/**
+ * Namespace de acceso a los componentes.
+ * @namespace
+ */
+var componentes = {};
+
+/**
  * Devuelve un separador.
- * 
- * @returns {String}: "->"
+ * @returns {String}
  */
 componentes.separador = function(){
     
@@ -31,10 +34,9 @@ componentes.separador = function(){
     
 };
 
-/*
- * Devuelve un espacio en blanco.
+/**
  * 
- * @returns {String}: "&nbsp" 
+ * @returns {String}
  */
 componentes.blankSpace = function(){
     
@@ -42,11 +44,10 @@ componentes.blankSpace = function(){
     
 };
 
-/*
- * Devuelve un elemento div con identificador igual a id.
+/**
  * 
- * @param {type} id: identificador del div.
- * @returns {String}: elemento div.
+ * @param {type} id
+ * @returns {String}
  */
 componentes.div = function(id){
     
@@ -54,10 +55,9 @@ componentes.div = function(id){
     
 };
 
-/*
- * Devuelve un botón vinculado al control de navegación del mapa.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.navegacionButton = function(){
     
@@ -74,10 +74,9 @@ componentes.navegacionButton = function(){
             
 };
 
-/*
- * Devuelve un botón vinculado al control ZoomToMaxExtent del mapa.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.zoomToMaxExtentButton = function(){
     
@@ -92,11 +91,9 @@ componentes.zoomToMaxExtentButton = function(){
     
 };
 
-/*
- * Devuelve un botón vinculado al control ZoomBox({out:false}) del mapa.
- * Permite acercar el zoom al mapa.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.zoomInButton = function (){
     
@@ -112,11 +109,9 @@ componentes.zoomInButton = function (){
     
 };
 
-/*
- * Devuelve un botón vinculado al control ZoomBox({out:true}) del mapa.
- * Permite elejar el zoom al mapa.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.zoomOutButton = function(){
     
@@ -132,11 +127,9 @@ componentes.zoomOutButton = function(){
     
 };
 
-/*
- * Devuelve un botón vinculado al control NavigationHistory del mapa.
- * Permite ir al zoom anterior en el historial de navegación.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.zoomAnteriorButton = function(){
     
@@ -151,11 +144,9 @@ componentes.zoomAnteriorButton = function(){
     
 };
 
-/*
- * Devuelve un botón vinculado al control NavigationHistory del mapa.
- * Permite ir al zoom siguiente en el historial de navegación.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.zoomPosteriorButton = function(){
     
@@ -170,11 +161,9 @@ componentes.zoomPosteriorButton = function(){
     
 };
 
-/*
- * Devuelve un botón vinculado al control Measure del mapa.
- * Permite medir distancias.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.distanciaButton = function(){
     
@@ -206,11 +195,9 @@ componentes.distanciaButton = function(){
     
 };
 
-/*
- * Devuelve un botón vinculado al control Measure del mapa.
- * Permite medir superficies.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.superficieButton = function(){
     
@@ -242,10 +229,9 @@ componentes.superficieButton = function(){
     
 };
 
-/*
- * Devuelve un botón vinculado al control WMSGetFeatureInfo del mapa.
+/**
  * 
- * @returns GeoExt.Action
+ * @returns {unresolved}
  */
 componentes.informacionButton = function(){
     
@@ -261,11 +247,9 @@ componentes.informacionButton = function(){
     
 };
 
-/*
- * Devuelve el coombobox el cual permite realizar consultas por topónimos y 
- * retorna su posición en el mapa.
+/**
  * 
- * @returns GeoExt.form.GeocoderComboBox
+ * @returns {unresolved}
  */
 componentes.geocoderComboBox = function(){
     
@@ -285,10 +269,9 @@ componentes.geocoderComboBox = function(){
     
 };
 
-/*
- * Devuelve un menú de opciones de configuración
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.configuracionButton = function(){
     
@@ -319,10 +302,9 @@ componentes.configuracionButton = function(){
     
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva el título del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionTituloCheckbox = function(){
     
@@ -336,10 +318,9 @@ componentes.configuracionTituloCheckbox = function(){
     
 };
 
-/*
- * Devuelve un botón que permite cambiar el título del mapa
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.configuracionCambiarTituloButton = function(){
     
@@ -353,10 +334,9 @@ componentes.configuracionCambiarTituloButton = function(){
     
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva el subtítulo del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionSubtituloCheckbox = function(){
     
@@ -370,10 +350,9 @@ componentes.configuracionSubtituloCheckbox = function(){
         
 };
 
-/*
- * Devuelve un botón que permite cambiar el subtítulo del mapa
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.configuracionCambiarSubtituloButton = function(){
     
@@ -387,10 +366,9 @@ componentes.configuracionCambiarSubtituloButton = function(){
         
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva la leyenda del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionLeyendaCheckbox = function(){
     
@@ -404,10 +382,9 @@ componentes.configuracionLeyendaCheckbox = function(){
     
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva el navegador del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionNavegadorCheckbox = function(){
     
@@ -421,10 +398,9 @@ componentes.configuracionNavegadorCheckbox = function(){
     
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva la escala del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionEscalaCheckbox = function(){
     
@@ -438,10 +414,9 @@ componentes.configuracionEscalaCheckbox = function(){
     
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva el minimapa del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionMinimapaCheckbox = function(){
     
@@ -455,10 +430,9 @@ componentes.configuracionMinimapaCheckbox = function(){
     
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva la rosa de los vientos del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionNorteCheckbox = function(){
     
@@ -472,10 +446,9 @@ componentes.configuracionNorteCheckbox = function(){
     
 };
 
-/*
- * Devuelve un CheckItem que activa y desactiva la grilla de lat lon del mapa
+/**
  * 
- * @returns Ext.menu.CheckItem
+ * @returns {unresolved}
  */
 componentes.configuracionGrillaCheckbox = function(){
     
@@ -489,10 +462,9 @@ componentes.configuracionGrillaCheckbox = function(){
     
 };
 
-/*
- * Devuelve un botón que permite imprimir el mapa y sus componentes
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.imprimirButton = function(){
     
@@ -506,10 +478,9 @@ componentes.imprimirButton = function(){
     
 };
 
-/*
- * Devuelve un botón que muestra una ventana con ayuda acerca del funcionamiento del programa
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.ayudaButton = function(){
     
@@ -523,10 +494,9 @@ componentes.ayudaButton = function(){
     
 };
 
-/*
- * Devuelve un botón que muestra una ventana con información acerca del programa
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.acercaDeButton = function(){
     
@@ -540,10 +510,9 @@ componentes.acercaDeButton = function(){
     
 };
 
-/*
- * Devuelve un combobox que contiene las resoluciones del mapa
+/**
  * 
- * @returns Ext.form.ComboBox
+ * @returns {unresolved}
  */
 componentes.scaleComboBox = function(){
     
@@ -577,10 +546,9 @@ componentes.scaleComboBox = function(){
     
 };
 
-/*
- * Devuelve un botón que abre una ventana que permite agregar nuevas capas de servidores WMS
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.agregarCapasButton = function(){
     
@@ -595,10 +563,9 @@ componentes.agregarCapasButton = function(){
     
 };
 
-/*
- * Devuelve un botón que muestra en el árbol de capas el orden de las capas
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.ordenDeCapasButton = function(){
     
@@ -614,10 +581,9 @@ componentes.ordenDeCapasButton = function(){
     
 };
 
-/*
- * Devuelve un botón que permite agregar una nueva carpeta al árbol de capas
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.agregarCarpetaButton = function(){
     
@@ -632,10 +598,9 @@ componentes.agregarCarpetaButton = function(){
     
 };
 
-/*
- * Devuelve un botón que expande todas las carpetas y subcarpetas del árbol de capas a partir del nodo raiz
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.expandirTodoButton = function(){
     
@@ -650,10 +615,9 @@ componentes.expandirTodoButton = function(){
     
 };
 
-/*
- * Devuelve un botón que colapsa todas las carpetas y subcarpetas del árbol de capas a partir del nodo raiz
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.colapsarTodoButton = function(){
     
@@ -668,10 +632,9 @@ componentes.colapsarTodoButton = function(){
     
 };
 
-/*
- * Devuelve un menú que permite cambiar el mapa base
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.mapaBaseMenuButton = function(){
     
@@ -738,10 +701,9 @@ componentes.mapaBaseMenuButton = function(){
     
 };
 
-/*
- * Devuelve un botón que permite importar capas al árbol de capas.
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.importarCapasButton = function(){
     
@@ -756,10 +718,9 @@ componentes.importarCapasButton = function(){
     
 };
 
-/*
- * Devuelve un botón que exportar importar capas del árbol de capas.
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.exportarCapasButton = function(){
     
@@ -774,10 +735,9 @@ componentes.exportarCapasButton = function(){
     
 };
 
-/*
- * Devuelve un botón que permite ejecutar el reconocimiento WFS en el mapa
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.wfsReconocerButton = function(){
     
@@ -798,10 +758,9 @@ componentes.wfsReconocerButton = function(){
     
 };
 
-/*
- * Devuelve un botón que permite seleccionar vectores en la capa wfsLayer
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.wfsSeleccionarButton = function(){
    
@@ -821,10 +780,9 @@ componentes.wfsSeleccionarButton = function(){
    
 };
 
-/*
- * Devuelve un botón que permite limpiar los vectores de la capa wfsLayer
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.wfsLimpiarButton = function(){
    
@@ -839,10 +797,9 @@ componentes.wfsLimpiarButton = function(){
     
 };
 
-/*
- * Devuelve un link que permite exportar a excel el contenido del featureGridPanel
+/**
  * 
- * @returns Ext.ux.Exporter.Button
+ * @returns {unresolved}
  */
 componentes.wfsExportarAExcelLink = function(){
     
@@ -854,10 +811,9 @@ componentes.wfsExportarAExcelLink = function(){
     
 };
 
-/*
- * Devuelve un store para utilizar en el capabilitiesGridPanel
+/**
  * 
- * @returns GeoExt.data.WMSCapabilitiesStore
+ * @returns {unresolved}
  */
 componentes.capabilitiesStore = function(){
 
@@ -870,10 +826,9 @@ componentes.capabilitiesStore = function(){
     
 };
 
-/*
- * Devuelve componente rowExpandeer para utilizar en el capabilitiesGridPanel
+/**
  * 
- * @returns new Ext.ux.grid.RowExpander
+ * @returns {unresolved}
  */
 componentes.rowExpander = function(){
     
@@ -887,10 +842,9 @@ componentes.rowExpander = function(){
     
 };
 
-/*
- * Devuelve un botón que agrega las capas seleccionadas del capabilitiesGridPanel
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.confirmarAgregarCapasButton = function(){
     
@@ -904,10 +858,9 @@ componentes.confirmarAgregarCapasButton = function(){
     
 };
 
-/*
- * Devuelve un combobox que contiene los servidores WMS
+/**
  * 
- * @returns Ext.form.ComboBox
+ * @returns {unresolved}
  */
 componentes.capabilitiesCombo = function(){
     
@@ -926,10 +879,10 @@ componentes.capabilitiesCombo = function(){
     
 };
 
-/*
- * Devuelve un gridPanel que muestra las capas ofrecidas por un servidor WMS determinado
+/**
  * 
- * @returns Ext.grid.GridPanel
+ * @param {type} node
+ * @returns {componentes.capabilitiesGridPanel.capabilitiesGridPanel}
  */
 componentes.capabilitiesGridPanel = function(node){
     
@@ -983,10 +936,9 @@ componentes.capabilitiesGridPanel = function(node){
     
 };
 
-/*
- * Devuelve un botón que abre una ventana que permite gestionar la lista de servidores WMS
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.servidoresWmsButton = function(){
     
@@ -1001,10 +953,9 @@ componentes.servidoresWmsButton = function(){
     
 };
 
-/*
- * Devuelve un gridPanel que muestra los servidores WMS definidos en la aplicación
+/**
  * 
- * @returns Ext.grid.GridPanel
+ * @returns {unresolved}
  */
 componentes.wmsServersGridPanel = function(){
    
@@ -1049,10 +1000,9 @@ componentes.wmsServersGridPanel = function(){
    
 };
 
-/*
- * Devuelve un botón que obtiene y muestra la información de un servidor WMS seleccionado
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.wmsServersInformationButton = function(){
     
@@ -1066,10 +1016,9 @@ componentes.wmsServersInformationButton = function(){
     
 };
 
-/*
- * Devuelve un botón que permite agregar un servidor WMS a la lista de servidores
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.agregarServidorWmsButton = function(){
     
@@ -1083,10 +1032,9 @@ componentes.agregarServidorWmsButton = function(){
         
 };
 
-/*
- * Devuelve un botón que permite eliminar un servidor WMS de la lista de servidores
+/**
  * 
- * @returns Ext.Button
+ * @returns {unresolved}
  */
 componentes.eliminarServidorWmsButton = function(){
     
