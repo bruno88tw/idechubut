@@ -1,7 +1,7 @@
 /**
  *  @file js/toolbar.js
  *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
- *  @fileOverview Se definen las funciones para la construcción y acceso a las barras de herramientas de la aplicacón.
+ *  @fileOverview Archivo en el que se definen las funciones para la construcción y acceso a las barras de herramientas de la aplicacón.
  *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,9 @@
 var toolbar = {};
 
 /**
- * 
- * @returns {Array}
+ * Devuelve un arreglo con los componentes de la barra de
+ * herramientas superior del mapPanel.
+ * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
 toolbar.mapPanelTopBar = function(){
     
@@ -54,8 +55,9 @@ toolbar.mapPanelTopBar = function(){
 };
 
 /**
- * 
- * @returns {Array}
+ * Devuelve un arreglo con los componentes de la barra de
+ * herramientas inferior del mapPanel.
+ * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
 toolbar.mapPanelBottomBar = function(){
     
@@ -70,8 +72,9 @@ toolbar.mapPanelBottomBar = function(){
 };
 
 /**
- * 
- * @returns {Array}
+ * Devuelve un arreglo con los componentes de la barra de
+ * herramientas superior del panel de árbol de capas.
+ * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
 toolbar.treePanelTopBar = function(){
     
@@ -88,8 +91,9 @@ toolbar.treePanelTopBar = function(){
 };
 
 /**
- * 
- * @returns {Array}
+ * Devuelve un arreglo con los componentes de la barra de
+ * herramientas inferior del panel de árbol de capas.
+ * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
 toolbar.treePanelBottomBar = function(){
     
@@ -105,8 +109,9 @@ toolbar.treePanelBottomBar = function(){
 };
 
 /**
- * 
- * @returns {Array}
+ * Devuelve un arreglo con los componentes de la barra de
+ * herramientas del panel de atributos.
+ * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
 toolbar.featureGridPanelTopBar = function(){
     

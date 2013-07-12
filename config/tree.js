@@ -1,7 +1,7 @@
 /**
  *  @file config/tree.js
  *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
- *  @fileOverview Contiene la configuración del árbol de capas y la configuración del orden de capas a cargar en el inicio de la aplicación.
+ *  @fileOverview Archivo que contiene la configuración del árbol de capas y la configuración del orden de capas a cargar en el inicio de la aplicación.
  *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -58,8 +58,8 @@ config.tree = [
 config.index = [
     "OpenStreetMap","Google Streets","Google Terrain",
     "Google Satellite","Google Hybrid","Bing Road",
-    "Bing Aerial","Bing Hybrid","mapquest",
-    "mapquestAerial","Población total 2010","Índice de debilidad social",
+    "Bing Aerial","Bing Hybrid","MapQuest",
+    "MapQuest Aerial","Población total 2010","Índice de debilidad social",
     "Índice de delincuencia","Porcentaje de población extranjera","Censo Nac. Agropecuario 2002",
     "Censo Nac. Agropecuario 2008","Radios","Fracciones",
     "Departamentos","Manzanas","Calles","Localidades"

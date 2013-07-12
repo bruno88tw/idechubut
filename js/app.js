@@ -127,6 +127,7 @@ Ext.onReady(function() {
 /**
  * Crea el mapa de la aplicación. 
  * Inicializa app.map con una instancia de OpenLayers.Map.
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 app.crearMapa = function(){               
    
@@ -146,6 +147,7 @@ app.crearMapa = function(){
 
 /**
  * Agrega controles básicos al mapa.
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 app.agregarControles = function(){
     
@@ -164,6 +166,7 @@ app.agregarControles = function(){
 
 /**
  * Agrega capas base y capas vectoriales al mapa.
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 app.agregarCapasBase = function(){
     
@@ -176,8 +179,8 @@ app.agregarCapasBase = function(){
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Road", zoomOffset: 6, resolutions: app.resolutions}));
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Aerial", zoomOffset: 6, resolutions: app.resolutions}));
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "AerialWithLabels", zoomOffset: 6, resolutions: app.resolutions}));
-    app.map.addLayer(new OpenLayers.Layer.OSM("mapquest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));  
-    app.map.addLayer(new OpenLayers.Layer.OSM("mapquestAerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions2, isBaseLayer:true, sphericalMercator: true}));            
+    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));  
+    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions2, isBaseLayer:true, sphericalMercator: true}));            
 
     // Vector layer para las consultas WFS            
     app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {
@@ -199,6 +202,7 @@ app.agregarCapasBase = function(){
 
 /**
  * Genera el vieport y le incorpora todos los paneles necesarios.
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 app.generarViewport = function(){            
     
@@ -219,6 +223,7 @@ app.generarViewport = function(){
 /**
  * Configuración final de la aplicación. 
  * Agrega elementos al mapPanel y realiza modificaciones sobre el css de algunos componentes.
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 app.configuracionFinal = function(){
 

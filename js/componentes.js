@@ -1,7 +1,7 @@
 /**
  *  @file js/componentes.js
  *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
- *  @fileOverview Se definen las funciones para la construcción y acceso a los componentes de la aplicacón.
+ *  @fileOverview Archivo en el que se definen las funciones para la construcción y acceso a los componentes de la aplicacón.
  *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ componentes.separador = function(){
 };
 
 /**
- * 
+ * Devuelve un espacio en blanco.
  * @returns {String}
  */
 componentes.blankSpace = function(){
@@ -45,7 +45,7 @@ componentes.blankSpace = function(){
 };
 
 /**
- * 
+ * Devuelve un div.
  * @param {type} id
  * @returns {String}
  */
@@ -56,8 +56,8 @@ componentes.div = function(id){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de navegación.
+ * @returns {GeoExt.Action}
  */
 componentes.navegacionButton = function(){
     
@@ -75,8 +75,8 @@ componentes.navegacionButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de zoom a la máxima extensión.
+ * @returns {GeoExt.Action}
  */
 componentes.zoomToMaxExtentButton = function(){
     
@@ -92,8 +92,8 @@ componentes.zoomToMaxExtentButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de zoom in.
+ * @returns {GeoExt.Action}
  */
 componentes.zoomInButton = function (){
     
@@ -110,8 +110,8 @@ componentes.zoomInButton = function (){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de zoom out.
+ * @returns {GeoExt.Action}
  */
 componentes.zoomOutButton = function(){
     
@@ -128,8 +128,8 @@ componentes.zoomOutButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de zoom anterior.
+ * @returns {GeoExt.Action}
  */
 componentes.zoomAnteriorButton = function(){
     
@@ -145,8 +145,8 @@ componentes.zoomAnteriorButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de zoom posterior.
+ * @returns {GeoExt.Action}
  */
 componentes.zoomPosteriorButton = function(){
     
@@ -162,8 +162,8 @@ componentes.zoomPosteriorButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de medición de distancia.
+ * @returns {GeoExt.Action}
  */
 componentes.distanciaButton = function(){
     
@@ -196,8 +196,8 @@ componentes.distanciaButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de medición de superficie.
+ * @returns {GeoExt.Action}
  */
 componentes.superficieButton = function(){
     
@@ -230,8 +230,8 @@ componentes.superficieButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de información.
+ * @returns {GeoExt.Action}
  */
 componentes.informacionButton = function(){
     
@@ -248,14 +248,14 @@ componentes.informacionButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el combobox del buscador de topónimos.
+ * @returns {GeoExt.form.GeocoderComboBox}
  */
 componentes.geocoderComboBox = function(){
     
     var geocoderComboBox = new GeoExt.form.GeocoderComboBox({       
         layer: app.map.getLayersByName("Location")[0],
-        emptyText: "Buscar un lugar ..",
+        emptyText: "Buscar un lugar ...",
         map: app.map,                
         bounds: app.max_bounds,
         border: false,
@@ -270,8 +270,8 @@ componentes.geocoderComboBox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de configuración.
+ * @returns {Ext.Button}
  */
 componentes.configuracionButton = function(){
     
@@ -303,8 +303,8 @@ componentes.configuracionButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de título.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionTituloCheckbox = function(){
     
@@ -319,8 +319,8 @@ componentes.configuracionTituloCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón para cambiar el texto del título.
+ * @returns {Ext.Button}
  */
 componentes.configuracionCambiarTituloButton = function(){
     
@@ -335,8 +335,8 @@ componentes.configuracionCambiarTituloButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de subtítulo.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionSubtituloCheckbox = function(){
     
@@ -351,12 +351,12 @@ componentes.configuracionSubtituloCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón para cambiar el texto del subtítulo.
+ * @returns {Ext.Button}
  */
 componentes.configuracionCambiarSubtituloButton = function(){
     
-    var configuracionCambiarSubtituloButton = new Ext.Toolbar.Button({
+    var configuracionCambiarSubtituloButton = new Ext.Button({
         text: "Cambiar subtítulo",
         width: 105,
         handler: handler.onConfiguracionCambiarSubtituloButton
@@ -367,8 +367,8 @@ componentes.configuracionCambiarSubtituloButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de leyenda.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionLeyendaCheckbox = function(){
     
@@ -383,8 +383,8 @@ componentes.configuracionLeyendaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de navegador.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionNavegadorCheckbox = function(){
     
@@ -399,8 +399,8 @@ componentes.configuracionNavegadorCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de escala.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionEscalaCheckbox = function(){
     
@@ -415,8 +415,8 @@ componentes.configuracionEscalaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de minimapa.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionMinimapaCheckbox = function(){
     
@@ -431,8 +431,8 @@ componentes.configuracionMinimapaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de norte.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionNorteCheckbox = function(){
     
@@ -447,8 +447,8 @@ componentes.configuracionNorteCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el checkbox de grilla.
+ * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionGrillaCheckbox = function(){
     
@@ -463,8 +463,8 @@ componentes.configuracionGrillaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de imprimir.
+ * @returns {Ext.Button}
  */
 componentes.imprimirButton = function(){
     
@@ -479,8 +479,8 @@ componentes.imprimirButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de ayuda.
+ * @returns {Ext.Button}
  */
 componentes.ayudaButton = function(){
     
@@ -495,12 +495,12 @@ componentes.ayudaButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de acerca de.
+ * @returns {Ext.Button}
  */
 componentes.acercaDeButton = function(){
     
-    var acercaDeButton = new Ext.Toolbar.Button({
+    var acercaDeButton = new Ext.Button({
         tooltip: 'Acerca de',
         icon: 'img/star.png',
         handler: handler.onAcercaDeButton
@@ -511,8 +511,8 @@ componentes.acercaDeButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el combobox de resoluciones.
+ * @returns {Ext.form.ComboBox}
  */
 componentes.scaleComboBox = function(){
     
@@ -547,8 +547,8 @@ componentes.scaleComboBox = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de agregar capas.
+ * @returns {Ext.Button}
  */
 componentes.agregarCapasButton = function(){
     
@@ -564,8 +564,8 @@ componentes.agregarCapasButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de orden de capas.
+ * @returns {Ext.Button}
  */
 componentes.ordenDeCapasButton = function(){
     
@@ -582,8 +582,8 @@ componentes.ordenDeCapasButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de agregar carpeta.
+ * @returns {Ext.Button}
  */
 componentes.agregarCarpetaButton = function(){
     
@@ -599,8 +599,8 @@ componentes.agregarCarpetaButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de expandir todo.
+ * @returns {Ext.Button}
  */
 componentes.expandirTodoButton = function(){
     
@@ -616,12 +616,12 @@ componentes.expandirTodoButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de colapsar todo.
+ * @returns {Ext.Button}
  */
 componentes.colapsarTodoButton = function(){
     
-    var colapsarTodoButton = new Ext.Toolbar.Button({
+    var colapsarTodoButton = new Ext.Button({
         tooltip: 'Colapsar todo',
         icon: 'img/list-remove.png',
         id: "treePanelTopbarColapsar", 
@@ -633,8 +633,8 @@ componentes.colapsarTodoButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de mapas base.
+ * @returns {Ext.Button}
  */
 componentes.mapaBaseMenuButton = function(){
     
@@ -646,52 +646,52 @@ componentes.mapaBaseMenuButton = function(){
                 new Ext.menu.Item({
                     text: "Google Streets",
                     iconCls: "googleIcon",
-                    handler: handler.onGoogleStreets
+                    handler: function(){handler.onCambiarCapaBase("Google Streets");}
                 }),
                 new Ext.menu.Item({
                     text: "Google Terrain",
                     iconCls: "googleIcon",
-                    handler: handler.onGoogleTerrain
+                    handler: function(){handler.onCambiarCapaBase("Google Terrain");}
                 }),
                 new Ext.menu.Item({
                     text: "Google Satellite",
                     iconCls: "googleIcon",
-                    handler: handler.onGoogleSatellite
+                    handler: function(){handler.onCambiarCapaBase("Google Satellite");}
                 }),
                 new Ext.menu.Item({
                     text: "Google Hybrid",
                     iconCls: "googleIcon",
-                    handler: handler.onGoogleHibryd
+                    handler: function(){handler.onCambiarCapaBase("Google Hybrid");}
                 }),
                 new Ext.menu.Item({
                     text: "OpenStreetMap",
                     iconCls: "osmIcon",
-                    handler: handler.onOpenStreetMap
+                    handler: function(){handler.onCambiarCapaBase("OpenStreetMap");}
                 }),                                
                 new Ext.menu.Item({
                     text: "Bing Road",
                     iconCls: "bingIcon",
-                    handler: handler.onBingRoad
+                    handler: function(){handler.onCambiarCapaBase("Bing Road");}
                 }),
                 new Ext.menu.Item({
                     text: "Bing Aerial",
                     iconCls: "bingIcon",
-                    handler: handler.onBingAerial
+                    handler: function(){handler.onCambiarCapaBase("Bing Aerial");}
                 }),
                 new Ext.menu.Item({
                     text: "Bing Hybrid",
                     iconCls: "bingIcon",
-                    handler: handler.onBingHibryd
+                    handler: function(){handler.onCambiarCapaBase("Bing Hybrid");}
                 }),
                 new Ext.menu.Item({
-                    text: "mapquest",
+                    text: "MapQuest",
                     iconCls: "mapQuestIcon",
-                    handler: handler.onMapQuest
+                    handler: function(){handler.onCambiarCapaBase("MapQuest");}
                 }),
                 new Ext.menu.Item({
-                    text: "mapquestAerial",
+                    text: "MapQuest Aerial",
                     iconCls: "mapQuestIcon",
-                    handler: handler.onMapQuestAerial
+                    handler: function(){handler.onCambiarCapaBase("MapQuest Aerial");}
                 })                       
             ]
         })
@@ -702,8 +702,8 @@ componentes.mapaBaseMenuButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de importar capas.
+ * @returns {Ext.Button}
  */
 componentes.importarCapasButton = function(){
     
@@ -719,8 +719,8 @@ componentes.importarCapasButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de exportar capas.
+ * @returns {Ext.Button}
  */
 componentes.exportarCapasButton = function(){
     
@@ -736,8 +736,8 @@ componentes.exportarCapasButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de reconocer.
+ * @returns {Ext.Button}
  */
 componentes.wfsReconocerButton = function(){
     
@@ -759,8 +759,8 @@ componentes.wfsReconocerButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de seleccionar.
+ * @returns {Ext.Button}
  */
 componentes.wfsSeleccionarButton = function(){
    
@@ -781,8 +781,8 @@ componentes.wfsSeleccionarButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de limpiar.
+ * @returns {Ext.Button}
  */
 componentes.wfsLimpiarButton = function(){
    
@@ -798,8 +798,8 @@ componentes.wfsLimpiarButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de exportar a excel.
+ * @returns {Ext.ux.Exporter.Button}
  */
 componentes.wfsExportarAExcelLink = function(){
     
@@ -812,8 +812,8 @@ componentes.wfsExportarAExcelLink = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el el store de capabilities.
+ * @returns {GeoExt.data.WMSCapabilitiesStore}
  */
 componentes.capabilitiesStore = function(){
 
@@ -827,8 +827,8 @@ componentes.capabilitiesStore = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el controlador de expansión de filas para un gridPanel.
+ * @returns {Ext.ux.grid.RowExpander}
  */
 componentes.rowExpander = function(){
     
@@ -843,8 +843,8 @@ componentes.rowExpander = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de confirmar agregar capas.
+ * @returns {Ext.Button}
  */
 componentes.confirmarAgregarCapasButton = function(){
     
@@ -859,8 +859,8 @@ componentes.confirmarAgregarCapasButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el combobox de servidores WMS.
+ * @returns {Ext.form.ComboBox}
  */
 componentes.capabilitiesCombo = function(){
     
@@ -880,9 +880,9 @@ componentes.capabilitiesCombo = function(){
 };
 
 /**
- * 
+ * Devuelve el gridPanel de la ventana "Agregar capas".
  * @param {type} node
- * @returns {componentes.capabilitiesGridPanel.capabilitiesGridPanel}
+ * @returns {Ext.grid.GridPanel}
  */
 componentes.capabilitiesGridPanel = function(node){
     
@@ -937,8 +937,8 @@ componentes.capabilitiesGridPanel = function(node){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de servidores WMS.
+ * @returns {Ext.Button}
  */
 componentes.servidoresWmsButton = function(){
     
@@ -954,8 +954,8 @@ componentes.servidoresWmsButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el gridPanel de la ventana "Servidores WMS".
+ * @returns {Ext.grid.GridPanel}
  */
 componentes.wmsServersGridPanel = function(){
    
@@ -1001,8 +1001,8 @@ componentes.wmsServersGridPanel = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de información de la ventana "Servidores WMS".
+ * @returns {Ext.Button}
  */
 componentes.wmsServersInformationButton = function(){
     
@@ -1017,8 +1017,8 @@ componentes.wmsServersInformationButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de agregar de la ventana "Servidores WMS".
+ * @returns {Ext.Button}
  */
 componentes.agregarServidorWmsButton = function(){
     
@@ -1033,8 +1033,8 @@ componentes.agregarServidorWmsButton = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Devuelve el botón de eliminar de la ventana "Servidores WMS".
+ * @returns {Ext.Button}
  */
 componentes.eliminarServidorWmsButton = function(){
     

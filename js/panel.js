@@ -1,7 +1,7 @@
 /**
  *  @file js/panel.js
  *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
- *  @fileOverview Se definen las funciones para la construcción y acceso a los paneles de la aplicacón.
+ *  @fileOverview Archivo en el que se definen las funciones para la construcción y acceso a los paneles de la aplicacón.
  *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -25,8 +25,8 @@
 var panel = {};
 
 /**
- * 
- * @returns {panel.banner.banner}
+ * Crea y devuelve el panel sobre el que se visualizará el banner.
+ * @returns {Array} Panel del banner.
  */
 panel.banner = function(){
     
@@ -44,8 +44,8 @@ panel.banner = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Instancia y devuelve el panel sobre el que se visualizará el mapa.
+ * @returns {GeoExt.MapPanel} Panel del mapa.
  */
 panel.mapPanel = function(){
     
@@ -67,8 +67,8 @@ panel.mapPanel = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Instancia y devuelve el panel sobre el que se visualizará el árbol de capas.
+ * @returns {Ext.tree.TreePanel} Panel del árbol de capas.
  */
 panel.layerTreePanel = function(){
     
@@ -96,8 +96,8 @@ panel.layerTreePanel = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Instancia y devuelve el panel sobre el que se visualizarán las leyendas del mapa.
+ * @returns {GeoExt.LegendPanel} Panel de leyenda.
  */
 panel.legendPanel = function(){
     
@@ -128,8 +128,8 @@ panel.legendPanel = function(){
 };
 
 /**
- * 
- * @returns {unresolved}
+ * Instancia y devuelve el panel sobre el que se visualizarán los atributos de las capas.
+ * @returns {Ext.grid.GridPanel} Panel de atributos.
  */
 panel.featureGridPanel = function(){
     

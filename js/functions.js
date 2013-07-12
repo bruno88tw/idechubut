@@ -1,7 +1,7 @@
 /**
  *  @file js/functions.js
  *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
- *  @fileOverview Se definen funciones de variada utilidad.
+ *  @fileOverview Archivo en el que se definen funciones de variada utilidad.
  *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -100,11 +100,11 @@ function convertDMS(coordinate, type) {
     if( coordinateseconds < 10 )
       coordinateseconds = "0" + coordinateseconds;
 
-      if(type == "LAT"){
-          coords = "<b>lat: </b>"+coordinatedegrees+"º "+coordinateminutes+"' "+coordinateseconds+"'' "+this.getHemi(coordinate, type)+"&nbsp&nbsp";
-      }else{
-          coords = "<b>lon: </b>"+coordinatedegrees+"º "+coordinateminutes+"' "+coordinateseconds+"'' "+this.getHemi(coordinate, type);
-      }            
+    if(type == "LAT"){
+        coords = "<b>lat: </b>"+coordinatedegrees+"º "+coordinateminutes+"' "+coordinateseconds+"'' "+this.getHemi(coordinate, type)+"&nbsp&nbsp";
+    }else{
+        coords = "<b>lon: </b>"+coordinatedegrees+"º "+coordinateminutes+"' "+coordinateseconds+"'' "+this.getHemi(coordinate, type);
+    }            
 
     return coords;
 };
@@ -138,7 +138,7 @@ function getHemi(coordinate, type) {
 
 /**
  * Posiciona la escala en el mapa de acuerdo a la configuración de componentes actuales
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function acomodarScaleline(){
     
@@ -161,7 +161,7 @@ function acomodarScaleline(){
 
 /**
  * Posiciona el navegador en el mapa de acuerdo a la configuración de componentes actuales.
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function acomodarNavegador(){
 
@@ -189,7 +189,9 @@ function acomodarNavegador(){
 
 /**
  * Crea el archivo de exportación del árbol de capas.
- * @returns {undefined}
+ * @param {type} father
+ * @param {type} children
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function saveLayerTree(father, children){
     
@@ -209,7 +211,7 @@ function saveLayerTree(father, children){
 
 /**
  * Crea el archivo de exportación del índice de las capas.
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function saveLayerIndex(){
     
@@ -226,7 +228,7 @@ function saveLayerIndex(){
 /**
  * Restaura el índice de las capas dado un archivo de resguardo.
  * @param {type} index
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function restoreIndex(index){
     
@@ -242,7 +244,7 @@ function restoreIndex(index){
  * Dado un archivo de resguardo de árbol de capas, agrega la descendencia a un nodo padre dado
  * @param {type} father
  * @param {type} children
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function restoreTree(father,children){
     
@@ -264,7 +266,7 @@ function restoreTree(father,children){
 /**
  * Dado un nodo, expande todos sus nodos hijos.
  * @param {type} node
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function expandAll(node){
     if (!node.isLeaf()){
@@ -278,7 +280,7 @@ function expandAll(node){
 /**
  * Dado un nodo, colapsa todos sus nodos hijos.
  * @param {type} node
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function collapseAll(node){
     if (!node.isLeaf()){
@@ -292,7 +294,7 @@ function collapseAll(node){
 /**
  * Dado un nodo, elimina todos sus nodos hijos y a sí mismo.
  * @param {type} node
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function removeLayers(node){
     
@@ -309,7 +311,7 @@ function removeLayers(node){
 /**
  * Dado un nodo, le asigna un nombre.
  * @param {type} e
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 function setFolderName(e){       
     

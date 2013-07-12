@@ -1,7 +1,7 @@
 /**
  *  @file js/handler.js
  *  @author Bruno José Vecchietti <bruno88tw@gmial.com>
- *  @fileOverview Se definen los manejadores de los componentes.
+ *  @fileOverview Archivo en el que se definen los manejadores de los componentes.
  *  @copyright Copyright (C) 2012  Bruno José Vecchietti.
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ var handler = {};
 
 /**
  * Handler para la herramienta importar capas.
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onImportarCapasButton = function(){
     
@@ -88,8 +88,8 @@ handler.onImportarCapasButton = function(){
 };
 
 /**
- * Handler para la herramienta exportar capas
- * @returns {undefined}
+ * Handler para la herramienta exportar capas.
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onExportarCapasButton = function(){
     
@@ -142,8 +142,8 @@ handler.onExportarCapasButton = function(){
 };
 
 /**
-* 
-* @returns {undefined} 
+* Handler correspondiente al evento asociado al checkbox de configuración "Título".
+* @returns {undefined} Esta función no devuelve resultados.
 */
 handler.onConfiguracionTituloCheckbox = function(){
    
@@ -157,8 +157,8 @@ handler.onConfiguracionTituloCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón de configuración "Cambiar título".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onConfiguracionCambiarTituloButton = function(){
     
@@ -171,8 +171,8 @@ handler.onConfiguracionCambiarTituloButton = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al checkbox de configuración "Subtítulo".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onConfiguracionSubtituloCheckbox = function(){
     
@@ -186,8 +186,8 @@ handler.onConfiguracionSubtituloCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón de configuración "Cambiar subtítulo".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onConfiguracionCambiarSubtituloButton = function(){
     
@@ -200,8 +200,8 @@ handler.onConfiguracionCambiarSubtituloButton = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al checkbox de configuración "Leyenda".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onConfiguracionLeyendaCheckbox = function(){
     
@@ -218,8 +218,8 @@ handler.onConfiguracionLeyendaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al checkbox de configuración "Navegador".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onConfiguracionNavegadorCheckbox = function(){
     
@@ -232,8 +232,8 @@ handler.onConfiguracionNavegadorCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al checkbox de configuración "Escala".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onConfiguracionEscalaCheckbox = function(){
     
@@ -247,8 +247,8 @@ handler.onConfiguracionEscalaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al checkbox de configuración "Minimapa".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.ConfiguracionMinimapaCheckbox = function(){
     
@@ -262,8 +262,8 @@ handler.ConfiguracionMinimapaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al checkbox de configuración "Norte".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.ConfiguracionNorteCheckbox = function(){
     
@@ -277,8 +277,8 @@ handler.ConfiguracionNorteCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al checkbox de configuración "Grilla".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.ConfiguracionGrillaCheckbox = function(){
     
@@ -292,8 +292,8 @@ handler.ConfiguracionGrillaCheckbox = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Imprimir".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onImprimirButton = function(){
     
@@ -305,9 +305,9 @@ handler.onImprimirButton = function(){
     var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height='+ height + ',width=' + width);       
     mywindow.document.write('<html><head><title>Imprimir mapa</title>');
     mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/ext-all.css">');
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ext-3.4.0/resources/css/xtheme-gray.css">');                                                    
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers-2.12/theme/default/style.css">');
+    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/ext-all.css">');
+    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/xtheme-gray.css">');                                                    
+    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers/theme/default/style.css">');
     mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
     mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
     mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
@@ -316,11 +316,11 @@ handler.onImprimirButton = function(){
     mywindow.document.close();
     mywindow.focus();       
            
-};
+}; 
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Ayuda".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onAyudaButton = function(){
     
@@ -346,8 +346,8 @@ handler.onAyudaButton = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Acerca de".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onAcercaDeButton = function(){
     
@@ -373,9 +373,9 @@ handler.onAcercaDeButton = function(){
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al botón "Agregar capas".
  * @param {type} node
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onAgregarCapas = function(node){
 
@@ -394,8 +394,8 @@ handler.onAgregarCapas = function(node){
 };
  
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Servidores WMS".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onServidoresWmsButton = function(){
 
@@ -414,8 +414,8 @@ handler.onServidoresWmsButton = function(){
 };
  
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Orden de capas".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onOrdenDeCapasButton = function(){
 
@@ -446,8 +446,8 @@ handler.onOrdenDeCapasButton = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Agregar carpeta".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onAgregarCarpetaButton = function(){
 
@@ -458,8 +458,8 @@ handler.onAgregarCarpetaButton = function(){
 };
  
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Expandir todo".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onExpandirTodoButton = function(){
 
@@ -468,118 +468,29 @@ handler.onExpandirTodoButton = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Colapsar todo".
+ * @returns {undefined} Esta función no devuelve resultados.
  */   
 handler.onColapsarTodoButton = function(){
 
    collapseAll(Ext.getCmp("layerTreePanel").getRootNode());
 
 };
- 
+
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al cambio de capa base.
+ * @param {type} capaBase nombre de la capa base
+ * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onGoogleStreets = function(){
+handler.onCambiarCapaBase = function(capaBase){
 
-   app.map.setBaseLayer(app.map.getLayersByName("Google Streets")[0]);
-
-};
- 
-/**
- * 
- * @returns {undefined}
- */
-handler.onGoogleTerrain = function(){
-
-   app.map.setBaseLayer(app.map.getLayersByName("Google Terrain")[0]);
+   app.map.setBaseLayer(app.map.getLayersByName(capaBase)[0]);
 
 };
 
 /**
- * 
- * @returns {undefined}
- */
-handler.onGoogleSatellite = function(){
-
-   app.map.setBaseLayer(app.map.getLayersByName("Google Satellite")[0]);
-
-};
-
-/**
- * 
- * @returns {undefined}
- */
-handler.onGoogleHibryd = function(){
-
-   app.map.setBaseLayer(app.map.getLayersByName("Google Hybrid")[0]);
-
-};
-
-/**
- * 
- * @returns {undefined}
- */
-handler.onOpenStreetMap = function(){
-    
-    app.map.setBaseLayer(app.map.getLayersByName("OpenStreetMap")[0]);
-    
-};
-
-/**
- * 
- * @returns {undefined}
- */
-handler.onBingRoad = function(){
-    
-    app.map.setBaseLayer(app.map.getLayersByName("Bing Road")[0]);
-    
-};
-
-/**
- * 
- * @returns {undefined}
- */
-handler.onBingAerial = function(){
-    
-    app.map.setBaseLayer(app.map.getLayersByName("Bing Aerial")[0]);
-    
-};
-
-/**
- * 
- * @returns {undefined}
- */
-handler.onBingHibryd = function(){
-    
-    app.map.setBaseLayer(app.map.getLayersByName("Bing Hybrid")[0]);
-    
-};
-
-/**
- * 
- * @returns {undefined}
- */
-handler.onMapQuest = function(){
-    
-    app.map.setBaseLayer(app.map.getLayersByName("mapquest")[0]);
-    
-};
-
-/**
- * 
- * @returns {undefined}
- */
-handler.onMapQuestAerial = function(){
-    
-    app.map.setBaseLayer(app.map.getLayersByName("mapquestAerial")[0]);
-    
-};
-
-/**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Reconocer".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onWfsReconocerButton = function(){
     
@@ -594,8 +505,8 @@ handler.onWfsReconocerButton = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Seleccionar".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onWfsSeleccionarButton = function(){
     
@@ -610,8 +521,8 @@ handler.onWfsSeleccionarButton = function(){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Limpiar".
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onWfsLimpiarButton = function(){
     
@@ -620,10 +531,10 @@ handler.onWfsLimpiarButton = function(){
 };
 
 /**
- * 
+ * Handler correspondiente al evento "ContextMenu" de una componente tipo nodo.
  * @param {type} nodo
  * @param {type} event
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onNodeContextMenu = function(nodo, event){
     
@@ -682,12 +593,12 @@ handler.onNodeContextMenu = function(nodo, event){
 };
 
 /**
- * 
+ * Handler correspondiente al evento "ContextMenu" de una componente tipo leaf.
  * @param {type} leaf
  * @param {type} event
  * @param {type} titulo
  * @param {type} params
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onLeafContextMenu = function(leaf, event, titulo, params){
     
@@ -727,10 +638,10 @@ handler.onLeafContextMenu = function(leaf, event, titulo, params){
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al botón "Zoom a la capa".
  * @param {type} leaf
  * @param {type} params
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onZoomALaCapaButton = function(leaf, params){
     
@@ -773,11 +684,11 @@ handler.onZoomALaCapaButton = function(leaf, params){
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al botón "Propiedades".
  * @param {type} leaf
  * @param {type} titulo
  * @param {type} params
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onPropiedadesButton = function(leaf, titulo, params){
     
@@ -906,9 +817,9 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al botón "Atributos".
  * @param {type} leaf
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onAtributosButton = function(leaf){
     
@@ -1020,9 +931,9 @@ handler.onAtributosButton = function(leaf){
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al botón "Información" de la ventana de servidores WMS.
  * @param {type} wmsServersGridPanel
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onWmsServersInformationButton = function(wmsServersGridPanel){
     
@@ -1196,8 +1107,8 @@ handler.onWmsServersInformationButton = function(wmsServersGridPanel){
 };
 
 /**
- * 
- * @returns {undefined}
+ * Handler correspondiente al evento asociado al botón "Agregar" de la ventana de servidores WMS.
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onAgregarServidorWmsButton = function(){
     
@@ -1221,9 +1132,9 @@ handler.onAgregarServidorWmsButton = function(){
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al botón "Eliminar" de la ventana de servidores WMS.
  * @param {type} wmsServersGridPanel
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onEliminarServidorWmsButton = function(wmsServersGridPanel){
     
@@ -1234,11 +1145,11 @@ handler.onEliminarServidorWmsButton = function(wmsServersGridPanel){
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al botón "Agregar" de la ventana "Agregar capas".
  * @param {type} node
  * @param {type} capabilitiesGridPanel
  * @param {type} capabilitiesCombo
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onAgregarCapasButton = function(node, capabilitiesGridPanel, capabilitiesCombo){
     
@@ -1266,9 +1177,9 @@ handler.onAgregarCapasButton = function(node, capabilitiesGridPanel, capabilitie
 };
 
 /**
- * 
+ * Handler correspondiente al evento asociado al control "getFeatureInfo".
  * @param {type} e
- * @returns {undefined}
+ * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onGetFeatureInfo = function(e){
     
