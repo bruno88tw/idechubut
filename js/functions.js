@@ -152,7 +152,7 @@ function acomodarScaleline(){
         left = "10px";       
     }
     
-    bottom = "5px";      
+    bottom = "8px";      
 
     scalelinecss.left = left;
     scalelinecss.bottom = bottom;    

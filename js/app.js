@@ -93,7 +93,8 @@ app.wfsStoreExport = new GeoExt.data.FeatureStore({
 app.wmsServerStore = new Ext.data.ArrayStore({
     fields: ['nombre', 'url'],
     data: [
-        ["Dirección General de Estadística y Censos","http://eycchubut.sytes.net/geoserver/wms"],
+//        ["Dirección General de Estadística y Censos","http://eycchubut.sytes.net/geoserver/wms"],
+        ["Dirección General de Estadística y Censos","http://192.168.0.61/geoserver/wms"],
         ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
         ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
         ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
@@ -271,6 +272,7 @@ app.configuracionFinal = function(){
         id: "legendPanelOnMap",
         autoScroll: true,
         width: 250,
+        height: Ext.getCmp("mapPanel").getHeight() - 73,
         collapsible: false,
         collapsed: false,
         border: false,

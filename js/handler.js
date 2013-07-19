@@ -299,7 +299,7 @@ handler.onImprimirButton = function(){
     
     var divmap = document.getElementById("mapPanel").getElementsByClassName('x-panel-body')[0];
     var mapp = Ext.getCmp("mapPanel");
-    var height = mapp.lastSize.height;
+    var height = mapp.lastSize.height - 52;
     var width = mapp.lastSize.width;
 
     var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height='+ height + ',width=' + width);       
@@ -720,6 +720,7 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
                     iconCls: 'configuracionIcon',
                     layout: "anchor",
                     resizable: false,   
+                    shadow: false,
                     items: [
                         new Ext.Panel({
                             border: false,

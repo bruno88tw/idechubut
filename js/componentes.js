@@ -421,7 +421,7 @@ componentes.configuracionEscalaCheckbox = function(){
 componentes.configuracionMinimapaCheckbox = function(){
     
     var configuracionMinimapaCheckbox = new Ext.menu.CheckItem({
-        text: 'Minimapa',
+        text: 'Localizador',
         checked: true,
         checkHandler: handler.ConfiguracionMinimapaCheckbox
     });
@@ -553,7 +553,7 @@ componentes.scaleComboBox = function(){
 componentes.agregarCapasButton = function(){
     
     var agregarCapasButton = new Ext.Button({
-        tooltip: 'Agregar capa',
+        tooltip: 'Agregar capas',
         icon: 'img/map-plus.png',
         id: "treePanelTopbarAgregar",
         handler: function(){handler.onAgregarCapas(null);}

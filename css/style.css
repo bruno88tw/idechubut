@@ -115,15 +115,6 @@
    background:transparent url(../img/map.png) no-repeat 0 0;
 }
 
-.geocodercombobox{
-   position:absolute; 
-   z-index:1005; 
-   left:10px; 
-   top:5px; 
-   width: 210px; 
-   height: 21px; 
-}
-
 .legend{
    position:absolute; 
    z-index:1005; 
@@ -137,22 +128,13 @@
    display: block;
    z-index:1005; 
    left:10px; 
-   bottom:5px; 
+   bottom:8px; 
    width: 210px; 
    height: 30px; 
    font-size: 10px;
    -moz-user-select: none;
    -khtml-user-select: none;   
-}
-
-.scalecombobox{
-   position:absolute; 
-   z-index:1006; 
-   left:10px; 
-   bottom:10px; 
-   width: 210px; 
-   height: 21px; 
-}            
+}         
 
 .latlong{
    position:absolute; 
