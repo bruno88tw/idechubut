@@ -644,6 +644,11 @@ componentes.mapaBaseMenuButton = function(){
         menu: new Ext.menu.Menu({
             items: [
                 new Ext.menu.Item({
+                    text: "IGN",
+                    iconCls: "ignIcon",
+                    handler: function(){handler.onCambiarCapaBase("IGN");}
+                }),
+                new Ext.menu.Item({
                     text: "Google Streets",
                     iconCls: "googleIcon",
                     handler: function(){handler.onCambiarCapaBase("Google Streets");}

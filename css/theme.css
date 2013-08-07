@@ -1,0 +1,204 @@
+/* 
+    Document   : theme
+    Created on : 07-ago-2013, 8:38:37
+    Author     : bruno
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.x-panel-body {
+    background-color:#FFFFFF;
+}
+
+.x-panel-header {
+    background: #EBEBEB;
+    height: 17px
+}
+
+.x-tab-panel-header, .x-tab-panel-footer {
+    border-color:#EBEBEB;
+}
+
+.x-tab-panel-header, .x-tab-panel-footer {
+	border-color:#EBEBEB;
+}
+
+ul.x-tab-strip-top{
+    border-bottom-color:#EBEBEB;
+}
+
+ul.x-tab-strip-bottom{
+    border-top-color:#EBEBEB;
+}
+
+.x-tab-panel-header-plain .x-tab-strip-spacer,
+.x-tab-panel-footer-plain .x-tab-strip-spacer {
+    border-color:#EBEBEB;
+}
+
+.x-tab-panel-body {
+    border-color:#EBEBEB;
+}
+
+.x-tab-scroller-left {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-tab-scroller-right {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-tab-panel-bbar .x-toolbar, .x-tab-panel-tbar .x-toolbar {
+    border-color:#EBEBEB;
+}
+
+.x-form-check-group-label {
+    border-bottom: 1px solid #EBEBEB;
+}
+
+.x-toolbar{
+    border-color:#EBEBEB;
+    background-color:#EBEBEB;
+}
+
+.x-grid-panel .x-panel-mc .x-panel-body {
+    border-color:#EBEBEB;
+}
+
+.x-grid3-header-pop {
+    border-left-color:#EBEBEB;
+}
+
+.x-grid-group-hd {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-panel {
+    border-color: #EBEBEB;
+}
+
+.x-panel-header {
+    border-color:#EBEBEB;
+}
+
+.x-panel-bbar .x-toolbar, .x-panel-tbar .x-toolbar {
+    border-color:#EBEBEB;
+}
+
+.x-panel-tbar-noheader .x-toolbar, .x-panel-mc .x-panel-tbar .x-toolbar {
+    border-top-color:#EBEBEB;
+}
+
+.x-panel-tl, .x-panel-tr, .x-panel-bl,  .x-panel-br{
+    border-bottom-color:#EBEBEB;
+}
+
+.x-panel-ghost ul {
+    border-color:#EBEBEB;
+}
+
+.x-panel-dd-spacer {
+    border-color:#EBEBEB;
+}
+
+.x-window-proxy {
+    border-color:#EBEBEB;
+}
+
+.x-window-bbar .x-toolbar {
+    border-top-color:#EBEBEB;
+}
+
+.x-panel-ghost .x-window-tl {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-panel-collapsed .x-window-tl {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-panel-noborder .x-panel-header-noborder {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-panel-noborder .x-panel-tbar-noborder .x-toolbar {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-panel-noborder .x-panel-bbar-noborder .x-toolbar {
+    border-top-color:#EBEBEB;
+}
+
+.x-tab-panel-bbar-noborder .x-toolbar {
+    border-top-color:#EBEBEB;
+}
+
+.x-tab-panel-tbar-noborder .x-toolbar {
+    border-bottom-color:#EBEBEB;
+}
+
+.x-list-header-inner em.sort-asc, .x-list-header-inner em.sort-desc {
+    border-color: #EBEBEB;
+}
+
+.x-window-tl .x-window-header {
+    color:#EBEBEB;
+}
+
+.x-layout-split{
+    background-color:#D0D0D0;
+}
+
+.x-panel-body {
+    border-color:#D0D0D0;
+}
+
+
+.x-panel-body-noheader, .x-panel-mc .x-panel-body {
+    border-top-color:#D0D0D0;
+}
+
+.x-window-tc {
+    background-color: #D0D0D0;
+}
+
+.x-window-tl {
+    background-color: #D0D0D0;
+}
+
+.x-window-tr {
+    background-color: #D0D0D0;
+}
+
+.x-window-bc {
+    background-color: #D0D0D0;
+}
+
+.x-window-bl {
+    background-color: #D0D0D0;
+}
+
+.x-window-br {
+    background-color: #D0D0D0;
+}
+
+.x-window-mc {
+    border-color:#D0D0D0;
+}
+
+.x-window-ml {
+    background-color: #D0D0D0;
+}
+
+.x-window-mr {
+    background-color: #D0D0D0;
+}
+
+.x-layout-collapsed{
+    background-color:#D0D0D0;
+    border-color:#D0D0D0;
+}
+
+.x-layout-collapsed-over{
+    background-color:#D0D0D0;
+}

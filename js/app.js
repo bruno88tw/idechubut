@@ -93,8 +93,7 @@ app.wfsStoreExport = new GeoExt.data.FeatureStore({
 app.wmsServerStore = new Ext.data.ArrayStore({
     fields: ['nombre', 'url'],
     data: [
-//        ["Dirección General de Estadística y Censos","http://eycchubut.sytes.net/geoserver/wms"],
-        ["Dirección General de Estadística y Censos","http://192.168.0.61/geoserver/wms"],
+        ["Dirección General de Estadística y Censos","http://idedgeyc.chubut.gov.ar/geoserver/wms"],
         ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
         ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
         ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
@@ -172,6 +171,12 @@ app.agregarControles = function(){
 app.agregarCapasBase = function(){
     
     // Capas Base
+    app.map.addLayer(new OpenLayers.Layer.WMS(
+        "IGN", 
+        "http://idedgeyc.chubut.gov.ar/geoserver/wms", 
+        {layers: "rural:basemap", transparent: 'false', format: 'image/jpeg', tiled: 'true'}, 
+        {isBaseLayer: true, visibility: false, singleTile: false, displayInLayerSwitcher: false}
+    ));   
     app.map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
     app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
     app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
@@ -183,11 +188,6 @@ app.agregarCapasBase = function(){
     app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));  
     app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions2, isBaseLayer:true, sphericalMercator: true}));            
 
-    // Vector layer para las consultas WFS            
-    app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {
-        displayInLayerSwitcher: false
-    }));
-    
     // Vector layer para el localizador
     app.map.addLayer(new OpenLayers.Layer.Vector("Location", {
         styleMap: new OpenLayers.Style({
@@ -197,7 +197,14 @@ app.agregarCapasBase = function(){
             graphicTitle: "${name}"
         }),
         displayInLayerSwitcher: false
-    }));    
+    }));   
+
+    // Vector layer para las consultas WFS            
+    app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {
+        displayInLayerSwitcher: false
+    }));
+    
+ 
     
 };
 
@@ -294,15 +301,15 @@ app.configuracionFinal = function(){
     });    
 
     // Modifico las propiedades css de algunos componentes para perfeccionar la estética de la aplicación
-    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
-    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
-    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.backgroundColor = "#BACAE6";
-    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.borderTopColor = "#BACAE6";
-    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.height = "20px";
-    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
-    document.getElementById("legendPanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
-    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
-    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
+//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
+//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
+//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.backgroundColor = "#BACAE6";
+//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.borderTopColor = "#BACAE6";
+//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.height = "20px";
+//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
+//    document.getElementById("legendPanel").getElementsByClassName('x-panel-header')[0].style.height = "21px";
+//    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
+//    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
        
 };
 

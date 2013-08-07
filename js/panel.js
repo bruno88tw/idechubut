@@ -81,8 +81,8 @@ panel.layerTreePanel = function(){
         minWidth: 255,
         border: false,      
         autoScroll: true,
-        iconCls: "layers-headerIcon",
-        title: 'Capas',
+//        iconCls: "layers-headerIcon",
+//        title: 'Capas',
         id: "layerTreePanel",
         root: app.rootnode,
         rootVisible: false,
@@ -135,7 +135,7 @@ panel.featureGridPanel = function(){
     
     var featureGridPanel = new Ext.grid.GridPanel({
         region: 'south',
-        title: 'Atributos',
+//        title: 'Atributos',
         collapseMode: 'mini',
         collapsed: true,
         split: true,

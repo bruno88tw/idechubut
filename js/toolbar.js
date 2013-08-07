@@ -44,10 +44,8 @@ toolbar.mapPanelTopBar = function(){
         componentes.blankSpace(),
         componentes.geocoderComboBox(),
         componentes.separador(),
-        componentes.configuracionButton(),
-        componentes.imprimirButton(),
-        componentes.ayudaButton(),
-        componentes.acercaDeButton()
+        componentes.div("position")        
+
     ];
     
     return mapPanelToolbar;
@@ -64,7 +62,11 @@ toolbar.mapPanelBottomBar = function(){
     var mapPanelBottomBar = [
         componentes.scaleComboBox(),
         componentes.separador(),
-        componentes.div("position")
+
+        componentes.configuracionButton(),
+        componentes.imprimirButton(),        
+        componentes.ayudaButton(),
+        componentes.acercaDeButton()        
     ];
 
     return mapPanelBottomBar;
