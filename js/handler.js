@@ -299,24 +299,54 @@ handler.ConfiguracionGrillaCheckbox = function(){
  */
 handler.onImprimirButton = function(){
     
-    var divmap = document.getElementById("mapPanel").getElementsByClassName('x-panel-body')[0];
-    var mapp = Ext.getCmp("mapPanel");
-    var height = mapp.lastSize.height - 52;
-    var width = mapp.lastSize.width;
+//    var divmap = document.getElementById("mapPanel").getElementsByClassName('x-panel-body')[0];
+//    var mapp = Ext.getCmp("mapPanel");
+//    var height = mapp.lastSize.height - 52;
+//    var width = mapp.lastSize.width;
 
-    var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height='+ height + ',width=' + width);       
-    mywindow.document.write('<html><head><title>Imprimir mapa</title>');
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/ext-all.css">');
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/xtheme-gray.css">');                                                    
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers/theme/default/style.css">');
-    mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
-    mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
-    mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
-    mywindow.document.write(divmap.innerHTML);
-    mywindow.document.write('</body></html>');
-    mywindow.document.close();
-    mywindow.focus();       
+//    var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height='+ height + ',width=' + width);       
+//    mywindow.document.write('<html><head><title>Imprimir mapa</title>');
+//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
+//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/ext-all.css">');
+//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/xtheme-gray.css">');                                                    
+//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers/theme/default/style.css">');
+//    mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
+//    mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
+//    mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
+//    mywindow.document.write(divmap.innerHTML);
+//    mywindow.document.write('</body></html>');
+//    mywindow.document.close();
+//    mywindow.focus();    
+
+//    html2canvas(document.body, {
+//        proxy: "/cgi-bin/html2canvas.py",
+//        onrendered: function(canvas) {
+//            var dataUrl = canvas.toDataURL("image/png");
+//            window.open(dataUrl, "toDataURL() image");
+//        }
+//    });
+
+    html2canvas( [ document.body ], {
+        "proxy":"/cgi-bin/html2canvas3.php",
+        "onrendered": function(canvas) {
+            var uridata = canvas.toDataURL("image/png");
+            alert(uridata);
+        }
+    });
+    
+//    html2canvas.Preload(document.body, {
+//        "complete" : function(images) {
+//            var queue = html2canvas.Parse(document.body, images);
+//            var canvas = html2canvas.Renderer(queue);
+////            var img = canvas.toDataURL('image/png;base64');
+////            img = img.replace('data:image/png;base64,', '');
+////            processImg(img);
+//        },
+//        "proxy": "/cgi-bin/html2canvas.py",
+//        "logging" : false
+//    });
+
+   
            
 }; 
 

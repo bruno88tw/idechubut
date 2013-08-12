@@ -374,7 +374,7 @@ componentes.configuracionLeyendaCheckbox = function(){
     
     var configuracionLeyendaCheckbox = new Ext.menu.CheckItem({
         text: 'Leyenda',
-        checked: false,
+        checked: true,
         checkHandler: handler.onConfiguracionLeyendaCheckbox
     });
     

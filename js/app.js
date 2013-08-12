@@ -160,7 +160,7 @@ app.agregarControles = function(){
         maxFeatures: 20,
         eventListeners: {"getfeatureinfo": function(e){handler.onGetFeatureInfo(e)}}
     }));
-    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,2));        
+    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(134,2));        
     
 };
 
@@ -219,8 +219,7 @@ app.generarViewport = function(){
             border:false,
             items:[
                 panel.banner(),
-                panel.layerTreePanel(),
-                panel.legendPanel(),                        
+                panel.layerTreePanel(),                     
                 panel.mapPanel(),
                 panel.featureGridPanel()                         
             ]

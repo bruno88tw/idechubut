@@ -96,38 +96,6 @@ panel.layerTreePanel = function(){
 };
 
 /**
- * Instancia y devuelve el panel sobre el que se visualizarán las leyendas del mapa.
- * @returns {GeoExt.LegendPanel} Panel de leyenda.
- */
-panel.legendPanel = function(){
-    
-    var legendPanel = new GeoExt.LegendPanel({        
-        region: 'east',
-        collapseMode: 'mini',
-        collapsed: true,
-        split: true,
-        width: 255,
-        maxWidth: 255,
-        minWidth: 255,                                      
-        title: 'Leyenda',
-        id: "legendPanel",
-        iconCls: "legendIcon",
-        autoScroll: true,
-        border: false,
-        defaults: {
-            style: 'padding:5px',
-            baseParams: {
-                FORMAT: 'image/png',
-                LEGEND_OPTIONS: 'forceLabels:on'
-            }
-        }
-    });
-    
-    return legendPanel;
-    
-};
-
-/**
  * Instancia y devuelve el panel sobre el que se visualizarán los atributos de las capas.
  * @returns {Ext.grid.GridPanel} Panel de atributos.
  */

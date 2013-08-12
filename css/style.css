@@ -120,14 +120,14 @@
    z-index:1005; 
    top:10px; 
    left: 10px;
-   display: none;
+   display: block;
 }
 
 .scalebox{
    position:absolute; 
    display: block;
    z-index:1005; 
-   left:10px; 
+   left:270px; 
    bottom:8px; 
    width: 210px; 
    height: 30px; 
