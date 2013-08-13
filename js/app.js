@@ -159,8 +159,7 @@ app.agregarControles = function(){
         infoFormat: "application/vnd.ogc.gml",
         maxFeatures: 20,
         eventListeners: {"getfeatureinfo": function(e){handler.onGetFeatureInfo(e)}}
-    }));
-    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(134,2));        
+    }));     
     
 };
 
@@ -273,17 +272,15 @@ app.configuracionFinal = function(){
 
     // Agrega el panel de leyenda que se visualiza dentro del mapa
     new GeoExt.LegendPanel({
-        title: 'Leyenda',
         iconCls: "legendIcon",
         id: "legendPanelOnMap",
         autoScroll: true,
         width: 250,
-        height: Ext.getCmp("mapPanel").getHeight() - 73,
         collapsible: false,
         collapsed: false,
         border: false,
         renderTo: document.getElementById("legenddiv"),
-        bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0.6)'} },
+        bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0.8)'} },
         defaults: {
             style: 'padding:5px',
             baseParams: {
@@ -292,23 +289,6 @@ app.configuracionFinal = function(){
             }
         }
     });  
-
-
-    // Agrego un manejador sobre el evento de resize del mapPanel para acomodar el tamaño del legendPanelOnMap
-    Ext.getCmp("mapPanel").on("bodyresize", function(){
-        Ext.getCmp("legendPanelOnMap").setHeight(Ext.getCmp("mapPanel").getHeight() - 73);
-    });    
-
-    // Modifico las propiedades css de algunos componentes para perfeccionar la estética de la aplicación
-//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
-//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
-//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.backgroundColor = "#BACAE6";
-//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.borderTopColor = "#BACAE6";
-//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-bbar')[0].firstChild.style.height = "20px";
-//    document.getElementById("layerTreePanel").getElementsByClassName('x-panel-header')[0].style.height = "17px";
-//    document.getElementById("legendPanel").getElementsByClassName('x-panel-header')[0].style.height = "21px";
-//    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.backgroundColor = "#BACAE6";
-//    document.getElementById("featureGridPanel").getElementsByClassName('x-panel-bwrap')[0].getElementsByClassName('x-panel-tbar')[0].firstChild.style.borderBottomColor = "#BACAE6";
-       
+     
 };
 

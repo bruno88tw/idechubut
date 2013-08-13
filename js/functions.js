@@ -137,57 +137,6 @@ function getHemi(coordinate, type) {
 };
 
 /**
- * Posiciona la escala en el mapa de acuerdo a la configuración de componentes actuales
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function acomodarScaleline(){
-    
-    var legendpanelcss = document.getElementById("legenddiv").style;
-    var scalelinecss = document.getElementById("scalelinediv").style;
-    var left;
-    var bottom;
-    if(legendpanelcss.display == "block"){
-        left = "270px";                        
-    }else{
-        left = "10px";       
-    }
-    
-    bottom = "8px";      
-
-    scalelinecss.left = left;
-    scalelinecss.bottom = bottom;    
-    
-}
-
-/**
- * Posiciona el navegador en el mapa de acuerdo a la configuración de componentes actuales.
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function acomodarNavegador(){
-
-    var legendpanelcss = document.getElementById("legenddiv").style;
-    var existeNavegador = app.map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0];
-    var left;
-    var top;
-    
-    if(existeNavegador != null){
-        
-        if(legendpanelcss.display == "block"){
-            left = 134;                        
-        }else{
-            left = 6;       
-        }
-        top = 2;                  
-        
-        app.map.removeControl(app.map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]);   
-        app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(left,top));                                             
-             
-    }
-     
-    
-};
-
-/**
  * Crea el archivo de exportación del árbol de capas.
  * @param {type} father
  * @param {type} children

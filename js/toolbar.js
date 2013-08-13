@@ -60,9 +60,11 @@ toolbar.mapPanelTopBar = function(){
 toolbar.mapPanelBottomBar = function(){
     
     var mapPanelBottomBar = [
-        componentes.scaleComboBox(),
+        componentes.scaleComboBox(),        
+        componentes.bottomBarZoomOutButton(),
+        componentes.zoomSlider(),   
+        componentes.bottomBarZoomInButton(),
         componentes.separador(),
-
         componentes.configuracionButton(),
         componentes.imprimirButton(),        
         componentes.ayudaButton(),

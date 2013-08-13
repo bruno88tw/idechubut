@@ -288,8 +288,7 @@ componentes.configuracionButton = function(){
                 componentes.configuracionCambiarTituloButton(),
                 componentes.configuracionSubtituloCheckbox(), 
                 componentes.configuracionCambiarSubtituloButton(),
-                componentes.configuracionLeyendaCheckbox(),                          
-                componentes.configuracionNavegadorCheckbox(),                             
+                componentes.configuracionLeyendaCheckbox(),                                                     
                 componentes.configuracionEscalaCheckbox(),
                 componentes.configuracionMinimapaCheckbox(),
                 componentes.configuracionNorteCheckbox(),
@@ -379,22 +378,6 @@ componentes.configuracionLeyendaCheckbox = function(){
     });
     
     return configuracionLeyendaCheckbox;
-    
-};
-
-/**
- * Devuelve el checkbox de navegador.
- * @returns {Ext.menu.CheckItem}
- */
-componentes.configuracionNavegadorCheckbox = function(){
-    
-    var configuracionNavegadorCheckbox = new Ext.menu.CheckItem({
-        text: 'Navegador',
-        checked: true,
-        checkHandler: handler.onConfiguracionNavegadorCheckbox
-    });
-    
-    return configuracionNavegadorCheckbox;
     
 };
 
@@ -546,6 +529,45 @@ componentes.scaleComboBox = function(){
     
 };
 
+componentes.bottomBarZoomInButton = function(){
+    
+    var zoomInButton = new Ext.Button({
+        tooltip: 'Zoom In',
+        icon: 'img/list-add.png',
+        handler: function(){
+            app.map.zoomIn();
+        }
+    });
+    
+    return zoomInButton;
+    
+};
+
+componentes.bottomBarZoomOutButton = function(){
+    
+    var zoomOutButton = new Ext.Button({
+        tooltip: 'Zoom Out',
+        icon: 'img/list-remove.png',
+        handler: function(){
+            app.map.zoomOut();
+        }
+    });
+    
+    return zoomOutButton;
+    
+};
+
+componentes.zoomSlider = function(){
+    
+    var zoomSlider = new GeoExt.ZoomSlider({
+        width: 200,
+        map: app.map
+    });
+    
+    return zoomSlider;
+    
+};
+
 /**
  * Devuelve el botón de agregar capas.
  * @returns {Ext.Button}
@@ -606,7 +628,7 @@ componentes.expandirTodoButton = function(){
     
     var expandirTodoButton = new Ext.Button({
         tooltip: 'Expandir todo',
-        icon: 'img/list-add.png',
+        icon: 'img/folder-expandir.png',
         id: "treePanelTopbarExpandir",
         handler: handler.onExpandirTodoButton
     });
@@ -623,7 +645,7 @@ componentes.colapsarTodoButton = function(){
     
     var colapsarTodoButton = new Ext.Button({
         tooltip: 'Colapsar todo',
-        icon: 'img/list-remove.png',
+        icon: 'img/folder-colapsar.png',
         id: "treePanelTopbarColapsar", 
         handler: handler.onColapsarTodoButton
     });

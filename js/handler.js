@@ -210,26 +210,9 @@ handler.onConfiguracionLeyendaCheckbox = function(){
     var legenddiv = document.getElementById("legenddiv");
     if (this.checked){
         legenddiv.style.display = "block";
-        Ext.getCmp("legendPanelOnMap").setHeight(Ext.getCmp("mapPanel").getHeight() - 74);
     }else{
         legenddiv.style.display = "none";
-    }
-    acomodarScaleline();
-    acomodarNavegador();    
-    
-};
-
-/**
- * Handler correspondiente al evento asociado al checkbox de configuración "Navegador".
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onConfiguracionNavegadorCheckbox = function(){
-    
-    if (this.checked){
-        app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(134,17)); 
-    }else{
-        app.map.removeControl(app.map.getControlsByClass('OpenLayers.Control.PanZoomBar')[0]); 
-    }    
+    } 
     
 };
 
@@ -604,13 +587,13 @@ handler.onNodeContextMenu = function(nodo, event){
                 }
             },{
                 text: 'Expandir todo',
-                icon: "img/list-add.png",
+                icon: "img/folder-expandir.png",
                 handler: function(){
                     expandAll(nodo);
                 }
             },{
                 text: 'Colapsar todo',
-                icon: "img/list-remove.png",
+                icon: "img/folder-colapsar.png",
                 handler: function(){
                     collapseAll(nodo);
                 }
