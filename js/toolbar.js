@@ -44,8 +44,15 @@ toolbar.mapPanelTopBar = function(){
         componentes.blankSpace(),
         componentes.geocoderComboBox(),
         componentes.separador(),
-        componentes.div("position")        
-
+//        componentes.div("position"),
+//        componentes.div("escala"),
+        componentes.configuracionButton(),
+        componentes.ayudaButton(),
+        componentes.acercaDeButton()
+              
+//        componentes.div("position"),
+//        componentes.div("escala"),
+//        componentes.configuracionButton()
     ];
     
     return mapPanelToolbar;
@@ -61,14 +68,16 @@ toolbar.mapPanelBottomBar = function(){
     
     var mapPanelBottomBar = [
         componentes.scaleComboBox(),        
-        componentes.bottomBarZoomOutButton(),
-        componentes.zoomSlider(),   
-        componentes.bottomBarZoomInButton(),
+//        componentes.separador(),
+//        componentes.configuracionButton(),
+//        componentes.imprimirButton(),        
+//        componentes.bottomBarZoomOutButton(),
+//        componentes.zoomSlider(),   
+//        componentes.bottomBarZoomInButton(),        
         componentes.separador(),
-        componentes.configuracionButton(),
-        componentes.imprimirButton(),        
-        componentes.ayudaButton(),
-        componentes.acercaDeButton()        
+        componentes.div("position"),
+//        componentes.div("escala"),
+        
     ];
 
     return mapPanelBottomBar;
@@ -87,7 +96,9 @@ toolbar.treePanelTopBar = function(){
         componentes.ordenDeCapasButton(),
         componentes.agregarCarpetaButton(),  
         componentes.expandirTodoButton(),
-        componentes.colapsarTodoButton()
+        componentes.colapsarTodoButton(),
+        componentes.importarCapasButton(),
+        componentes.exportarCapasButton()
     ];
     
     return treePanelTopBar;
@@ -102,10 +113,6 @@ toolbar.treePanelTopBar = function(){
 toolbar.treePanelBottomBar = function(){
     
     var treePanelBottomBar = [ 
-        componentes.mapaBaseMenuButton(),
-        componentes.separador(),
-        componentes.importarCapasButton(),
-        componentes.exportarCapasButton()
     ];
     
     return treePanelBottomBar;
@@ -122,9 +129,11 @@ toolbar.featureGridPanelTopBar = function(){
     var featureGridPanelTopBar = [
         componentes.wfsReconocerButton(), 
         componentes.wfsSeleccionarButton(), 
-        componentes.wfsLimpiarButton(),
+        componentes.wfsLimpiarButton(),    
+        componentes.blankSpace(),
+        componentes.wfsExportarAExcelLink(),
         componentes.separador(),
-        componentes.wfsExportarAExcelLink()
+        componentes.wfsCerrarButton()
     ];
     
     return featureGridPanelTopBar;

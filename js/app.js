@@ -104,6 +104,18 @@ app.wmsServerStore = new Ext.data.ArrayStore({
 });
 
 /**
+ * Flag de fullscreen
+ * @type Boolean
+ */
+app.fullscreen = false;
+
+/**
+ * Flag del panel de atributos
+ * @type Boolean
+ */
+app.isAttributesPanelHidden = true;
+
+/**
  * Ubicación del proxy cgi.
  * @type String
  */
@@ -152,7 +164,7 @@ app.crearMapa = function(){
 app.agregarControles = function(){
     
     app.map.addControl(new OpenLayers.Control.NavigationHistory());
-    app.map.addControl(new OpenLayers.Control.Navigation());
+    app.map.addControl(new OpenLayers.Control.Navigation({mouseWheelOptions: {interval: 100}}));
     app.map.addControl(new OpenLayers.Control.WMSGetFeatureInfo({
         queryVisible: true,
         drillDown: true,
@@ -216,11 +228,28 @@ app.generarViewport = function(){
     new Ext.Viewport({
             layout: "border",  
             border:false,
-            items:[
-                panel.banner(),
-                panel.layerTreePanel(),                     
-                panel.mapPanel(),
-                panel.featureGridPanel()                         
+            id: "appViewport",
+            items:
+            [
+                new Ext.Panel({
+                    region:"center",
+                    layout:"border",
+                    id:"viewportPanel",
+                    border:false,
+                    items:[
+                        panel.banner(),
+                        panel.layerTreePanel(),                     
+                        new Ext.Panel({
+                            region:"center",
+                            layout:"border",
+                            border:false,
+                            items:[                  
+                                panel.mapPanel(),
+                                panel.featureGridPanel()                                                 
+                            ]
+                        })                                           
+                    ]
+                })
             ]
     });  
     
@@ -233,6 +262,127 @@ app.generarViewport = function(){
  */
 app.configuracionFinal = function(){
 
+    // Cargar las capas base al árbol de capas
+    var capasBase = new Ext.tree.TreeNode({
+        text: "Capas base",
+        expanded: false,
+        icon: "img/folder.png",
+        leaf: false,
+        listeners:{
+            contextmenu: function(nodo, event){}
+        }
+    });
+    app.rootnode.appendChild(capasBase);
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "IGN",
+            layer: "IGN",   
+            icon: "img/ign.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "OpenStreetMap",
+            layer: "OpenStreetMap",   
+            icon: "img/osm.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "Google Streets",
+            layer: "Google Streets",   
+            icon: "img/google.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "Google Terrain",
+            layer: "Google Terrain",   
+            icon: "img/google.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "Google Satellite",
+            layer: "Google Satellite",   
+            icon: "img/google.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "Google Hybrid",
+            layer: "Google Hybrid",   
+            icon: "img/google.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "Bing Road",
+            layer: "Bing Road",   
+            icon: "img/bing.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "Bing Aerial",
+            layer: "Bing Aerial",   
+            icon: "img/bing.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "Bing Hybrid",
+            layer: "Bing Hybrid",   
+            icon: "img/bing.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "MapQuest",
+            layer: "MapQuest",   
+            icon: "img/mapQuest.png",
+            leaf:true,
+            map: app.map
+        })
+    );
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "MapQuest Aerial",
+            layer: "MapQuest Aerial",   
+            icon: "img/mapQuest.png",
+            leaf:true,
+            map: app.map
+        })
+    );    
 
     // Importa las capas definidas en app.tree y el orden definido en app.index
     if(config.tree != null){
@@ -244,6 +394,7 @@ app.configuracionFinal = function(){
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('scalelinediv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('minimapcontainer'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('rosa'));
+    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('fullscreen'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('titulodiv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('subtitulodiv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('legenddiv'));                              
@@ -275,7 +426,7 @@ app.configuracionFinal = function(){
         iconCls: "legendIcon",
         id: "legendPanelOnMap",
         autoScroll: true,
-        width: 250,
+//        width: 250,
         collapsible: false,
         collapsed: false,
         border: false,
@@ -289,6 +440,43 @@ app.configuracionFinal = function(){
             }
         }
     });  
+    
+    //Agrega el botón de fullscreen
+    new Ext.Button({
+        icon: 'img/fullscreen.png',
+        cls: "fullscreenButton",
+        renderTo: document.getElementById("fullscreen"),
+        handler: function(){
+            if(app.fullscreen){
+                this.setIcon('img/fullscreen.png');
+                app.fullscreen = false;
+                Ext.getCmp("layerTreePanel").show();
+                if(!app.isAttributesPanelHidden){
+                    Ext.getCmp("featureGridPanel").show();
+                }
+                Ext.getCmp("banner").show();
+                Ext.getCmp("mapPanel").getTopToolbar().show();
+                Ext.getCmp("mapPanel").getBottomToolbar().show();
+                Ext.getCmp("viewportPanel").doLayout();                         
+            }else{                
+                this.setIcon('img/normalscreen.png');
+                app.fullscreen = true;
+                Ext.getCmp("layerTreePanel").hide();
+                Ext.getCmp("featureGridPanel").hide();
+                Ext.getCmp("banner").hide();
+                Ext.getCmp("mapPanel").getTopToolbar().hide();
+                Ext.getCmp("mapPanel").getBottomToolbar().hide();
+                Ext.getCmp("viewportPanel").doLayout();                
+            }
+            
+        }
+    });
+    
+//    document.getElementById("escala").innerHTML = "| Escala = 1 : " + parseInt(app.map.getScale());
+//    // Agrega un manejador al evento cambio de zoom del mapa de modo que reescriba el contenido del combobox de resolución
+//    app.map.events.register("zoomend", this, function() {
+//        document.getElementById("escala").innerHTML = "| Escala = 1 : " + parseInt(app.map.getScale());
+//    });  
      
 };
 

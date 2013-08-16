@@ -71,10 +71,10 @@ panel.mapPanel = function(){
  * @returns {Ext.tree.TreePanel} Panel del árbol de capas.
  */
 panel.layerTreePanel = function(){
-    
+        
     var layerTreePanel = new Ext.tree.TreePanel({
         region: 'west',
-        collapseMode: 'mini',
+//        collapseMode: 'mini',
         split: true,
         width: 255,
         maxWidth: 255,
@@ -88,7 +88,7 @@ panel.layerTreePanel = function(){
         rootVisible: false,
         enableDD: true,
         tbar: toolbar.treePanelTopBar(),
-        bbar: toolbar.treePanelBottomBar()
+//        bbar: toolbar.treePanelBottomBar()
     }); 
     
     return layerTreePanel;
@@ -104,8 +104,9 @@ panel.featureGridPanel = function(){
     var featureGridPanel = new Ext.grid.GridPanel({
         region: 'south',
 //        title: 'Atributos',
-        collapseMode: 'mini',
-        collapsed: true,
+//        collapseMode: 'mini',        
+//        collapsed: true,
+        hidden: true,
         split: true,
         height: 200,
         minHeight: 200,

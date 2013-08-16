@@ -200,3 +200,16 @@
    right:10px; 
    top:10px;
 }
+
+.fullscreen{
+   position:absolute; 
+   z-index:1006; 
+   right:0px; 
+   top:0px;
+   opacity: 0.0; 
+   filter: alpha(opacity=0);
+}
+
+.fullscreenButton td {
+    background-image: none;
+}

@@ -67,11 +67,15 @@ handler.onImportarCapasButton = function(){
 
                         var loadtree = JSON.parse(inputTextArea.getValue());
 
-                        removeLayers(Ext.getCmp("layerTreePanel").getRootNode());
-                        for(var i = 0; i < Ext.getCmp("layerTreePanel").getRootNode().childNodes.length; i++){
-                            Ext.getCmp("layerTreePanel").getRootNode().childNodes[i].remove();
+                        for(var j = 1; j < app.rootnode.childNodes.length; j++){
+                            removeLayers(app.rootnode.childNodes[j]);
+                        }    
+                        
+                        var length = app.rootnode.childNodes.length;
+                        for(var i = 1; i < length; i++){
+                            app.rootnode.childNodes[1].remove();
                         }
-                        agregarDescendencia(Ext.getCmp("layerTreePanel").getRootNode(),loadtree[0]);   
+                        restoreTree(app.rootnode,loadtree[0]);   
                         restoreIndex(loadtree[1]);
                         window.close();
 
@@ -97,6 +101,7 @@ handler.onExportarCapasButton = function(){
     var savetree = [];
     index = [];
     saveLayerTree(savetree,Ext.getCmp("layerTreePanel").getRootNode().childNodes); 
+    savetree.splice(0,1);
     index = saveLayerIndex();
     var jsonobject = JSON.stringify([savetree,index]);
 
@@ -150,11 +155,11 @@ handler.onExportarCapasButton = function(){
 handler.onConfiguracionTituloCheckbox = function(){
    
     var titulodiv = document.getElementById("titulodiv");
-    if (this.checked){
+    if (this.getValue() == true){
         titulodiv.style.display = "block"; 
     }else{
         titulodiv.style.display = "none";
-    }   
+    }
    
 };
 
@@ -176,10 +181,10 @@ handler.onConfiguracionCambiarTituloButton = function(){
  * Handler correspondiente al evento asociado al checkbox de configuración "Subtítulo".
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onConfiguracionSubtituloCheckbox = function(){
+handler.onConfiguracionSubtituloCheckbox = function(){    
     
     var subtitulodiv = document.getElementById("subtitulodiv");
-    if (this.checked){
+    if (this.getValue() == true){
         subtitulodiv.style.display = "block"; 
     }else{
         subtitulodiv.style.display = "none";
@@ -208,7 +213,7 @@ handler.onConfiguracionCambiarSubtituloButton = function(){
 handler.onConfiguracionLeyendaCheckbox = function(){
     
     var legenddiv = document.getElementById("legenddiv");
-    if (this.checked){
+    if (this.getValue() == true){
         legenddiv.style.display = "block";
     }else{
         legenddiv.style.display = "none";
@@ -223,7 +228,7 @@ handler.onConfiguracionLeyendaCheckbox = function(){
 handler.onConfiguracionEscalaCheckbox = function(){
     
     var scalelinediv = document.getElementById("scalelinediv");
-    if (this.checked){
+    if (this.getValue() == true){
         scalelinediv.style.display = "block";
     }else{
         scalelinediv.style.display = "none";
@@ -238,7 +243,7 @@ handler.onConfiguracionEscalaCheckbox = function(){
 handler.ConfiguracionMinimapaCheckbox = function(){
     
     var minimapcontainer = document.getElementById("minimapcontainer");
-    if (this.checked){
+    if (this.getValue() == true){
         minimapcontainer.style.display = "block";
     }else{
         minimapcontainer.style.display = "none";
@@ -253,7 +258,7 @@ handler.ConfiguracionMinimapaCheckbox = function(){
 handler.ConfiguracionNorteCheckbox = function(){
     
     var rosa = document.getElementById("rosa");
-    if (this.checked){
+    if (this.getValue() == true){
         rosa.style.display = "block";
     }else{
         rosa.style.display = "none";
@@ -267,7 +272,7 @@ handler.ConfiguracionNorteCheckbox = function(){
  */
 handler.ConfiguracionGrillaCheckbox = function(){
     
-    if (this.checked){
+    if (this.getValue() == true){
         app.map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false, labelSymbolizer: new OpenLayers.Symbolizer.Text({fontSize:9})}));
     }else{
         app.map.removeLayer(app.map.getLayersByName("Grilla")[0]);
@@ -282,55 +287,55 @@ handler.ConfiguracionGrillaCheckbox = function(){
  */
 handler.onImprimirButton = function(){
     
+    Ext.getCmp("layerTreePanel").hide();
+    Ext.getCmp("featureGridPanel").hide();
+    Ext.getCmp("mapPanel").getTopToolbar().hide();
+    Ext.getCmp("mapPanel").getBottomToolbar().hide();
+    Ext.getCmp("viewportPanel").doLayout();
 //    var divmap = document.getElementById("mapPanel").getElementsByClassName('x-panel-body')[0];
 //    var mapp = Ext.getCmp("mapPanel");
 //    var height = mapp.lastSize.height - 52;
 //    var width = mapp.lastSize.width;
-
+//
 //    var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height='+ height + ',width=' + width);       
 //    mywindow.document.write('<html><head><title>Imprimir mapa</title>');
 //    mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
 //    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/ext-all.css">');
 //    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/xtheme-gray.css">');                                                    
 //    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers/theme/default/style.css">');
-//    mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers-2.12/OpenLayers.js"></script>');
-//    mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
+//    mywindow.document.write('<script type="text/javascript" src="js/libs/HTML2Canvas.js"></script>');    
+//    mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers/OpenLayers.js" ></script>');
+////    mywindow.document.write('<script>function load(){html2canvas(document.body, {onrendered: function(canvas) {var dataUrl = canvas.toDataURL("image/png");console.log(dataUrl);}});}</scrim  imipt>');
+////    mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
 //    mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
 //    mywindow.document.write(divmap.innerHTML);
 //    mywindow.document.write('</body></html>');
 //    mywindow.document.close();
 //    mywindow.focus();    
 
-//    html2canvas(document.body, {
-//        proxy: "/cgi-bin/html2canvas.py",
+    
+
+//    html2canvas(divmap, {
+//        "proxy":"/cgi-bin/html2canvasproxy.php",
+//        "logging":true,
 //        onrendered: function(canvas) {
 //            var dataUrl = canvas.toDataURL("image/png");
-//            window.open(dataUrl, "toDataURL() image");
+//            console.log(dataUrl);
 //        }
 //    });
 
-    html2canvas( [ document.body ], {
-        "proxy":"/cgi-bin/html2canvas3.php",
-        "onrendered": function(canvas) {
-            var uridata = canvas.toDataURL("image/png");
-            alert(uridata);
-        }
-    });
-    
-//    html2canvas.Preload(document.body, {
-//        "complete" : function(images) {
-//            var queue = html2canvas.Parse(document.body, images);
-//            var canvas = html2canvas.Renderer(queue);
-////            var img = canvas.toDataURL('image/png;base64');
-////            img = img.replace('data:image/png;base64,', '');
-////            processImg(img);
-//        },
-//        "proxy": "/cgi-bin/html2canvas.py",
-//        "logging" : false
-//    });
-
-   
-           
+//    html2canvas( [ document.body ], {
+//        "proxy":"/cgi-bin/html2canvas2.php",
+//        "logging":true,
+//        "allowTaint":true,
+//        "taintTest":true,
+//        "useCORS":true,
+//        "onrendered": function(canvas) {
+//            var uridata = canvas.toDataURL("image/png");
+//            console.log(uridata);
+//        }
+//    });    
+              
 }; 
 
 /**
@@ -491,17 +496,6 @@ handler.onExpandirTodoButton = function(){
 handler.onColapsarTodoButton = function(){
 
    collapseAll(Ext.getCmp("layerTreePanel").getRootNode());
-
-};
-
-/**
- * Handler correspondiente al evento asociado al cambio de capa base.
- * @param {type} capaBase nombre de la capa base
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onCambiarCapaBase = function(capaBase){
-
-   app.map.setBaseLayer(app.map.getLayersByName(capaBase)[0]);
 
 };
 
@@ -841,8 +835,10 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
  */
 handler.onAtributosButton = function(leaf){
     
-    if(!Ext.getCmp("featureGridPanel").isVisible()){
-        Ext.getCmp("featureGridPanel").expand();
+    if(app.isAttributesPanelHidden){
+        Ext.getCmp("featureGridPanel").show();
+        Ext.getCmp("viewportPanel").doLayout(); 
+        app.isAttributesPanelHidden = false;
     }
     var mask = new Ext.LoadMask(Ext.getCmp("featureGridPanel").el, {msg:"Conectando..."});
     mask.show();
@@ -990,7 +986,8 @@ handler.onWmsServersInformationButton = function(wmsServersGridPanel){
                 title: wmsServersGridPanel.getSelectionModel().getSelected().data.nombre,
                 iconCls: 'configuracionIcon',
                 layout: "anchor",
-                resizable: false,   
+                resizable: false,  
+                shadow: false,
                 items: [
                     new Ext.Panel({
                         border: false,
@@ -1204,10 +1201,13 @@ handler.onGetFeatureInfo = function(e){
     var info = [];
     Ext.each(e.features, function(feature) {    
         var p;                             
-        p = new Ext.grid.PropertyGrid({title: feature.gml.featureType});    
+        p = new Ext.grid.PropertyGrid({
+            title: feature.gml.featureType
+        });    
         delete p.getStore().sortInfo; // Remove default sorting
         p.getColumnModel().getColumnById('name').sortable = false; // set sorting of first column to false
         p.setSource(feature.attributes); // Now load data
+        var source = feature.attributes;
         info.push(p); 
     });
     new Ext.Window({

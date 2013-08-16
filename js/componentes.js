@@ -64,6 +64,7 @@ componentes.navegacionButton = function(){
     var navegacionButon = new GeoExt.Action({
         control: new OpenLayers.Control.Navigation(),
         map: app.map,
+        id: "buttonNav",
         icon: "img/move2.png",
         toggleGroup: "nav",
         tooltip: "Navegación",
@@ -259,7 +260,7 @@ componentes.geocoderComboBox = function(){
         map: app.map,                
         bounds: app.max_bounds,
         border: false,
-        width: 246,
+        width: 200,
         heigh:100,
         boxMaxHeight: 100,
         boxMinHeight: 100
@@ -276,28 +277,59 @@ componentes.geocoderComboBox = function(){
 componentes.configuracionButton = function(){
     
     var configuracionButton = new Ext.Button({
-        icon: 'img/gear.png',
         tooltip: 'Configuración',
-        menu: new Ext.menu.Menu({
-            id: 'mainMenu',
-            style: {
-                overflow: 'visible'     // For the Combo popup
-            },
-            items: [
-                componentes.configuracionTituloCheckbox(), 
-                componentes.configuracionCambiarTituloButton(),
-                componentes.configuracionSubtituloCheckbox(), 
-                componentes.configuracionCambiarSubtituloButton(),
-                componentes.configuracionLeyendaCheckbox(),                                                     
-                componentes.configuracionEscalaCheckbox(),
-                componentes.configuracionMinimapaCheckbox(),
-                componentes.configuracionNorteCheckbox(),
-                componentes.configuracionGrillaCheckbox()                                                         
-            ]
-        })
-    });
+        icon: 'img/gear.png',
+        handler: function(){
+            var window = new Ext.Window({
+                title: "Configuración",
+                iconCls: 'configuracionIcon',
+                layout: "fit",
+                shadow: false,
+                width: 180,
+                height:220,
+                resizable: false,
+                items: [
+                    new Ext.Panel({
+                        border: false,
+                        width: "100%",
+                        heigth: "100%",
+                        items: new Ext.FormPanel({
+                             labelWidth: 0, // label settings here cascade unless overridden
+                             frame:true,
+                             border: false,
+                             items: [
+                                componentes.configuracionTituloField(),
+                                componentes.configuracionSubtituloField(),
+                                componentes.configuracionLeyendaCheckbox(),
+                                componentes.configuracionEscalaCheckbox(),
+                                componentes.configuracionMinimapaCheckbox(),
+                                componentes.configuracionNorteCheckbox(),
+                                componentes.configuracionGrillaCheckbox(),
+                             ]
+                         })
+                    })
+                ]
+            });
+            window.show();             
+        }
+    });                                   
     
     return configuracionButton;
+    
+};
+
+componentes.configuracionTituloField = function(){
+    
+    var configuracionTituloField = new Ext.form.CompositeField({
+        border: false,
+        fieldLabel: 'Título',
+        items: [
+            componentes.configuracionTituloCheckbox(),
+            componentes.configuracionCambiarTituloButton()                                      
+        ]
+    });
+    
+    return configuracionTituloField;
     
 };
 
@@ -305,12 +337,11 @@ componentes.configuracionButton = function(){
  * Devuelve el checkbox de título.
  * @returns {Ext.menu.CheckItem}
  */
-componentes.configuracionTituloCheckbox = function(){
+componentes.configuracionTituloCheckbox = function(){    
     
-    var configuracionTituloCheckbox = new Ext.menu.CheckItem({
-        text: 'Título',
+    var configuracionTituloCheckbox = new Ext.form.Checkbox({
         checked: false,
-        checkHandler: handler.onConfiguracionTituloCheckbox
+        listeners:{check: handler.onConfiguracionTituloCheckbox}
     });
     
     return configuracionTituloCheckbox;
@@ -324,12 +355,26 @@ componentes.configuracionTituloCheckbox = function(){
 componentes.configuracionCambiarTituloButton = function(){
     
     var configuracionCambiarTituloButton = new Ext.Button({
-        text: "Cambiar título",
-        width: 105,
+        icon: 'img/pencil.png',
         handler: handler.onConfiguracionCambiarTituloButton
      });
      
      return configuracionCambiarTituloButton;
+    
+};
+
+componentes.configuracionSubtituloField = function(){
+    
+    var configuracionSubtituloField = new Ext.form.CompositeField({
+        border: false,
+        fieldLabel: 'Título',
+        items: [
+            componentes.configuracionSubtituloCheckbox(),
+            componentes.configuracionCambiarSubtituloButton()                                     
+        ]
+    });
+    
+    return configuracionSubtituloField;
     
 };
 
@@ -339,11 +384,10 @@ componentes.configuracionCambiarTituloButton = function(){
  */
 componentes.configuracionSubtituloCheckbox = function(){
     
-    var configuracionSubtituloCheckbox = new Ext.menu.CheckItem({
-        text: 'Subtítulo',
+    var configuracionSubtituloCheckbox = new Ext.form.Checkbox({
         checked: false,
-        checkHandler: handler.onConfiguracionSubtituloCheckbox
-    });
+        listeners:{check: handler.onConfiguracionSubtituloCheckbox}
+    });        
     
     return configuracionSubtituloCheckbox;
         
@@ -356,8 +400,7 @@ componentes.configuracionSubtituloCheckbox = function(){
 componentes.configuracionCambiarSubtituloButton = function(){
     
     var configuracionCambiarSubtituloButton = new Ext.Button({
-        text: "Cambiar subtítulo",
-        width: 105,
+        icon: 'img/pencil.png',
         handler: handler.onConfiguracionCambiarSubtituloButton
      });
     
@@ -369,12 +412,12 @@ componentes.configuracionCambiarSubtituloButton = function(){
  * Devuelve el checkbox de leyenda.
  * @returns {Ext.menu.CheckItem}
  */
-componentes.configuracionLeyendaCheckbox = function(){
+componentes.configuracionLeyendaCheckbox = function(){    
     
-    var configuracionLeyendaCheckbox = new Ext.menu.CheckItem({
-        text: 'Leyenda',
+    var configuracionLeyendaCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Leyenda',
         checked: true,
-        checkHandler: handler.onConfiguracionLeyendaCheckbox
+        listeners:{check: handler.onConfiguracionLeyendaCheckbox}
     });
     
     return configuracionLeyendaCheckbox;
@@ -386,11 +429,11 @@ componentes.configuracionLeyendaCheckbox = function(){
  * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionEscalaCheckbox = function(){
-    
-    var configuracionEscalaCheckbox = new Ext.menu.CheckItem({
-        text: 'Escala',
+
+    var configuracionEscalaCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Escala',
         checked: true,
-        checkHandler: handler.onConfiguracionEscalaCheckbox
+        listeners:{check: handler.onConfiguracionEscalaCheckbox}
     });
     
     return configuracionEscalaCheckbox;
@@ -401,12 +444,12 @@ componentes.configuracionEscalaCheckbox = function(){
  * Devuelve el checkbox de minimapa.
  * @returns {Ext.menu.CheckItem}
  */
-componentes.configuracionMinimapaCheckbox = function(){
+componentes.configuracionMinimapaCheckbox = function(){        
     
-    var configuracionMinimapaCheckbox = new Ext.menu.CheckItem({
-        text: 'Localizador',
+    var configuracionMinimapaCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Localizador',
         checked: true,
-        checkHandler: handler.ConfiguracionMinimapaCheckbox
+        listeners:{check: handler.ConfiguracionMinimapaCheckbox}
     });
     
     return configuracionMinimapaCheckbox;
@@ -418,11 +461,11 @@ componentes.configuracionMinimapaCheckbox = function(){
  * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionNorteCheckbox = function(){
-    
-    var configuracionNorteCheckbox = new Ext.menu.CheckItem({
-        text: 'Norte',
+
+    var configuracionNorteCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Norte',
         checked: true,
-        checkHandler: handler.ConfiguracionNorteCheckbox
+        listeners:{check: handler.ConfiguracionNorteCheckbox}
     });
     
     return configuracionNorteCheckbox;
@@ -434,11 +477,11 @@ componentes.configuracionNorteCheckbox = function(){
  * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionGrillaCheckbox = function(){
-    
-    var configuracionGrillaCheckbox = new Ext.menu.CheckItem({
-        text: 'Grilla',
+
+    var configuracionGrillaCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Grilla',
         checked: false,
-        checkHandler: handler.ConfiguracionGrillaCheckbox
+        listeners:{check: handler.ConfiguracionGrillaCheckbox}
     });
     
     return configuracionGrillaCheckbox;
@@ -655,80 +698,6 @@ componentes.colapsarTodoButton = function(){
 };
 
 /**
- * Devuelve el botón de mapas base.
- * @returns {Ext.Button}
- */
-componentes.mapaBaseMenuButton = function(){
-    
-    var mapaBaseMenuButton = new Ext.Button({
-        icon: "img/map.png",
-        text: "Mapa Base",
-        menu: new Ext.menu.Menu({
-            items: [
-                new Ext.menu.Item({
-                    text: "IGN",
-                    iconCls: "ignIcon",
-                    handler: function(){handler.onCambiarCapaBase("IGN");}
-                }),
-                new Ext.menu.Item({
-                    text: "Google Streets",
-                    iconCls: "googleIcon",
-                    handler: function(){handler.onCambiarCapaBase("Google Streets");}
-                }),
-                new Ext.menu.Item({
-                    text: "Google Terrain",
-                    iconCls: "googleIcon",
-                    handler: function(){handler.onCambiarCapaBase("Google Terrain");}
-                }),
-                new Ext.menu.Item({
-                    text: "Google Satellite",
-                    iconCls: "googleIcon",
-                    handler: function(){handler.onCambiarCapaBase("Google Satellite");}
-                }),
-                new Ext.menu.Item({
-                    text: "Google Hybrid",
-                    iconCls: "googleIcon",
-                    handler: function(){handler.onCambiarCapaBase("Google Hybrid");}
-                }),
-                new Ext.menu.Item({
-                    text: "OpenStreetMap",
-                    iconCls: "osmIcon",
-                    handler: function(){handler.onCambiarCapaBase("OpenStreetMap");}
-                }),                                
-                new Ext.menu.Item({
-                    text: "Bing Road",
-                    iconCls: "bingIcon",
-                    handler: function(){handler.onCambiarCapaBase("Bing Road");}
-                }),
-                new Ext.menu.Item({
-                    text: "Bing Aerial",
-                    iconCls: "bingIcon",
-                    handler: function(){handler.onCambiarCapaBase("Bing Aerial");}
-                }),
-                new Ext.menu.Item({
-                    text: "Bing Hybrid",
-                    iconCls: "bingIcon",
-                    handler: function(){handler.onCambiarCapaBase("Bing Hybrid");}
-                }),
-                new Ext.menu.Item({
-                    text: "MapQuest",
-                    iconCls: "mapQuestIcon",
-                    handler: function(){handler.onCambiarCapaBase("MapQuest");}
-                }),
-                new Ext.menu.Item({
-                    text: "MapQuest Aerial",
-                    iconCls: "mapQuestIcon",
-                    handler: function(){handler.onCambiarCapaBase("MapQuest Aerial");}
-                })                       
-            ]
-        })
-    });
-    
-    return mapaBaseMenuButton;
-    
-};
-
-/**
  * Devuelve el botón de importar capas.
  * @returns {Ext.Button}
  */
@@ -835,6 +804,24 @@ componentes.wfsExportarAExcelLink = function(){
     });
     
     return wfsExportarAExcelLink;
+    
+};
+
+componentes.wfsCerrarButton = function(){
+  
+    var wfsCerrarButton = new Ext.Button({
+        tooltip: 'Cerrar',
+        icon: 'img/close.png',
+        handler: function(){
+            app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
+            Ext.getCmp("featureGridPanel").hide();
+            Ext.getCmp("viewportPanel").doLayout();   
+            app.isAttributesPanelHidden = true;
+            Ext.getCmp("buttonNav").toggle(true);
+        }
+    });
+            
+    return wfsCerrarButton;
     
 };
 

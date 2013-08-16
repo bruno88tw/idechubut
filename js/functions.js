@@ -152,7 +152,6 @@ function saveLayerTree(father, children){
             var grandchildren = [];
             saveLayerTree(grandchildren,children[i].childNodes);
             father.push({"type":"folder","name":children[i].attributes.text,"children":grandchildren});
-            
         }
     }    
     
@@ -247,13 +246,22 @@ function collapseAll(node){
  */
 function removeLayers(node){
     
-    node.eachChild(function(childnode){
-        if (childnode.isLeaf()){
-            app.map.removeLayer(app.map.getLayersByName(childnode.attributes.layer)[0]);        
-        }else{
-            removeLayers(childnode);
-        } 
-    });
+    if (node.isLeaf()){
+        app.map.removeLayer(app.map.getLayersByName(node.attributes.layer)[0]);        
+    }else{
+        for(var i = 0; i < node.childNodes.length; i++){
+            removeLayers(node.childNodes[i]);
+        }
+        
+    } 
+    
+//    node.eachChild(function(childnode){
+//        if (childnode.isLeaf()){
+//            app.map.removeLayer(app.map.getLayersByName(childnode.attributes.layer)[0]);        
+//        }else{
+//            removeLayers(childnode);
+//        } 
+//    });
     
 };
 
