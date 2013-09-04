@@ -48,13 +48,17 @@ config.tree =
             ]},
             {"type":"folder", "name":"Mapas temáticos", "children":[
                 {"type":"folder","name":"Departamentos","children":[
-                    {"type":"leaf", "title":"Población total 2010", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Población total 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
                     {"type":"leaf", "title":"Índice de debilidad social", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:debilidad_social", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
                     {"type":"leaf", "title":"Índice de delincuencia", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:delincuencia", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
                     {"type":"leaf", "title":"Porcentaje de población extranjera", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_extranjera", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}                            
-                ]},
-                {"type":"folder","name":"Fracciones","children":[]},
-                {"type":"folder","name":"Radios","children":[]},                    
+                ]},   
+                {"type":"folder","name":"Fracciones","children":[
+                    {"type":"leaf", "title":"Población total 2010 por fraccion", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_fracciones_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                ]},   
+                {"type":"folder","name":"Radios","children":[
+                    {"type":"leaf", "title":"Población total 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                ]},   
             ]}            
     ]},
     {"type":"folder","name":"Otros organismos","children":[
@@ -74,7 +78,7 @@ config.index = [
     "Google Satellite","Google Hybrid","Bing Road",
     "Bing Aerial","Bing Hybrid","MapQuest", "MapQuest Aerial",
     
-    "Población total 2010","Índice de debilidad social",
+    "Población total 2010 por departamento","Población total 2010 por fraccion","Población total 2010 por radio","Índice de debilidad social",
     "Índice de delincuencia","Porcentaje de población extranjera","Censo Nac. Agropecuario 2002",
     "Censo Nac. Agropecuario 2008","Radios","Fracciones",
     "Departamentos","Comarcas","Manzanas","Calles","Localidades","Ejidos","Barrios",

@@ -279,7 +279,9 @@ componentes.configuracionButton = function(){
     var configuracionButton = new Ext.Button({
         tooltip: 'Configuración',
         icon: 'img/gear.png',
+        id:'configuracionButton',
         handler: function(){
+            Ext.getCmp("configuracionButton").disable();
             var window = new Ext.Window({
                 title: "Configuración",
                 iconCls: 'configuracionIcon',
@@ -310,7 +312,8 @@ componentes.configuracionButton = function(){
                     })
                 ]
             });
-            window.show();             
+            window.show();   
+            window.on('close',function(){Ext.getCmp("configuracionButton").enable();});
         }
     });                                   
     
@@ -340,7 +343,7 @@ componentes.configuracionTituloField = function(){
 componentes.configuracionTituloCheckbox = function(){    
     
     var configuracionTituloCheckbox = new Ext.form.Checkbox({
-        checked: false,
+        checked: app.configuracion.titulo,
         listeners:{check: handler.onConfiguracionTituloCheckbox}
     });
     
@@ -367,7 +370,7 @@ componentes.configuracionSubtituloField = function(){
     
     var configuracionSubtituloField = new Ext.form.CompositeField({
         border: false,
-        fieldLabel: 'Título',
+        fieldLabel: 'Subtítulo',
         items: [
             componentes.configuracionSubtituloCheckbox(),
             componentes.configuracionCambiarSubtituloButton()                                     
@@ -385,7 +388,7 @@ componentes.configuracionSubtituloField = function(){
 componentes.configuracionSubtituloCheckbox = function(){
     
     var configuracionSubtituloCheckbox = new Ext.form.Checkbox({
-        checked: false,
+        checked: app.configuracion.subtitulo,
         listeners:{check: handler.onConfiguracionSubtituloCheckbox}
     });        
     
@@ -416,7 +419,7 @@ componentes.configuracionLeyendaCheckbox = function(){
     
     var configuracionLeyendaCheckbox = new Ext.form.Checkbox({
         fieldLabel: 'Leyenda',
-        checked: true,
+        checked: app.configuracion.leyenda,
         listeners:{check: handler.onConfiguracionLeyendaCheckbox}
     });
     
@@ -432,7 +435,7 @@ componentes.configuracionEscalaCheckbox = function(){
 
     var configuracionEscalaCheckbox = new Ext.form.Checkbox({
         fieldLabel: 'Escala',
-        checked: true,
+        checked: app.configuracion.escala,
         listeners:{check: handler.onConfiguracionEscalaCheckbox}
     });
     
@@ -448,7 +451,7 @@ componentes.configuracionMinimapaCheckbox = function(){
     
     var configuracionMinimapaCheckbox = new Ext.form.Checkbox({
         fieldLabel: 'Localizador',
-        checked: true,
+        checked: app.configuracion.localizador,
         listeners:{check: handler.ConfiguracionMinimapaCheckbox}
     });
     
@@ -464,7 +467,7 @@ componentes.configuracionNorteCheckbox = function(){
 
     var configuracionNorteCheckbox = new Ext.form.Checkbox({
         fieldLabel: 'Norte',
-        checked: true,
+        checked: app.configuracion.norte,
         listeners:{check: handler.ConfiguracionNorteCheckbox}
     });
     
@@ -480,7 +483,7 @@ componentes.configuracionGrillaCheckbox = function(){
 
     var configuracionGrillaCheckbox = new Ext.form.Checkbox({
         fieldLabel: 'Grilla',
-        checked: false,
+        checked: app.configuracion.grilla,
         listeners:{check: handler.ConfiguracionGrillaCheckbox}
     });
     

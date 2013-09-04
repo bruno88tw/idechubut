@@ -156,8 +156,10 @@ handler.onConfiguracionTituloCheckbox = function(){
    
     var titulodiv = document.getElementById("titulodiv");
     if (this.getValue() == true){
+        app.configuracion.titulo = true;
         titulodiv.style.display = "block"; 
     }else{
+        app.configuracion.titulo = false;
         titulodiv.style.display = "none";
     }
    
@@ -185,8 +187,10 @@ handler.onConfiguracionSubtituloCheckbox = function(){
     
     var subtitulodiv = document.getElementById("subtitulodiv");
     if (this.getValue() == true){
+        app.configuracion.subtitulo = true;
         subtitulodiv.style.display = "block"; 
     }else{
+        app.configuracion.subtitulo = false;
         subtitulodiv.style.display = "none";
     }
             
@@ -214,8 +218,10 @@ handler.onConfiguracionLeyendaCheckbox = function(){
     
     var legenddiv = document.getElementById("legenddiv");
     if (this.getValue() == true){
+        app.configuracion.leyenda = true;
         legenddiv.style.display = "block";
     }else{
+        app.configuracion.leyenda = false;
         legenddiv.style.display = "none";
     } 
     
@@ -229,8 +235,10 @@ handler.onConfiguracionEscalaCheckbox = function(){
     
     var scalelinediv = document.getElementById("scalelinediv");
     if (this.getValue() == true){
+        app.configuracion.escala = true;
         scalelinediv.style.display = "block";
     }else{
+        app.configuracion.escala = false;
         scalelinediv.style.display = "none";
     }    
     
@@ -244,8 +252,10 @@ handler.ConfiguracionMinimapaCheckbox = function(){
     
     var minimapcontainer = document.getElementById("minimapcontainer");
     if (this.getValue() == true){
+        app.configuracion.localizador = true;
         minimapcontainer.style.display = "block";
     }else{
+        app.configuracion.localizador = false;
         minimapcontainer.style.display = "none";
     }    
     
@@ -259,8 +269,10 @@ handler.ConfiguracionNorteCheckbox = function(){
     
     var rosa = document.getElementById("rosa");
     if (this.getValue() == true){
+        app.configuracion.norte = true;
         rosa.style.display = "block";
     }else{
+        app.configuracion.norte = false;
         rosa.style.display = "none";
     }
     
@@ -273,8 +285,10 @@ handler.ConfiguracionNorteCheckbox = function(){
 handler.ConfiguracionGrillaCheckbox = function(){
     
     if (this.getValue() == true){
+        app.configuracion.grilla = true;
         app.map.addControl(new OpenLayers.Control.Graticule({visible:true, layerName: 'Grilla', displayInLayerSwitcher:false, labelSymbolizer: new OpenLayers.Symbolizer.Text({fontSize:9})}));
     }else{
+        app.configuracion.grilla = false;
         app.map.removeLayer(app.map.getLayersByName("Grilla")[0]);
         app.map.removeControl(app.map.getControlsByClass('OpenLayers.Control.Graticule')[0]);
     }    
@@ -342,23 +356,84 @@ handler.onImprimirButton = function(){
  * Handler correspondiente al evento asociado al botón "Ayuda".
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onAyudaButton = function(){
+handler.onAyudaButton = function(){   
     
     var window = new Ext.Window({
         title: "Ayuda",
         iconCls: 'ayudaIcon',
-        layout: "fit",
+        layout: "border",
         shadow: false,
-        width: 300,
-        height:300,
+        width: 600,
+        height:400,
         resizable: false,
         items: [
             new Ext.Panel({
                 bodyStyle: 'padding:5px',
                 border: false,
+                region: "center",
+                autoScroll: true,
                 width: "100%",
                 heigth: "100%",
-                html: "En desarrollo..."
+                html: '<div style="font-size:small">\n\
+                <div align="center" style="font-size:xx-large"><b>Ayuda</b></div></br>\n\
+                <b>Controles del mapa</b></br>\n\
+                </br>\n\
+                <img src="img/move2.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta de paneo permite desplazarse por el mapa. Al hacer doble click sobre un punto del mapa se realiza un acercamiento a dicha zona. Del mismo modo puede utilizarse el scroll del mouse para acercarse o alejarse a una zona del mapa. </br></br>\n\
+                <img src="img/magnifier-zoom-fit.png" alt="ayuda">&nbsp&nbsp&nbspAl hacer clikc sobre el botón de zoom a la máxima extensión automáticamente se cambiará el nivel de zoom al menor grado definido por la aplicación.</br></br>\n\
+                <img src="img/magnifier-zoom-in.png" alt="ayuda">&nbsp&nbsp&nbspZoom in nos permite realizar acercamientos a un punto o zona en particular. Funciona haciendo click sobre un punto en el mapa o dibujando un cuadro sobre una zona determinada.</br></br>\n\
+                <img src="img/magnifier-zoom-out.png" alt="ayuda">&nbsp&nbsp&nbspZoom out nos permite realizar alejamientos en el mapa. </br></br>\n\
+                <img src="img/history-zoom-left.png" alt="ayuda">&nbsp&nbsp&nbspZoom anterior nos devuelve al nivel de zoom anterior en el historial de zoom realizados.</br></br>\n\
+                <img src="img/history-zoom-right.png" alt="ayuda">&nbsp&nbsp&nbspZoom posterior nos devuelve al nivel de zoom siguiente en el historial de zoom realizados.</br></br>\n\
+                <hr></br><b>Herramientas de medición</b></br>\n\
+                </br>\n\
+                <img src="img/rulerline.png" alt="ayuda">&nbsp&nbsp&nbspEl medidor de distancias nos permite calcular la distancia comprendida entre dos o mas puntos en el mapa.</br></br>\n\
+                <img src="img/rulerarea.png" alt="ayuda">&nbsp&nbsp&nbspEl medidor de superficie nos permite calcular la superficie comprendida dentro de un polígono en el mapa.</br></br>\n\
+                <hr></br><b>Obtener información</b></br>\n\
+                </br>\n\
+                <img src="img/cursor-info.png" alt="ayuda">&nbsp&nbsp&nbspEsta herramienta nos permite obtener información asociada a capas activas en el mapa. Para ello, el primer paso consiste en activar una capa, luego seleccionar la herramienta "Obtener información" y luego hacer click en algún elemento de la capa. Aparecerá una ventana conteniendo la información correspondiente.</br></br>\n\
+                <hr></br><b>Buscador de topónimos</b></br>\n\
+                </br>\n\
+                <img src="img/buscador.png" alt="ayuda">&nbsp&nbsp&nbspEl buscador de topónimos permite realizar una consulta por un nombre propio de una ubicación geográfica y devuelve un listado de coincidencias de las cuales al seleccionar alguna ajusta en nivel de zoom y posiciona el visor del mapa en la coordenada asociada a ese topónimo en particular.</br></br>\n\
+                <hr></br><b>Configuración</b></br>\n\
+                </br>\n\
+                <img src="img/gear.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta de configuración nos abre una nueva ventana que nos permitirá realizar una configuración sobre los elementos contenidos dentro del mapa. Entre las opciones encontramos:</br></br>\n\
+                * Activar / desactivar / cambiar título del mapa</br>\n\
+                * Activar / desactivar / cambiar subtítulo del mapa</br>\n\
+                * Activar / desactivar leyenda</br>\n\
+                * Activar / desactivar escala</br>\n\
+                * Activar / desactivar localizador</br>\n\
+                * Activar / desactivar norte</br>\n\
+                * Activar / desactivar grilla</br></br>\n\
+                <hr></br><b>Ayuda</b></br>\n\
+                </br>\n\
+                <img src="img/question.png" alt="ayuda">&nbsp&nbsp&nbspEl botón de ayuda nos muestra una breve descripción de cada uno de los elementos con los que podemos interactuar en la aplicación.</br></br>\n\
+                <hr></br><b>Acerca de</b></br>\n\
+                </br>\n\
+                <img src="img/star.png" alt="ayuda">&nbsp&nbsp&nbspMuestra información correspondiente al desarrollo de la aplicación.</br></br>\n\
+                <hr></br><b>Herramientas del panel de capas</b></br>\n\
+                </br>\n\
+                <img src="img/map-plus.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta "Agregar capas" nos permite conectarnos con servidores de mapas y obtener de ellos nuevas capas de información.</br></br>\n\
+                <img src="img/maps-stack.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta "Orden de capas" cambia la vista por directorios del árbol de capas por una vista según el orden de superposición de las capas. Desde aquí es posible arrastrar una capa más arriba o más abajo que otra para cambiar el orden de superposición de la misma.</br></br>\n\
+                <img src="img/folder-add.png" alt="ayuda">&nbsp&nbsp&nbspNos permite agregar una nueva carpeta al árbol de capas.</br></br>\n\
+                <img src="img/folder-expandir.png" alt="ayuda">&nbsp&nbsp&nbspExpande todas las carpetas y las subcarpetas correspondientes al árbol de capas.</br></br>\n\
+                <img src="img/folder-colapsar.png" alt="ayuda">&nbsp&nbsp&nbspColapsa todas las carpetas y las subcarpetas correspondientes al árbol de capas.</br></br>\n\
+                <img src="img/folder-open.png" alt="ayuda">&nbsp&nbsp&nbsp"Importar capas" nos permite restaurar un árbol de capas.</br></br>\n\
+                <img src="img/folder-save.png" alt="ayuda">&nbsp&nbsp&nbsp"Guardar capas" nos permite exportar el árbol de capas actual.</br></br>\n\
+                <hr></br><b>Menús desplegables del árbol de capas</b></br>\n\
+                </br>\n\
+                Estas herramientas pueden encontrarse haciendo click derecho sobre una carpeta o una capa en el árbol de capas</br></br>\n\
+                <img src="img/folder-edit.png" alt="ayuda">&nbsp&nbsp&nbspNos permite cambiar el nombre de una carpeta determinada.</br></br>\n\
+                <img src="img/zoom-to-map.png" alt="ayuda">&nbsp&nbsp&nbspCambia el zoom del visor de mapas para adaptarse a una capa determinada.</br></br>\n\
+                <img src="img/map-minus.png" alt="ayuda">&nbsp&nbsp&nbspElimina una capa del árbol de capas.</br></br>\n\
+                <img src="img/map-properties.png" alt="ayuda">&nbsp&nbsp&nbspMuestra las propiedades de la capa.</br></br>\n\
+                <img src="img/information-italic.png" alt="ayuda">&nbsp&nbsp&nbspConecta con la información asociada a la capa y despliega el panel de atributos.</br></br>\n\
+                <hr></br><b>Herramientas del panel de atributos</b></br>\n\
+                </br>\n\
+                <img src="img/cursor-question.png" alt="ayuda">&nbsp&nbsp&nbspPermite reconocer elementos de una capa y obtener información de ellos. Funciona haciendo click sobre puntos en el mapa o dibujando un recuadro sobre el mismo. Las teclas shift y control permiten añadir nuevos elementos al conjunto de elementos reconocidos.</br></br>\n\
+                <img src="img/cursor.png" alt="ayuda">&nbsp&nbsp&nbspUna vez hecho el reconocimiento de elementos de una capa, es posible mediante esta herramienta seleccionarlos haciendo click sobre ellos. Los elementos seleccionados serán iluminados de color azul en el mapa y las filas correspondientes a estos elementos serán también seleccionadas en el panel de atributos.</br></br>\n\
+                <img src="img/broom.png" alt="ayuda">&nbsp&nbsp&nbspLimpia los elementos reconocidos en el mapa.</br></br>\n\
+                <img src="img/close.png" alt="ayuda">&nbsp&nbsp&nbspDesconecta el reconocimiento de elementos de una capa y cierra el panel de atributos.</br></br>\n\
+                </div>'
             })
         ]
     });
@@ -377,8 +452,8 @@ handler.onAcercaDeButton = function(){
         iconCls: 'acercaDeIcon',
         layout: "fit",
         shadow: false,
-        width: 300,
-        height:300,
+        width: 600,
+        height:400,
         resizable: false,
         items: [
             new Ext.Panel({
@@ -386,7 +461,16 @@ handler.onAcercaDeButton = function(){
                 border: false,
                 width: "100%",
                 heigth: "100%",
-                html: "En desarrollo..."
+                html: '<div align="center" style="font-size:small">\n\
+                <div style="font-size:xx-large"><b>Visor de mapas</b></div></br>\n\
+                Esta aplicación fue desarrollada por el Departamento de Sistemas Informáticos en conjunto con el Departamento de Cartografía pertenecientes a la Dirección General de Estadística y Censos del Gobierno de la Provincia del Chubut.</br>\n\
+                </br>\n\
+                Para su desarrollo se utilizó OpenLayers, Ext JS y GeoExt.</br>\n\
+                </br>\n\
+                <div align="center"><img src="img/OpenLayers.png" alt="ayuda"></div></br></br>\n\
+                <div align="center"><img src="img/ExtJS.png" alt="ayuda"></div></br></br>\n\
+                <div align="center"><img src="img/GeoExt.png" alt="ayuda"></div></br></br>\n\
+                </div>'
             })
         ]
     });

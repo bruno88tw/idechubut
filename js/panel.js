@@ -34,7 +34,7 @@ panel.banner = function(){
         region: 'north',
         id:"banner",
         height: 30,
-        bodyStyle:'background-color:black',
+        bodyStyle:'background-color:#000000',
         border:false,
         html: '<img src="img/banner-dgeyc.jpg" alt="banner" style="height: 100%">'
     };

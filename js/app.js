@@ -110,6 +110,20 @@ app.wmsServerStore = new Ext.data.ArrayStore({
 app.fullscreen = false;
 
 /**
+ * Configuración del mapPanel
+ * @type type
+ */
+app.configuracion = {
+    "titulo":false,
+    "subtitulo":false,
+    "leyenda":true,
+    "escala":true,
+    "localizador":true,
+    "norte":true,
+    "grilla":false
+};
+
+/**
  * Flag del panel de atributos
  * @type Boolean
  */
@@ -271,8 +285,7 @@ app.configuracionFinal = function(){
         listeners:{
             contextmenu: function(nodo, event){}
         }
-    });
-    app.rootnode.appendChild(capasBase);
+    });        
     capasBase.appendChild(
         new GeoExt.tree.LayerNode({
             checkedGroup:"capasBase",
@@ -383,6 +396,7 @@ app.configuracionFinal = function(){
             map: app.map
         })
     );    
+    app.rootnode.appendChild(capasBase);    
 
     // Importa las capas definidas en app.tree y el orden definido en app.index
     if(config.tree != null){
@@ -426,7 +440,6 @@ app.configuracionFinal = function(){
         iconCls: "legendIcon",
         id: "legendPanelOnMap",
         autoScroll: true,
-//        width: 250,
         collapsible: false,
         collapsed: false,
         border: false,
@@ -470,13 +483,7 @@ app.configuracionFinal = function(){
             }
             
         }
-    });
-    
-//    document.getElementById("escala").innerHTML = "| Escala = 1 : " + parseInt(app.map.getScale());
-//    // Agrega un manejador al evento cambio de zoom del mapa de modo que reescriba el contenido del combobox de resolución
-//    app.map.events.register("zoomend", this, function() {
-//        document.getElementById("escala").innerHTML = "| Escala = 1 : " + parseInt(app.map.getScale());
-//    });  
+    });    
      
 };
 
