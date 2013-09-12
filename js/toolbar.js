@@ -131,7 +131,7 @@ toolbar.featureGridPanelTopBar = function(){
         componentes.wfsSeleccionarButton(), 
         componentes.wfsLimpiarButton(),    
         componentes.blankSpace(),
-        componentes.wfsExportarAExcelLink(),
+//        componentes.wfsExportarAExcelLink(),
         componentes.separador(),
         componentes.wfsCerrarButton()
     ];

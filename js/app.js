@@ -252,20 +252,35 @@ app.generarViewport = function(){
                     border:false,
                     items:[
                         panel.banner(),
-                        panel.layerTreePanel(),                     
                         new Ext.Panel({
                             region:"center",
                             layout:"border",
-                            border:false,
+                            border: false,
+                            id: "container",
+                            style: 'border-width:5px; border-color:#D0D0D0',
                             items:[                  
-                                panel.mapPanel(),
-                                panel.featureGridPanel()                                                 
+                                panel.layerTreePanel(),                     
+                                new Ext.Panel({
+                                    region:"center",
+                                    layout:"border",
+                                    border:false,
+                                    items:[                  
+                                        panel.mapPanel(),
+                                        panel.featureGridPanel()                                                 
+                                    ]
+                                })                                               
                             ]
-                        })                                           
+                        }),                         
+                                         
                     ]
                 })
             ]
     });  
+    
+//    Ext.getCmp('container').body.setStyle('border-width','5px');    
+//    Ext.getCmp("appViewport").doLayout();
+//    Ext.getCmp("viewportPanel").doLayout();
+//    Ext.getCmp("container").doLayout();
     
 };
 
@@ -483,7 +498,10 @@ app.configuracionFinal = function(){
             }
             
         }
-    });    
+    });  
+    
+        
+    
      
 };
 

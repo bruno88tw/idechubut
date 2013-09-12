@@ -81,6 +81,7 @@ panel.layerTreePanel = function(){
         minWidth: 255,
         border: false,      
         autoScroll: true,
+        bodyCfg : { style: {'background':'#F8F8F8'} },
 //        iconCls: "layers-headerIcon",
 //        title: 'Capas',
         id: "layerTreePanel",
@@ -103,9 +104,6 @@ panel.featureGridPanel = function(){
     
     var featureGridPanel = new Ext.grid.GridPanel({
         region: 'south',
-//        title: 'Atributos',
-//        collapseMode: 'mini',        
-//        collapsed: true,
         hidden: true,
         split: true,
         height: 200,
@@ -118,7 +116,8 @@ panel.featureGridPanel = function(){
         store: [],
         sm: new GeoExt.grid.FeatureSelectionModel(),
         columns: [],
-        tbar: toolbar.featureGridPanelTopBar()    
+        tbar: toolbar.featureGridPanelTopBar(),
+        bbar: [componentes.wfsExportarAExcelLink()]
     });  
     
     return featureGridPanel;
