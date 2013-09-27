@@ -35,7 +35,7 @@ config.tree =
             {"type":"leaf", "title":"Departamentos", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:departamentos", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
             {"type":"leaf", "title":"Fracciones", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:fracciones", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
             {"type":"leaf", "title":"Radios", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:radios", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-            {"type":"leaf", "title":"Localidades", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:localidades", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+            {"type":"leaf", "title":"Localidades", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_localidades_2", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: true}},
             {"type":"leaf", "title":"Ejidos", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:ejidos_catastro_completos", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
             {"type":"folder", "name":"Urbano", "children":[
                 {"type":"leaf", "title":"Calles", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:calles", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
@@ -66,22 +66,31 @@ config.tree =
             {"type":"folder","name":"Secretaría de Energía","children":[]},
             {"type":"folder","name":"SCTyE","children":[]}
     ]}
-];
+];        
+        
+
+//    Ejemplos
+//    {"type":"folder","name":"_nombre_","children":[]}
+//    {"type":"leaf", "title":"_titulo_", "server":"_server_url_", "params":{layers: "_layers_names_", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+
 
 /**
  * Orden de las capas.
  * @type Array
  */
 config.index = [
-    "IGN",
+    //Capas base - Deben ir siempre primero
     "OpenStreetMap","Google Streets","Google Terrain",
     "Google Satellite","Google Hybrid","Bing Road",
     "Bing Aerial","Bing Hybrid","MapQuest", "MapQuest Aerial",
+    "Blank",
     
+    //Capas superpuestas - A continuación deben agregarse las capas superpuestas
     "Población total 2010 por departamento","Población total 2010 por fraccion","Población total 2010 por radio","Índice de debilidad social",
     "Índice de delincuencia","Porcentaje de población extranjera","Censo Nac. Agropecuario 2002",
     "Censo Nac. Agropecuario 2008","Radios","Fracciones",
     "Departamentos","Comarcas","Manzanas","Calles","Localidades","Ejidos","Barrios",
     
+    //Capas de vectores - Deben ir siempre al final
     "Location","wfsLayer"
 ];        

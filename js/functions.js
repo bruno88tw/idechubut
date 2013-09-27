@@ -274,7 +274,7 @@ function setFolderName(e){
     
     var folder = e;
     
-    Ext.MessageBox.prompt('Nombre de carpeta', '', function(btn, text){
+    Ext.MessageBox.prompt('Nombre de carpeta', 'Ingrese el nombre de la carpeta', function(btn, text){
         if (btn == "ok"){
             folder.setText(text);
         }

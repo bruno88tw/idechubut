@@ -67,7 +67,7 @@ componentes.navegacionButton = function(){
         id: "buttonNav",
         icon: "img/move2.png",
         toggleGroup: "nav",
-        tooltip: "Navegación",
+        tooltip: "Desplazar mapa",
         checked: true
     });
     
@@ -85,7 +85,7 @@ componentes.zoomToMaxExtentButton = function(){
         control: new OpenLayers.Control.ZoomToMaxExtent(),
         map: app.map,
         icon: "img/magnifier-zoom-fit.png",
-        tooltip: 'Zoom a la máxima extensión'
+        tooltip: 'Zoom general'
     });
     
     return zoomToMaxExtentButton;
@@ -103,7 +103,7 @@ componentes.zoomInButton = function (){
         map: app.map,
         icon: "img/magnifier-zoom-in.png",
         toggleGroup: "nav",
-        tooltip: "Zoom in"
+        tooltip: "Acercar zoom"
     });
     
     return zoomInButton;
@@ -121,7 +121,7 @@ componentes.zoomOutButton = function(){
         map: app.map,
         icon: "img/magnifier-zoom-out.png",
         toggleGroup: "nav",
-        tooltip: "Zoom out"
+        tooltip: "Alejar zoom"
     });
     
     return zoomOutButton;
@@ -155,7 +155,7 @@ componentes.zoomPosteriorButton = function(){
         icon: "img/history-zoom-right.png",
         control: app.map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].next,
         disabled: true,
-        tooltip: "Zoom posterior"
+        tooltip: "Zoom siguiente"
     });
     
     return zoomPosteriorButton;
@@ -178,8 +178,10 @@ componentes.distanciaButton = function(){
                         width: 300,
                         layout: "fit",
                         autoScroll:true,
-                        maximizable :true,
-                        collapsible : true,
+                        resizable: false,
+//                        maximizable :true,
+//                        collapsible : true,
+                        shadow: false,
                         bodyStyle:'background-color:white',                                        
                         html:'<div align="center" style="font-size:14px; padding:15px">La distancia es de ' + Math.round(evt.measure*100)/100 + ' ' + evt.units + '</div>'
                     }).show();
@@ -212,8 +214,10 @@ componentes.superficieButton = function(){
                         width: 300,
                         layout: "fit",
                         autoScroll:true,
-                        maximizable :true,
-                        collapsible : true,
+                        resizable: false,
+//                        maximizable :true,
+//                        collapsible : true,
+                        shadow: false,
                         bodyStyle:'background-color:white',
                         html:'<div align="center" style="font-size:14px; padding:15px">La superficie es de ' + Math.round(evt.measure*100)/100 + ' ' + evt.units + '<sup>2</sup></div>'
                     }).show();
@@ -260,7 +264,7 @@ componentes.geocoderComboBox = function(){
         map: app.map,                
         bounds: app.max_bounds,
         border: false,
-        width: 200,
+        width: 150,
         heigh:100,
         boxMaxHeight: 100,
         boxMinHeight: 100
@@ -288,13 +292,13 @@ componentes.configuracionButton = function(){
                 layout: "fit",
                 shadow: false,
                 width: 180,
-                height:220,
+                height:235,
                 resizable: false,
                 items: [
                     new Ext.Panel({
                         border: false,
-                        width: "100%",
-                        heigth: "100%",
+                        width: 185,
+                        heigth: 223,
                         items: new Ext.FormPanel({
                              labelWidth: 0, // label settings here cascade unless overridden
                              frame:true,
@@ -302,6 +306,7 @@ componentes.configuracionButton = function(){
                              items: [
                                 componentes.configuracionTituloField(),
                                 componentes.configuracionSubtituloField(),
+                                componentes.configuracionNavegadorCheckbox(),
                                 componentes.configuracionLeyendaCheckbox(),
                                 componentes.configuracionEscalaCheckbox(),
                                 componentes.configuracionMinimapaCheckbox(),
@@ -409,6 +414,22 @@ componentes.configuracionCambiarSubtituloButton = function(){
     
     return configuracionCambiarSubtituloButton;
         
+};
+
+/**
+ * Devuelve el checkbox de leyenda.
+ * @returns {Ext.menu.CheckItem}
+ */
+componentes.configuracionNavegadorCheckbox = function(){    
+    
+    var configuracionNavegadorCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Navegador',
+        checked: app.configuracion.navegador,
+        listeners:{check: handler.onConfiguracionNavegadorCheckbox}
+    });
+    
+    return configuracionNavegadorCheckbox;
+    
 };
 
 /**
@@ -547,7 +568,7 @@ componentes.scaleComboBox = function(){
     
     var scaleComboBox = new Ext.form.ComboBox({
         id: "scaleCombo",
-        width: 130,
+        width: 150,
         mode: "local", // keep the combo box from forcing a lot of unneeded data refreshes
         emptyText: "Scale",
         triggerAction: "all", // needed so that the combo box doesn't filter by its current content
@@ -621,7 +642,7 @@ componentes.zoomSlider = function(){
 componentes.agregarCapasButton = function(){
     
     var agregarCapasButton = new Ext.Button({
-        tooltip: 'Agregar capas',
+        tooltip: 'Agregar capas WMS',
         icon: 'img/map-plus.png',
         id: "treePanelTopbarAgregar",
         handler: function(){handler.onAgregarCapas(null);}
@@ -638,7 +659,7 @@ componentes.agregarCapasButton = function(){
 componentes.ordenDeCapasButton = function(){
     
     var ordenDeCapasButton = new Ext.Button({
-        tooltip: 'Orden',
+        tooltip: 'Orden de las capas',
         icon: 'img/maps-stack.png',
         enableToggle: true,
         allowDepress: true,
@@ -724,7 +745,7 @@ componentes.importarCapasButton = function(){
 componentes.exportarCapasButton = function(){
     
     var exportarCapasButton = new Ext.Button({
-        tooltip: 'Guardar capas',
+        tooltip: 'Exportar capas',
         icon: 'img/folder-save.png',
         id: "treePanelBottombarExportar",
         handler: handler.onExportarCapasButton
@@ -743,10 +764,12 @@ componentes.wfsReconocerButton = function(){
     var wfsReconocerButton = new Ext.Button({
         id: "wfsReconocerButton",
         tooltip: 'Reconocer',
-        text:"Reconocer",
+//        text:"Reconocer",
         icon: 'img/cursor-question.png',
         toggleGroup: "nav", 
         allowDepress: true,
+        disabled: true,
+        hidden: true,
         listeners: {
            toggle: handler.onWfsReconocerButton
         }
@@ -766,10 +789,12 @@ componentes.wfsSeleccionarButton = function(){
    var wfsSeleccionarButton = new Ext.Button({
         id: "wfsSeleccionarButton",
         tooltip: 'Seleccionar',
-        text:"Seleccionar",
+//        text:"Seleccionar",
         icon: 'img/cursor.png',
         toggleGroup: "nav", 
         allowDepress: true,
+        disabled: true,
+        hidden: true,
         listeners: {
            toggle: handler.onWfsSeleccionarButton
         }
@@ -787,8 +812,11 @@ componentes.wfsLimpiarButton = function(){
    
    var wfsLimpiarButton = new Ext.Button({
         tooltip: 'Limpiar',
-        text:"Limpiar",
+//        text:"Limpiar",
         icon: 'img/broom.png',
+        disabled: true,
+        hidden: true,
+        id: "wfsLimpiarButton",
         handler: handler.onWfsLimpiarButton
     });
     
@@ -815,12 +843,23 @@ componentes.wfsCerrarButton = function(){
     var wfsCerrarButton = new Ext.Button({
         tooltip: 'Cerrar',
         icon: 'img/close.png',
+        disabled: true,
+        hidden: true,
+        id: "wfsCerrarButton",
         handler: function(){
             app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
             Ext.getCmp("featureGridPanel").hide();
             Ext.getCmp("viewportPanel").doLayout();   
             app.isAttributesPanelHidden = true;
             Ext.getCmp("buttonNav").toggle(true);
+            Ext.getCmp("wfsReconocerButton").setDisabled(true);
+            Ext.getCmp("wfsSeleccionarButton").setDisabled(true);
+            Ext.getCmp("wfsLimpiarButton").setDisabled(true);
+            Ext.getCmp("wfsCerrarButton").setDisabled(true);
+            Ext.getCmp("wfsReconocerButton").hide();
+            Ext.getCmp("wfsSeleccionarButton").hide();
+            Ext.getCmp("wfsLimpiarButton").hide();
+            Ext.getCmp("wfsCerrarButton").hide();
         }
     });
             
@@ -883,7 +922,7 @@ componentes.capabilitiesCombo = function(){
     
     var capabilitiesCombo = new Ext.form.ComboBox({
         store: app.wmsServerStore,
-        width: 455,
+        width: 465,
         valueField: 'url',
         displayField: 'nombre', 
         emptyText: "Servidores WMS",

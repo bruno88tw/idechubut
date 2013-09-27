@@ -31,28 +31,34 @@ var toolbar = {};
  */
 toolbar.mapPanelTopBar = function(){
     
-    var mapPanelToolbar = [
+    var mapPanelToolbar = [          
+//        componentes.importarCapasButton(),
+//        componentes.exportarCapasButton(),          
+//        "-",
+//        componentes.agregarCarpetaButton(),
+//        componentes.agregarCapasButton(),
+////        componentes.ordenDeCapasButton(), 
+//        "-",
         componentes.navegacionButton(),
         componentes.zoomToMaxExtentButton(),
         componentes.zoomInButton(),
         componentes.zoomOutButton(),
         componentes.zoomAnteriorButton(),
         componentes.zoomPosteriorButton(),
+//        "-",
         componentes.distanciaButton(),
         componentes.superficieButton(),
-        componentes.informacionButton(),    
-        componentes.blankSpace(),
-        componentes.geocoderComboBox(),
+//        "-",
+//        componentes.informacionButton(),
+//        "-",
+        componentes.wfsReconocerButton(), 
+        componentes.wfsSeleccionarButton(), 
+        componentes.wfsLimpiarButton(),    
+        componentes.wfsCerrarButton(),        
         componentes.separador(),
-//        componentes.div("position"),
-//        componentes.div("escala"),
-        componentes.configuracionButton(),
+//        "-",
         componentes.ayudaButton(),
         componentes.acercaDeButton()
-              
-//        componentes.div("position"),
-//        componentes.div("escala"),
-//        componentes.configuracionButton()
     ];
     
     return mapPanelToolbar;
@@ -67,17 +73,16 @@ toolbar.mapPanelTopBar = function(){
 toolbar.mapPanelBottomBar = function(){
     
     var mapPanelBottomBar = [
-        componentes.scaleComboBox(),        
-//        componentes.separador(),
-//        componentes.configuracionButton(),
-//        componentes.imprimirButton(),        
-//        componentes.bottomBarZoomOutButton(),
-//        componentes.zoomSlider(),   
-//        componentes.bottomBarZoomInButton(),        
-        componentes.separador(),
+        componentes.scaleComboBox(), 
+        componentes.blankSpace(),
+        componentes.geocoderComboBox(),  
+        componentes.blankSpace(),        
+        componentes.separador(),        
         componentes.div("position"),
-//        componentes.div("escala"),
-        
+        componentes.blankSpace(),
+        app.map.projection.projCode,
+        componentes.blankSpace(),
+        componentes.configuracionButton()        
     ];
 
     return mapPanelBottomBar;
@@ -86,56 +91,38 @@ toolbar.mapPanelBottomBar = function(){
 
 /**
  * Devuelve un arreglo con los componentes de la barra de
- * herramientas superior del panel de árbol de capas.
+ * herramientas inferior del featureGridPanel.
  * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
 toolbar.treePanelTopBar = function(){
     
-    var treePanelTopBar = [ 
+    var treePanelTopBar = [
         componentes.agregarCapasButton(),
-        componentes.ordenDeCapasButton(),
-        componentes.agregarCarpetaButton(),  
+        componentes.agregarCarpetaButton(),        
+//        "-",
         componentes.expandirTodoButton(),
         componentes.colapsarTodoButton(),
+//        "-",
         componentes.importarCapasButton(),
-        componentes.exportarCapasButton()
+        componentes.exportarCapasButton(),                   
     ];
-    
+
     return treePanelTopBar;
     
 };
 
 /**
  * Devuelve un arreglo con los componentes de la barra de
- * herramientas inferior del panel de árbol de capas.
+ * herramientas inferior del featureGridPanel.
  * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
-toolbar.treePanelBottomBar = function(){
+toolbar.featureGridPanelBottomBar = function(){
     
-    var treePanelBottomBar = [ 
-    ];
-    
-    return treePanelBottomBar;
-    
-};
-
-/**
- * Devuelve un arreglo con los componentes de la barra de
- * herramientas del panel de atributos.
- * @returns {Array} Arreglo de componentes de la barra de herramientas.
- */
-toolbar.featureGridPanelTopBar = function(){
-    
-    var featureGridPanelTopBar = [
-        componentes.wfsReconocerButton(), 
-        componentes.wfsSeleccionarButton(), 
-        componentes.wfsLimpiarButton(),    
-        componentes.blankSpace(),
-//        componentes.wfsExportarAExcelLink(),
+    var featureGridPanelBottomBar = [
         componentes.separador(),
-        componentes.wfsCerrarButton()
+        componentes.wfsExportarAExcelLink()       
     ];
-    
-    return featureGridPanelTopBar;
+
+    return featureGridPanelBottomBar;
     
 };

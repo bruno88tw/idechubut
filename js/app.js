@@ -46,13 +46,19 @@ app.projection900913 = new OpenLayers.Projection("EPSG:900913");
  * Resoluciones para los niveles de zoom de las capas base.
  * @type Array
  */
-app.resolutions = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 19);
+app.resolutions = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(1, 19);
+
+/**
+ * Resoluciones para los niveles de zoom de las capas base.
+ * @type Array
+ */
+app.resolutionsOSM = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(3, 19);
 
 /**
  * Resoluciones para los niveles de zoom de la capa base MapQuest Aerial.
  * @type Array
  */
-app.resolutions2 = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 12);
+app.resolutionsMapQuestAerial = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(3, 12);
 
 /**
  * Control de reconocimiento WFS.
@@ -72,9 +78,12 @@ app.wfsSelectControl = null;
  */
 app.rootnode = new Ext.tree.TreeNode({
    text: "Capas",
-   icon: "img/layers.png",
+   icon: "img/folder.png",
    leaf:false,
-   expanded: true          
+   expanded: false,
+   listeners:{
+        contextmenu: function(nodo, event){handler.onRootNodeContextMenu(nodo, event);}
+    }
 }); 
 
 /**
@@ -94,8 +103,8 @@ app.wmsServerStore = new Ext.data.ArrayStore({
     fields: ['nombre', 'url'],
     data: [
         ["Dirección General de Estadística y Censos","http://idedgeyc.chubut.gov.ar/geoserver/wms"],
-        ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
-        ["Instituto Geográfico Nacional 2","http://wms.ign.gob.ar/geoserver/ows"],    
+//        ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
+        ["Instituto Geográfico Nacional","http://wms.ign.gob.ar/geoserver/ows"],    
         ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
         ["Ministerio de Educación","http://www.chubut.edu.ar:8080/geoserver/wms"],
         ["Secretaría de Energía","http://sig.se.gob.ar/cgi-bin/mapserv6?MAP=/var/www/html/visor/geofiles/map/mapase.map"]
@@ -116,10 +125,11 @@ app.fullscreen = false;
 app.configuracion = {
     "titulo":false,
     "subtitulo":false,
-    "leyenda":true,
+    "navegador":true,
+    "leyenda":false,
     "escala":true,
-    "localizador":true,
-    "norte":true,
+    "localizador":false,
+    "norte":false,
     "grilla":false
 };
 
@@ -144,7 +154,7 @@ Ext.onReady(function() {
     Ext.QuickTips.init();         
     app.crearMapa();
     app.agregarControles();
-    app.agregarCapasBase();
+    app.agregarCapas();
     app.generarViewport();   
     app.configuracionFinal();
     
@@ -161,13 +171,13 @@ app.crearMapa = function(){
         "divMapa",
         {
             controls: [],
-            resolutions: app.resolutions,
-            restrictedExtent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),  
             projection: app.projection900913,
             displayProjection: app.projection4326, 
             units: 'm'
         }
     );   
+        
+       
         
 };
 
@@ -178,40 +188,35 @@ app.crearMapa = function(){
 app.agregarControles = function(){
     
     app.map.addControl(new OpenLayers.Control.NavigationHistory());
-    app.map.addControl(new OpenLayers.Control.Navigation({mouseWheelOptions: {interval: 100}}));
+    app.map.addControl(new OpenLayers.Control.Navigation({mouseWheelOptions: {interval: 100}}));    
     app.map.addControl(new OpenLayers.Control.WMSGetFeatureInfo({
         queryVisible: true,
         drillDown: true,
         infoFormat: "application/vnd.ogc.gml",
         maxFeatures: 20,
         eventListeners: {"getfeatureinfo": function(e){handler.onGetFeatureInfo(e)}}
-    }));     
-    
+    })); 
 };
 
 /**
  * Agrega capas base y capas vectoriales al mapa.
  * @returns {undefined} Esta función no devuelve resultados.
  */
-app.agregarCapasBase = function(){
+app.agregarCapas = function(){
     
     // Capas Base
-    app.map.addLayer(new OpenLayers.Layer.WMS(
-        "IGN", 
-        "http://idedgeyc.chubut.gov.ar/geoserver/wms", 
-        {layers: "rural:basemap", transparent: 'false', format: 'image/jpeg', tiled: 'true'}, 
-        {isBaseLayer: true, visibility: false, singleTile: false, displayInLayerSwitcher: false}
-    ));   
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 6, maxZoomLevel: 19}));
-    app.map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));    
+    //NOTA: para OSM zoomOffset debe ser igual que el zoom menor definido en app.resolutionsOSM
+    app.map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 3, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));    
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 3, maxZoomLevel: 19}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 3, maxZoomLevel: 15}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 3, maxZoomLevel: 19}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 3, maxZoomLevel: 19}));    
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Road", zoomOffset: 6, resolutions: app.resolutions}));
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Aerial", zoomOffset: 6, resolutions: app.resolutions}));
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "AerialWithLabels", zoomOffset: 6, resolutions: app.resolutions}));
-    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions, isBaseLayer:true, sphericalMercator: true}));  
-    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutions2, isBaseLayer:true, sphericalMercator: true}));            
+    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 3, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));  
+    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 3, resolutions: app.resolutionsMapQuestAerial, isBaseLayer:true, sphericalMercator: true}));            
+    app.map.addLayer(new OpenLayers.Layer("Blank",{isBaseLayer: true}));
 
     // Vector layer para el localizador
     app.map.addLayer(new OpenLayers.Layer.Vector("Location", {
@@ -229,8 +234,11 @@ app.agregarCapasBase = function(){
         displayInLayerSwitcher: false
     }));
     
+    // Importa las capas definidas en app.tree y el orden definido en app.index
+    restoreTree(app.rootnode,config.tree);
+    restoreIndex(config.index);          
  
-    
+        
 };
 
 /**
@@ -243,44 +251,8 @@ app.generarViewport = function(){
             layout: "border",  
             border:false,
             id: "appViewport",
-            items:
-            [
-                new Ext.Panel({
-                    region:"center",
-                    layout:"border",
-                    id:"viewportPanel",
-                    border:false,
-                    items:[
-                        panel.banner(),
-                        new Ext.Panel({
-                            region:"center",
-                            layout:"border",
-                            border: false,
-                            id: "container",
-                            style: 'border-width:5px; border-color:#D0D0D0',
-                            items:[                  
-                                panel.layerTreePanel(),                     
-                                new Ext.Panel({
-                                    region:"center",
-                                    layout:"border",
-                                    border:false,
-                                    items:[                  
-                                        panel.mapPanel(),
-                                        panel.featureGridPanel()                                                 
-                                    ]
-                                })                                               
-                            ]
-                        }),                         
-                                         
-                    ]
-                })
-            ]
-    });  
-    
-//    Ext.getCmp('container').body.setStyle('border-width','5px');    
-//    Ext.getCmp("appViewport").doLayout();
-//    Ext.getCmp("viewportPanel").doLayout();
-//    Ext.getCmp("container").doLayout();
+            items: panel.viewportPanel()
+    });      
     
 };
 
@@ -289,135 +261,7 @@ app.generarViewport = function(){
  * Agrega elementos al mapPanel y realiza modificaciones sobre el css de algunos componentes.
  * @returns {undefined} Esta función no devuelve resultados.
  */
-app.configuracionFinal = function(){
-
-    // Cargar las capas base al árbol de capas
-    var capasBase = new Ext.tree.TreeNode({
-        text: "Capas base",
-        expanded: false,
-        icon: "img/folder.png",
-        leaf: false,
-        listeners:{
-            contextmenu: function(nodo, event){}
-        }
-    });        
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "IGN",
-            layer: "IGN",   
-            icon: "img/ign.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "OpenStreetMap",
-            layer: "OpenStreetMap",   
-            icon: "img/osm.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Streets",
-            layer: "Google Streets",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Terrain",
-            layer: "Google Terrain",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Satellite",
-            layer: "Google Satellite",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Hybrid",
-            layer: "Google Hybrid",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Bing Road",
-            layer: "Bing Road",   
-            icon: "img/bing.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Bing Aerial",
-            layer: "Bing Aerial",   
-            icon: "img/bing.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Bing Hybrid",
-            layer: "Bing Hybrid",   
-            icon: "img/bing.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "MapQuest",
-            layer: "MapQuest",   
-            icon: "img/mapQuest.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "MapQuest Aerial",
-            layer: "MapQuest Aerial",   
-            icon: "img/mapQuest.png",
-            leaf:true,
-            map: app.map
-        })
-    );    
-    app.rootnode.appendChild(capasBase);    
-
-    // Importa las capas definidas en app.tree y el orden definido en app.index
-    if(config.tree != null){
-        restoreTree(app.rootnode,config.tree);
-        restoreIndex(config.index);          
-    }  
+app.configuracionFinal = function(){ 
 
     //Agrega al mapPanel los div sobre los cuales se renderizarán los siguientes componentes
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('scalelinediv'));
@@ -427,6 +271,9 @@ app.configuracionFinal = function(){
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('titulodiv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('subtitulodiv'));
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('legenddiv'));                              
+
+    // Agrego el control de posición del mouse 
+    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,3)); 
 
     // Agrego el control de posición del mouse 
     app.map.addControl(new OpenLayers.Control.MousePosition({
@@ -448,7 +295,15 @@ app.configuracionFinal = function(){
         layers:[new OpenLayers.Layer.OSM("OSM",null,null,{isBaseLayer: true, maxZoomLevel: 20})],
         size: new OpenLayers.Size(150, 130),
         div: document.getElementById('minimap')            
-    }));       
+    }));     
+    
+    var minimap = new OpenLayers.Control.OverviewMap({
+        layers:[new OpenLayers.Layer.OSM("OSM",null,null,{isBaseLayer: true, maxZoomLevel: 20})],
+        size: new OpenLayers.Size(220, 140),  
+        div: document.getElementById('minimapa')   
+    });
+    
+    app.map.addControl(minimap);    
 
     // Agrega el panel de leyenda que se visualiza dentro del mapa
     new GeoExt.LegendPanel({
@@ -459,7 +314,8 @@ app.configuracionFinal = function(){
         collapsed: false,
         border: false,
         renderTo: document.getElementById("legenddiv"),
-        bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0.8)'} },
+        style: 'background:#ffffff; border-width:2px; border-color:#BCBCBC',
+//        bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 1.0)'} },
         defaults: {
             style: 'padding:5px',
             baseParams: {
@@ -471,14 +327,12 @@ app.configuracionFinal = function(){
     
     //Agrega el botón de fullscreen
     new Ext.Button({
-        icon: 'img/fullscreen.png',
         cls: "fullscreenButton",
         renderTo: document.getElementById("fullscreen"),
         handler: function(){
             if(app.fullscreen){
-                this.setIcon('img/fullscreen.png');
                 app.fullscreen = false;
-                Ext.getCmp("layerTreePanel").show();
+                Ext.getCmp("westPanel").show();
                 if(!app.isAttributesPanelHidden){
                     Ext.getCmp("featureGridPanel").show();
                 }
@@ -487,9 +341,8 @@ app.configuracionFinal = function(){
                 Ext.getCmp("mapPanel").getBottomToolbar().show();
                 Ext.getCmp("viewportPanel").doLayout();                         
             }else{                
-                this.setIcon('img/normalscreen.png');
                 app.fullscreen = true;
-                Ext.getCmp("layerTreePanel").hide();
+                Ext.getCmp("westPanel").hide();
                 Ext.getCmp("featureGridPanel").hide();
                 Ext.getCmp("banner").hide();
                 Ext.getCmp("mapPanel").getTopToolbar().hide();
@@ -500,7 +353,7 @@ app.configuracionFinal = function(){
         }
     });  
     
-        
+    app.map.setCenter((new OpenLayers.LonLat(-62,-38).transform(new OpenLayers.Projection("EPSG:4326"), app.map.getProjectionObject())),1);     
     
      
 };
