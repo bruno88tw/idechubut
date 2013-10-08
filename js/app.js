@@ -43,13 +43,13 @@ app.projection4326 = new OpenLayers.Projection("EPSG:4326");
 app.projection900913 = new OpenLayers.Projection("EPSG:900913");
 
 /**
- * Resoluciones para los niveles de zoom de las capas base.
+ * Resoluciones para los niveles de zoom de las capas base Bing.
  * @type Array
  */
-app.resolutions = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(1, 19);
+app.resolutionsBing = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(1, 19);
 
 /**
- * Resoluciones para los niveles de zoom de las capas base.
+ * Resoluciones para los niveles de zoom de las capas base OSM y MapQuest.
  * @type Array
  */
 app.resolutionsOSM = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(3, 19);
@@ -80,7 +80,7 @@ app.rootnode = new Ext.tree.TreeNode({
    text: "Capas",
    icon: "img/folder.png",
    leaf:false,
-   expanded: false,
+   expanded: false,   
    listeners:{
         contextmenu: function(nodo, event){handler.onRootNodeContextMenu(nodo, event);}
     }
@@ -103,7 +103,7 @@ app.wmsServerStore = new Ext.data.ArrayStore({
     fields: ['nombre', 'url'],
     data: [
         ["Dirección General de Estadística y Censos","http://idedgeyc.chubut.gov.ar/geoserver/wms"],
-//        ["Instituto Geográfico Nacional 1","http://sdi.ign.gob.ar/geoserver2/wms"],
+        ["Mapa Educativo","http://www.mapaeducativo.edu.ar/geoserver/ogc/ows"],
         ["Instituto Geográfico Nacional","http://wms.ign.gob.ar/geoserver/ows"],    
         ["Secretaría de Ciencia Tecnología e Innovación","http://200.63.163.47/geoserver/wms"],
         ["Ministerio de Educación","http://www.chubut.edu.ar:8080/geoserver/wms"],
@@ -199,7 +199,7 @@ app.agregarControles = function(){
 };
 
 /**
- * Agrega capas base y capas vectoriales al mapa.
+ * Agrega capas base y capas vectoriales al mapa. Carga las capas de superposición definidas en la configuración.
  * @returns {undefined} Esta función no devuelve resultados.
  */
 app.agregarCapas = function(){
@@ -211,9 +211,9 @@ app.agregarCapas = function(){
     app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 3, maxZoomLevel: 15}));
     app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 3, maxZoomLevel: 19}));
     app.map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 3, maxZoomLevel: 19}));    
-    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Road", zoomOffset: 6, resolutions: app.resolutions}));
-    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Aerial", zoomOffset: 6, resolutions: app.resolutions}));
-    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "AerialWithLabels", zoomOffset: 6, resolutions: app.resolutions}));
+    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Road", zoomOffset: 6, resolutions: app.resolutionsBing}));
+    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Aerial", zoomOffset: 6, resolutions: app.resolutionsBing}));
+    app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "AerialWithLabels", zoomOffset: 6, resolutions: app.resolutionsBing}));
     app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 3, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));  
     app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 3, resolutions: app.resolutionsMapQuestAerial, isBaseLayer:true, sphericalMercator: true}));            
     app.map.addLayer(new OpenLayers.Layer("Blank",{isBaseLayer: true}));
@@ -228,10 +228,30 @@ app.agregarCapas = function(){
         }),
         displayInLayerSwitcher: false
     }));   
-
+            
+    var symbolizer = OpenLayers.Util.applyDefaults(
+        {
+         fillColor: "blue", 
+         fillOpacity: 0.2, 
+         strokeColor: "blue"
+        },
+        OpenLayers.Feature.Vector.style["default"]
+    );
+        
+    var select = {
+        fillColor: "blue",
+        fillOpacity: 0.5
+    };
+        
+    var styleMap = new OpenLayers.StyleMap({
+        "default": symbolizer, 
+        "select": select
+    }); 
+    
     // Vector layer para las consultas WFS            
     app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {
-        displayInLayerSwitcher: false
+        displayInLayerSwitcher: false,
+        styleMap: styleMap
     }));
     
     // Importa las capas definidas en app.tree y el orden definido en app.index
@@ -258,7 +278,7 @@ app.generarViewport = function(){
 
 /**
  * Configuración final de la aplicación. 
- * Agrega elementos al mapPanel y realiza modificaciones sobre el css de algunos componentes.
+ * Agrega elementos al mapPanel y establece el centro y zoom del mapa.
  * @returns {undefined} Esta función no devuelve resultados.
  */
 app.configuracionFinal = function(){ 

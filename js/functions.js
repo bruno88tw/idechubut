@@ -313,24 +313,51 @@ function createNode(text){
  */
 function createLeaf(titulo, servidor, params, options){    
     
-    app.map.addLayer(new OpenLayers.Layer.WMS(
+    var layer = new OpenLayers.Layer.WMS(
         titulo, 
         servidor, 
         params, 
         options
-    ));          
+    );
+    
+    app.map.addLayer(layer);   
+    
+//    var store = new GeoExt.data.LayerStore({
+//        map: app.map,
+//        layers: app.map.layers
+//    });
+//
+//    var uiClass = Ext.extend(
+//            GeoExt.tree.LayerNodeUI, 
+//            new GeoExt.tree.TreeNodeUIEventMixin()
+//    );    
     
     var leaf = new GeoExt.tree.LayerNode({
         text: titulo,
-        layer: titulo,   
+        layer: titulo,  
+//        uiProvider: uiClass,
         icon: "img/layers3.png",
         leaf:true,
+        checked: false,
         listeners:{
             contextmenu: function(leaf, event){handler.onLeafContextMenu(leaf, event, titulo, params)},
             checkchange: function(leaf){leaf.select();}
-        },
+        },     
+//        component: new GeoExt.WMSLegend({
+//            layerRecord: store.getByLayer(layer),
+//            showTitle: false,
+//            defaults: {
+//                style: 'padding-left:40px;',
+//                baseParams: {
+//                    FORMAT: 'image/png',
+//                    LEGEND_OPTIONS: 'forceLabels:on'
+//                }
+//            }
+//        }),                
         map: app.map
-    });
+    });  
+    
+    
     
     return leaf;
  

@@ -32,33 +32,22 @@ var toolbar = {};
 toolbar.mapPanelTopBar = function(){
     
     var mapPanelToolbar = [          
-//        componentes.importarCapasButton(),
-//        componentes.exportarCapasButton(),          
-//        "-",
-//        componentes.agregarCarpetaButton(),
-//        componentes.agregarCapasButton(),
-////        componentes.ordenDeCapasButton(), 
-//        "-",
         componentes.navegacionButton(),
         componentes.zoomToMaxExtentButton(),
         componentes.zoomInButton(),
         componentes.zoomOutButton(),
         componentes.zoomAnteriorButton(),
         componentes.zoomPosteriorButton(),
-//        "-",
         componentes.distanciaButton(),
         componentes.superficieButton(),
-//        "-",
-//        componentes.informacionButton(),
-//        "-",
         componentes.wfsReconocerButton(), 
         componentes.wfsSeleccionarButton(), 
         componentes.wfsLimpiarButton(),    
         componentes.wfsCerrarButton(),        
-        componentes.separador(),
-//        "-",
+        componentes.separador(),  
+        componentes.configuracionButton(),
         componentes.ayudaButton(),
-        componentes.acercaDeButton()
+        componentes.acercaDeButton()               
     ];
     
     return mapPanelToolbar;
@@ -73,16 +62,14 @@ toolbar.mapPanelTopBar = function(){
 toolbar.mapPanelBottomBar = function(){
     
     var mapPanelBottomBar = [
-        componentes.scaleComboBox(), 
+//        componentes.geocoderComboBox(),
+//        componentes.blankSpace(),
+        componentes.scaleComboBox(),
+        componentes.separador(),                  
+        componentes.blankSpace(), 
+        componentes.div("position"),        
         componentes.blankSpace(),
-        componentes.geocoderComboBox(),  
-        componentes.blankSpace(),        
-        componentes.separador(),        
-        componentes.div("position"),
-        componentes.blankSpace(),
-        app.map.projection.projCode,
-        componentes.blankSpace(),
-        componentes.configuracionButton()        
+        app.map.projection.projCode,                
     ];
 
     return mapPanelBottomBar;
@@ -91,7 +78,7 @@ toolbar.mapPanelBottomBar = function(){
 
 /**
  * Devuelve un arreglo con los componentes de la barra de
- * herramientas inferior del featureGridPanel.
+ * herramientas superior del panel de árbol de capas.
  * @returns {Array} Arreglo de componentes de la barra de herramientas.
  */
 toolbar.treePanelTopBar = function(){
@@ -99,10 +86,8 @@ toolbar.treePanelTopBar = function(){
     var treePanelTopBar = [
         componentes.agregarCapasButton(),
         componentes.agregarCarpetaButton(),        
-//        "-",
         componentes.expandirTodoButton(),
         componentes.colapsarTodoButton(),
-//        "-",
         componentes.importarCapasButton(),
         componentes.exportarCapasButton(),                   
     ];

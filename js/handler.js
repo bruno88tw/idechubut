@@ -205,7 +205,7 @@ handler.onConfiguracionCambiarSubtituloButton = function(){
 };
 
 /**
- * Handler correspondiente al evento asociado al checkbox de configuración "Leyenda".
+ * Handler correspondiente al evento asociado al checkbox de configuración "Navegador".
  * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onConfiguracionNavegadorCheckbox = function(){
@@ -396,12 +396,10 @@ handler.onAyudaButton = function(){
                 <div style="background:#EBEBEB; padding:5px;"><b>Herramientas de medición</b></div></br>\n\
                 <img src="img/rulerline.png" alt="ayuda">&nbsp&nbsp&nbspEl medidor de distancias nos permite calcular la distancia comprendida entre dos o mas puntos en el mapa.</br></br>\n\
                 <img src="img/rulerarea.png" alt="ayuda">&nbsp&nbsp&nbspEl medidor de superficie nos permite calcular la superficie comprendida dentro de un polígono en el mapa.</br></br>\n\
-                <div style="background:#EBEBEB; padding:5px;"><b>Obtener información</b></div></br>\n\
-                <img src="img/cursor-info.png" alt="ayuda">&nbsp&nbsp&nbspEsta herramienta nos permite obtener información asociada a capas activas en el mapa. Para ello, el primer paso consiste en activar una capa, luego seleccionar la herramienta "Obtener información" y luego hacer click en algún elemento de la capa. Aparecerá una ventana conteniendo la información correspondiente.</br></br>\n\
                 <div style="background:#EBEBEB; padding:5px;"><b>Buscador de topónimos</b></div></br>\n\
                 <img src="img/buscador.png" alt="ayuda">&nbsp&nbsp&nbspEl buscador de topónimos permite realizar una consulta por un nombre propio de una ubicación geográfica y devuelve un listado de coincidencias de las cuales al seleccionar alguna ajusta en nivel de zoom y posiciona el visor del mapa en la coordenada asociada a ese topónimo en particular.</br></br>\n\
                 <div style="background:#EBEBEB; padding:5px;"><b>Configuración</b></div></br>\n\
-                <img src="img/gear.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta de configuración nos abre una nueva ventana que nos permitirá realizar una configuración sobre los elementos contenidos dentro del mapa. Entre las opciones encontramos:</br></br>\n\
+                <img src="img/equalizer.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta de configuración nos abre una nueva ventana que nos permitirá realizar una configuración sobre los elementos contenidos dentro del mapa. Entre las opciones encontramos:</br></br>\n\
                 * Activar / desactivar / cambiar título del mapa</br>\n\
                 * Activar / desactivar / cambiar subtítulo del mapa</br>\n\
                 * Activar / desactivar leyenda</br>\n\
@@ -780,7 +778,7 @@ handler.onLeafContextMenu = function(leaf, event, titulo, params){
             handler: function(){handler.onPropiedadesButton(leaf, titulo, params)}
         },{
             text: 'Atributos',
-            icon: "img/information-italic.png",
+            icon: "img/table.png",
             handler: function(){handler.onAtributosButton(leaf)}
         },{
             text: 'Descargar',
@@ -992,118 +990,138 @@ handler.onAtributosButton = function(leaf){
     }
     var mask = new Ext.LoadMask(Ext.getCmp("featureGridPanel").el, {msg:"Conectando..."});
     mask.show();
-
-    //obtengo el protocolo y ejecuto el metodo read()
-    OpenLayers.Protocol.WFS.fromWMSLayer(leaf.layer).read({
-        readOptions: {output: "object"},
-        maxFeatures: 1,
-        callback: function(resp){
-
-            if(resp.error){
-                mask.hide();
-                Ext.MessageBox.alert('Error', 'Ha ocurrido un error al tratar de obtener la información solicitada');
+    
+    Ext.getCmp("buttonNav").toggle(true);
+    
+    OpenLayers.Request.GET({
+        url: leaf.layer.url,
+        params: {service:"WFS", version:"1.0.0",request:"DescribeFeatureType",typeName:leaf.layer.params.LAYERS},
+        callback: handler
+    });
+    
+    function handler(request) {
+        
+        // the server could report an error
+        if(request.status == 500) {
+            mask.hide();
+            Ext.MessageBox.alert('Error', 'Ha ocurrido un error al tratar de obtener la información solicitada');
+        }
+        if(request.status == 200) {                       
+            
+            mask.hide();
+            var columns = [];
+            var fields = [];
+            
+            var sequence = null;
+            var atributos = null;  
+            
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
+                         
+            if(navigator.appVersion.indexOf("Chrome") != -1){
+                sequence = xmlDoc.getElementsByTagName("sequence")[0];
+                atributos = sequence.getElementsByTagName("element");
             }else{
-                Ext.getCmp("featureGridPanel").setTitle("Atributos: " + leaf.text);
-                Ext.getCmp("wfsReconocerButton").toggle(false);
-                Ext.getCmp("wfsSeleccionarButton").toggle(false);
-                mask.hide();
-                Ext.getCmp("wfsReconocerButton").setDisabled(false);
-                Ext.getCmp("wfsSeleccionarButton").setDisabled(false);
-                Ext.getCmp("wfsLimpiarButton").setDisabled(false);
-                Ext.getCmp("wfsCerrarButton").setDisabled(false);
-                Ext.getCmp("wfsReconocerButton").show();
-                Ext.getCmp("wfsSeleccionarButton").show();
-                Ext.getCmp("wfsLimpiarButton").show();
-                Ext.getCmp("wfsCerrarButton").show();
-                var attributesJSON = resp.features[0].attributes;
-                var columns = [];
-                var fields = [];
-
-                columns.push(new Ext.grid.RowNumberer());
-                for(attribute in attributesJSON){
-                    columns.push({header: attribute, dataIndex: attribute, sortable: true});
-                    if(isNaN(parseFloat(attributesJSON[attribute]))){
-                        fields.push({name: attribute, type: "string"});
-                    }else{
-                        fields.push({name: attribute, type: "float"});
-                    }
-
-                }                                      
-
-                app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
-
-                var x = 3;
-                while(x < app.wfsStoreExport.fields.items.length){
-                    app.wfsStoreExport.fields.removeAt(x);
+                sequence = xmlDoc.getElementsByTagName("xsd:sequence")[0];
+                atributos = sequence.getElementsByTagName("xsd:element");
+            }
+            
+            columns.push(new Ext.grid.RowNumberer());
+            for(var x = 0; x < atributos.length; x++){
+                if(atributos[x].attributes.name.nodeValue != "the_geom"){
+                    columns.push({header: atributos[x].attributes.name.nodeValue, dataIndex: atributos[x].attributes.name.nodeValue, sortable: true});
+                    if(atributos[x].attributes.type.nodeValue == "xsd:string"){
+                        fields.push({name: atributos[x].attributes.name.nodeValue, type: "string"});
+                    }else if(atributos[x].attributes.type.nodeValue == "xsd:double" ||
+                             atributos[x].attributes.type.nodeValue == "xsd:float" ||
+                             atributos[x].attributes.type.nodeValue == "xsd:decimal" ||
+                             atributos[x].attributes.type.nodeValue == "xsd:long" ||
+                             atributos[x].attributes.type.nodeValue == "xsd:integer"){
+                        fields.push({name: atributos[x].attributes.name.nodeValue, type: "float"});
+                    }                    
                 }
-                app.wfsStoreExport.fields.addAll(fields);
-                app.wfsStoreExport.bind(app.map.getLayersByName("wfsLayer")[0]);
+                
+            }
+                        
+            Ext.getCmp("wfsReconocerButton").show();
+            Ext.getCmp("wfsSeleccionarButton").show();
+            Ext.getCmp("wfsLimpiarButton").show();
+            Ext.getCmp("wfsCerrarButton").show();
+                        
+            app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
 
-                Ext.getCmp("featureGridPanel").reconfigure(
-                    new GeoExt.data.FeatureStore({
-                        fields: fields,
-                        layer: app.map.getLayersByName("wfsLayer")[0]
-                    }),
-                    new Ext.grid.ColumnModel({
-                        columns: columns
-                    })
-                );  
+            var x = 3;
+            while(x < app.wfsStoreExport.fields.items.length){
+                app.wfsStoreExport.fields.removeAt(x);
+            }
+            app.wfsStoreExport.fields.addAll(fields);
+            app.wfsStoreExport.bind(app.map.getLayersByName("wfsLayer")[0]);
 
-                Ext.getCmp("featureGridPanel").getSelectionModel().bind(app.map.getLayersByName("wfsLayer")[0]);
+            Ext.getCmp("featureGridPanel").reconfigure(
+                new GeoExt.data.FeatureStore({
+                    fields: fields,
+                    layer: app.map.getLayersByName("wfsLayer")[0]
+                }),
+                new Ext.grid.ColumnModel({
+                    columns: columns
+                })
+            );  
 
-                if (app.wfsReconocerControl != null){
-                    app.wfsReconocerControl.deactivate();
-                    app.map.removeControl(app.wfsReconocerControl);
-                }
+            Ext.getCmp("featureGridPanel").getSelectionModel().bind(app.map.getLayersByName("wfsLayer")[0]);
 
-                app.wfsReconocerControl = new OpenLayers.Control.GetFeature({
-                    protocol: new OpenLayers.Protocol.WFS({
-                        url: leaf.layer.url,
-                        version: "1.1.0",
-                        featureType: leaf.layer.params.LAYERS.substr(leaf.layer.params.LAYERS.indexOf(":") + 1),
-                        srsName: 'EPSG:900913'
-                    }),
-                    box: true,
-                    hover: false,
-                    multipleKey: "shiftKey",
-                    toggleKey: "ctrlKey",
-                    maxFeatures:1000
-                });
-
-                app.wfsReconocerControl.events.register("featureselected", this, function(leaf) {
-
-                    app.map.getLayersByName("wfsLayer")[0].addFeatures([leaf.feature]);
-
-                });
-
-                app.wfsReconocerControl.events.register("featureunselected", this, function(leaf) {
-                    app.map.getLayersByName("wfsLayer")[0].removeFeatures([leaf.feature]);
-                });
-
-                app.map.addControl(app.wfsReconocerControl);
-                app.wfsReconocerControl.deactivate();                                           
-
-                var selectControls = app.map.getControlsByClass('OpenLayers.Control.SelectFeature');
-                for(var i=0; i<selectControls.length; i++){
-                    if(selectControls[i].layer.name == "wfsLayer"){
-                        app.wfsSelectControl = selectControls[i];
-                        break;
-                    }
-                }
-
-                app.wfsSelectControl.deactivate();
-
-                Ext.getCmp("wfsReconocerButton").toggle(true);
-
+            if (app.wfsReconocerControl != null){
+                app.wfsReconocerControl.deactivate();
+                app.map.removeControl(app.wfsReconocerControl);
             }
 
+            app.wfsReconocerControl = new OpenLayers.Control.GetFeature({
+                protocol: new OpenLayers.Protocol.WFS({
+                    url: leaf.layer.url,
+                    version: "1.1.0",
+                    featureType: leaf.layer.params.LAYERS.substr(leaf.layer.params.LAYERS.indexOf(":") + 1),
+                    srsName: 'EPSG:900913',
+                    maxFeatures:100
+                }),
+                box: true,
+                hover: false,
+                multipleKey: "shiftKey",
+                toggleKey: "ctrlKey",
+                maxFeatures:100
+            });
+
+            app.wfsReconocerControl.events.register("featureselected", this, function(leaf) {
+
+                app.map.getLayersByName("wfsLayer")[0].addFeatures([leaf.feature]);
+
+            });
+
+            app.wfsReconocerControl.events.register("featureunselected", this, function(leaf) {
+                app.map.getLayersByName("wfsLayer")[0].removeFeatures([leaf.feature]);
+            });
+
+            app.map.addControl(app.wfsReconocerControl);
+            app.wfsReconocerControl.deactivate();                                           
+
+            var selectControls = app.map.getControlsByClass('OpenLayers.Control.SelectFeature');
+            for(var i=0; i<selectControls.length; i++){
+                if(selectControls[i].layer.name == "wfsLayer"){
+                    app.wfsSelectControl = selectControls[i];
+                    break;
+                }
+            }
+
+            app.wfsSelectControl.deactivate();
+
+            Ext.getCmp("wfsReconocerButton").toggle(true);            
+            
         }
-    });    
+
+    }
     
 };
 
 /**
- * Handler correspondiente al evento asociado al botón "Atributos".
+ * Handler correspondiente al evento asociado al botón "Descargar".
  * @param {type} leaf
  * @returns {undefined} Esta función no devuelve resultados.
  */
@@ -1118,10 +1136,6 @@ handler.onDescargarButton = function(leaf, titulo, params){
                 mask.show();
             },
             load: function(){
-                var descripcionEstiloField;
-                var styleCombo;
-                var styledata = [];
-                var styleabstract = {};
 
                 mask.hide();
                 var item = this.find('name', params.layers);
@@ -1135,7 +1149,6 @@ handler.onDescargarButton = function(leaf, titulo, params){
                     }
                 }
                 var url = servidor+'?service=wfs&version=2.0.0&request=GetFeature&typeName='+propiedades.name+'&outputFormat=shape-zip&SRSNAME=EPSG:4326';
-//                window.open('?service=wfs&version=2.0.0&request=GetFeature&typeName=rural:departamentos&outputFormat=shape-zip&SRSNAME=EPSG:22172', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height=50, width=50');
                 window.open(url, '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height=50, width=50');
 
             },

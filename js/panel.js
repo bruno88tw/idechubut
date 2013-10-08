@@ -26,7 +26,7 @@ var panel = {};
 
 /**
  * Crea y devuelve el panel principal del viewport.
- * @returns {Array} Panel del viewport.
+ * @returns {Ext.Panel}
  */
 panel.viewportPanel = function(){
     
@@ -67,7 +67,7 @@ panel.banner = function(){
 
 /**
  * Crea y devuelve el panel que contiene todo menos el banner.
- * @returns {Array} Panel contenedor.
+ * @returns {Ext.Panel}
  */
 panel.containerPanel = function(){
     
@@ -79,9 +79,7 @@ panel.containerPanel = function(){
         items:[                  
             panel.westPanel(),                     
             panel.centerPanel()                                              
-        ],
-//        tbar:toolbar.mapPanelTopBar(),
-//        bbar: toolbar.mapPanelBottomBar()
+        ]
     });
     
     return containerPanel;
@@ -89,8 +87,8 @@ panel.containerPanel = function(){
 };
 
 /**
- * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
- * @returns {Array} Panel central.
+ * Crea y devuelve el panel sobre el que se visualizará el tabPanel y el localizador.
+ * @returns {Ext.Panel}
  */
 panel.westPanel = function(){
     
@@ -103,8 +101,11 @@ panel.westPanel = function(){
         style: 'border-top-color:#BCBCBC; border-top-width:1px;\n\
                 border-bottom-color:#BCBCBC; border-bottom-width:1px',
         items:[                  
-            panel.accordionPanel(),
+            panel.tabPanel(),
             panel.minimapPanel()                                                 
+        ],
+        bbar:[
+            componentes.geocoderComboBox(),
         ]
     });
     
@@ -113,31 +114,18 @@ panel.westPanel = function(){
 };
 
 /**
- * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
- * @returns {Array} Panel central.
+ * Crea y devuelve el tabPanel que contiene los paneles de árbol de capas, capas base, leyenda y orden de capa.
+ * @returns {Ext.TabPanel}
  */
-panel.accordionPanel = function(){
+panel.tabPanel = function(){
     
-    var accordionPanel = new Ext.TabPanel({
+    var tabPanel = new Ext.TabPanel({
         region:"center",
-//        layout:"accordion",
         activeTab: 0,
-        id: "accordionPanel",
-//        layoutConfig: {
-//            // layout-specific configs go here
-//            titleCollapse: true,
-//            animate: false,
-//            activeOnTop: true,
-//            hideCollapseTool: true
-//        },
-//        enableTabScroll:true,
-//        animScroll: true,
+        id: "tabPanel",
         border:false,
-//        unstyled: true,
         bodyCfg : { style: {'background':'#F9F9F9'} },        
-//        width: 230,
         items:[   
-
             panel.layerTreePanel(),     
             panel.capasBasePanel(),             
             panel.legendPanel(),
@@ -146,13 +134,13 @@ panel.accordionPanel = function(){
         ]
     });
     
-    return accordionPanel;
+    return tabPanel;
     
 };
 
 /**
- * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
- * @returns {Array} Panel central.
+ * Crea y devuelve el panel sobre el que se visualizará el localizador.
+ * @returns {Ext.Panel}
  */
 panel.minimapPanel = function(){
        
@@ -161,10 +149,9 @@ panel.minimapPanel = function(){
         height: 150,
         minHeight: 150,
         maxHeight: 150,
-//        width: 100,
         split:true,
         collapseMode:"mini",
-        collapsed: true,
+        collapsed: false,
         id: "minimapPanel",
         border:false,
         style: 'background:#BCBCBC;',
@@ -182,7 +169,7 @@ panel.minimapPanel = function(){
 
 /**
  * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
- * @returns {Array} Panel central.
+ * @returns {Ext.Panel}
  */
 panel.centerPanel = function(){
     
@@ -202,7 +189,7 @@ panel.centerPanel = function(){
 
 /**
  * Instancia y devuelve el panel sobre el que se visualizará el mapa.
- * @returns {GeoExt.MapPanel} Panel del mapa.
+ * @returns {GeoExt.MapPanel}
  */
 panel.mapPanel = function(){
     
@@ -229,8 +216,8 @@ panel.mapPanel = function(){
 };
 
 /**
- * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
- * @returns {Array} Panel central.
+ * Crea y devuelve el panel de capas base.
+ * @returns {Ext.Panel}
  */
 panel.capasBasePanel = function(){
     
@@ -362,11 +349,12 @@ panel.capasBasePanel = function(){
             width: 262,
             border: false,      
             autoScroll: true,
-            useArrows: true,
+//            useArrows: true,
+            lines: true,
             bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
             root: capasBase,
             rootVisible: false,
-            enableDD: true
+//            enableDD: true
         })
     });
     
@@ -375,24 +363,27 @@ panel.capasBasePanel = function(){
 };
 
 /**
- * Instancia y devuelve el panel sobre el que se visualizará el árbol de capas.
- * @returns {Ext.tree.TreePanel} Panel del árbol de capas.
+ * Instancia y devuelve el panel de árbol de capas.
+ * @returns {Ext.Panel}
  */
-panel.layerTreePanel = function(){
+panel.layerTreePanel = function(){              
         
     var layerTreePanel = new Ext.Panel({
         iconCls: "treeLayers-headerIcon",
         tabTip: "Árbol de capas",
-        layout:"border",
+        layout:"border",        
         items: new Ext.tree.TreePanel({
-            title: "Árbol de capas",     
+            title: "Árbol de capas",   
+//            plugins: [
+//                new GeoExt.plugins.TreeNodeComponent(),
+//            ],
             region: "center",
             width: 262,
             maxWidth: 262,
             minWidth: 262,
             border: false,      
             autoScroll: true,
-            useArrows: true,
+//            lines: false,
             bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
             id: "layerTreePanel",
             root: app.rootnode,
@@ -408,29 +399,66 @@ panel.layerTreePanel = function(){
 };
 
 /**
- * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
- * @returns {Array} Panel central.
+ * Crea y devuelve el panel de orden de capas.
+ * @returns {Ext.Panel}
  */
 panel.ordenPanel = function(){
     
+//    var LayerNodeUI = Ext.extend(
+//        GeoExt.tree.LayerNodeUI,
+//        new GeoExt.tree.TreeNodeUIEventMixin()
+//    );    
+//        
+//    var store = new GeoExt.data.LayerStore({
+//        map: app.map,
+//        layers: app.map.layers
+//    });        
+//    
     var ordenPanel = new Ext.Panel({
         tabTip: "Orden de capas",
         iconCls: "ordenLayers-headerIcon",
         layout:"border",
         items: new Ext.tree.TreePanel({
             title: "Orden de capas",
+//            plugins: [
+//                new GeoExt.plugins.TreeNodeComponent(),
+//            ],
+//            loader: {
+//                applyLoader: false,
+//                uiProviders: {
+//                    "custom_ui": LayerNodeUI
+//                }
+//            },
             region: "center",
             width: 262,
             border: false,      
             autoScroll: true,
-            useArrows: true,
+//            useArrows: true,
             bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
             root: new GeoExt.tree.OverlayLayerContainer({
-                text: "Capas",
-                icon: "img/layers3.png",
-                iconCls: "layerNodeIcon",
                 map: app.map,
-                expanded: true
+                expanded: false,
+//                loader: {
+//                    createNode: function(attr) {
+//                        // add a WMS legend to each node created
+//                        attr.icon = "img/layers3.png";
+//                        attr.checked = false;
+//                        attr.uiProvider = "custom_ui";
+//                        attr.component = new GeoExt.WMSLegend({
+//                            layerRecord: store.getByLayer(attr.layer),
+//                            showTitle: false,
+//                            hidden: true,
+//                            baseParams: {
+//                                FORMAT: 'image/png',
+//                                LEGEND_OPTIONS: 'forceLabels:on'
+//                            },                            
+//                            defaults: {
+//                                style: 'padding-left:30px',
+//                            }
+//                        });                        
+//                        return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
+//                    }
+//                }                           
             }),
             rootVisible: false,
             enableDD: true
@@ -442,8 +470,8 @@ panel.ordenPanel = function(){
 };
 
 /**
- * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
- * @returns {Array} Panel central.
+ * Crea y devuelve el panel de leyenda.
+ * @returns {Ext.Panel}
  */
 panel.legendPanel = function(){
     
@@ -475,7 +503,7 @@ panel.legendPanel = function(){
 
 /**
  * Instancia y devuelve el panel sobre el que se visualizarán los atributos de las capas.
- * @returns {Ext.grid.GridPanel} Panel de atributos.
+ * @returns {Ext.grid.GridPanel}
  */
 panel.featureGridPanel = function(){
     
@@ -485,9 +513,7 @@ panel.featureGridPanel = function(){
         style: 'border-right-color:#BCBCBC; border-right-width:1px;\n\
         border-left-color:#BCBCBC; border-left-width:1px;\n\
         border-bottom-color:#BCBCBC; border-bottom-width:1px',
-        height: 155,
-//        minHeight: 210,
-//        maxHeight: 210,        
+        height: 155,     
         id: "featureGridPanel",
         viewConfig: {forceFit: false},
         border: false,

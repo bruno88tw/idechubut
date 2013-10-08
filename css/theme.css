@@ -219,8 +219,8 @@ ul.x-tab-strip-bottom{
 }
 /*Margen de los tree-node*/
 .x-tree-node-el {
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 /*Pestañas del tabpanel*/
@@ -299,3 +299,8 @@ ul.x-tab-strip-top {
 .x-panel-bbar .x-toolbar, .x-panel-tbar .x-toolbar {
     padding-left: 3px;
 }
+
+/*Oculta el ícono de las capas en el árbol de capas*/
+/*.gx-tree-layer-icon {
+    display: none;
+}*/

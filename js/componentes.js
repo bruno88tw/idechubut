@@ -168,8 +168,40 @@ componentes.zoomPosteriorButton = function(){
  */
 componentes.distanciaButton = function(){
     
+    // style the sketch fancy
+    var sketchSymbolizers = {
+        "Point": {
+            pointRadius: 4,
+            graphicName: "square",
+            fillColor: "white",
+            fillOpacity: 1,
+            strokeWidth: 1,
+            strokeOpacity: 1,
+            strokeColor: "#333333"
+        },
+        "Line": {
+            strokeWidth: 3,
+            strokeOpacity: 1,
+            strokeColor: "#666666",
+            strokeDashstyle: "dash"
+        }
+    }; 
+    
+    var style = new OpenLayers.Style();
+    
+    style.addRules([
+        new OpenLayers.Rule({symbolizer: sketchSymbolizers})
+    ]);
+
+    var styleMap = new OpenLayers.StyleMap({"default": style}); 
+    
     var distanciaButton = new GeoExt.Action({
         control: new OpenLayers.Control.Measure(OpenLayers.Handler.Path, {
+            handlerOptions: {
+                layerOptions:{
+                    styleMap: styleMap
+                }                
+            },
             eventListeners: {
                 measure: function(evt) {
                     new Ext.Window({
@@ -179,8 +211,6 @@ componentes.distanciaButton = function(){
                         layout: "fit",
                         autoScroll:true,
                         resizable: false,
-//                        maximizable :true,
-//                        collapsible : true,
                         shadow: false,
                         bodyStyle:'background-color:white',                                        
                         html:'<div align="center" style="font-size:14px; padding:15px">La distancia es de ' + Math.round(evt.measure*100)/100 + ' ' + evt.units + '</div>'
@@ -204,8 +234,41 @@ componentes.distanciaButton = function(){
  */
 componentes.superficieButton = function(){
     
+    // style the sketch fancy
+    var sketchSymbolizers = {
+        "Point": {
+            pointRadius: 4,
+            graphicName: "square",
+            fillColor: "white",
+            fillOpacity: 1,
+            strokeWidth: 1,
+            strokeOpacity: 1,
+            strokeColor: "#333333"
+        },
+        "Polygon": {
+            strokeWidth: 2,
+            strokeOpacity: 1,
+            strokeColor: "#666666",
+            fillColor: "white",
+            fillOpacity: 0.3
+        } 
+    }; 
+    
+    var style = new OpenLayers.Style();
+    
+    style.addRules([
+        new OpenLayers.Rule({symbolizer: sketchSymbolizers})
+    ]);
+
+    var styleMap = new OpenLayers.StyleMap({"default": style});   
+    
     var superficieButton = new GeoExt.Action({
         control: new OpenLayers.Control.Measure(OpenLayers.Handler.Polygon, {
+            handlerOptions: {
+                layerOptions:{
+                    styleMap: styleMap
+                }                
+            },
             eventListeners: {
                 measure: function(evt) {
                     new Ext.Window({
@@ -215,8 +278,6 @@ componentes.superficieButton = function(){
                         layout: "fit",
                         autoScroll:true,
                         resizable: false,
-//                        maximizable :true,
-//                        collapsible : true,
                         shadow: false,
                         bodyStyle:'background-color:white',
                         html:'<div align="center" style="font-size:14px; padding:15px">La superficie es de ' + Math.round(evt.measure*100)/100 + ' ' + evt.units + '<sup>2</sup></div>'
@@ -264,7 +325,7 @@ componentes.geocoderComboBox = function(){
         map: app.map,                
         bounds: app.max_bounds,
         border: false,
-        width: 150,
+        width: 224,
         heigh:100,
         boxMaxHeight: 100,
         boxMinHeight: 100
@@ -282,7 +343,7 @@ componentes.configuracionButton = function(){
     
     var configuracionButton = new Ext.Button({
         tooltip: 'Configuración',
-        icon: 'img/gear.png',
+        icon: 'img/equalizer.png',
         id:'configuracionButton',
         handler: function(){
             Ext.getCmp("configuracionButton").disable();
@@ -291,19 +352,14 @@ componentes.configuracionButton = function(){
                 iconCls: 'configuracionIcon',
                 layout: "fit",
                 shadow: false,
-                width: 180,
-                height:235,
+                width: 185,
+                height:240,
                 resizable: false,
                 items: [
-                    new Ext.Panel({
-                        border: false,
-                        width: 185,
-                        heigth: 223,
-                        items: new Ext.FormPanel({
-                             labelWidth: 0, // label settings here cascade unless overridden
-                             frame:true,
-                             border: false,
-                             items: [
+                        new Ext.FormPanel({
+                            labelWidth: 0, 
+                            padding: 10,
+                            items: [
                                 componentes.configuracionTituloField(),
                                 componentes.configuracionSubtituloField(),
                                 componentes.configuracionNavegadorCheckbox(),
@@ -314,7 +370,6 @@ componentes.configuracionButton = function(){
                                 componentes.configuracionGrillaCheckbox(),
                              ]
                          })
-                    })
                 ]
             });
             window.show();   
@@ -326,6 +381,10 @@ componentes.configuracionButton = function(){
     
 };
 
+/**
+ * Devuelve un campo compuesto por el checkbox de título y el botón de título.
+ * @returns {Ext.form.CompositeField}
+ */
 componentes.configuracionTituloField = function(){
     
     var configuracionTituloField = new Ext.form.CompositeField({
@@ -371,6 +430,10 @@ componentes.configuracionCambiarTituloButton = function(){
     
 };
 
+/**
+ * Devuelve un campo compuesto por el checkbox de subtítulo y el botón de subtítulo.
+ * @returns {Ext.form.CompositeField}
+ */
 componentes.configuracionSubtituloField = function(){
     
     var configuracionSubtituloField = new Ext.form.CompositeField({
@@ -417,7 +480,7 @@ componentes.configuracionCambiarSubtituloButton = function(){
 };
 
 /**
- * Devuelve el checkbox de leyenda.
+ * Devuelve el checkbox de navegador.
  * @returns {Ext.menu.CheckItem}
  */
 componentes.configuracionNavegadorCheckbox = function(){    
@@ -552,7 +615,7 @@ componentes.acercaDeButton = function(){
     
     var acercaDeButton = new Ext.Button({
         tooltip: 'Acerca de',
-        icon: 'img/star.png',
+        icon: 'img/information-italic.png',
         handler: handler.onAcercaDeButton
     });
     
@@ -596,6 +659,10 @@ componentes.scaleComboBox = function(){
     
 };
 
+/**
+ * Devuelve el botón de aumento de zoom
+ * @returns {Ext.Button}
+ */
 componentes.bottomBarZoomInButton = function(){
     
     var zoomInButton = new Ext.Button({
@@ -610,6 +677,10 @@ componentes.bottomBarZoomInButton = function(){
     
 };
 
+/**
+ * Devuelve el botón de alejamiento de zoom
+ * @returns {Ext.Button}
+ */
 componentes.bottomBarZoomOutButton = function(){
     
     var zoomOutButton = new Ext.Button({
@@ -624,6 +695,10 @@ componentes.bottomBarZoomOutButton = function(){
     
 };
 
+/**
+ * Devuelve una barra deslizable del nivel de zoom.
+ * @returns {GeoExt.ZoomSlider}
+ */
 componentes.zoomSlider = function(){
     
     var zoomSlider = new GeoExt.ZoomSlider({
@@ -764,11 +839,9 @@ componentes.wfsReconocerButton = function(){
     var wfsReconocerButton = new Ext.Button({
         id: "wfsReconocerButton",
         tooltip: 'Reconocer',
-//        text:"Reconocer",
         icon: 'img/cursor-question.png',
         toggleGroup: "nav", 
         allowDepress: true,
-        disabled: true,
         hidden: true,
         listeners: {
            toggle: handler.onWfsReconocerButton
@@ -789,11 +862,9 @@ componentes.wfsSeleccionarButton = function(){
    var wfsSeleccionarButton = new Ext.Button({
         id: "wfsSeleccionarButton",
         tooltip: 'Seleccionar',
-//        text:"Seleccionar",
         icon: 'img/cursor.png',
         toggleGroup: "nav", 
         allowDepress: true,
-        disabled: true,
         hidden: true,
         listeners: {
            toggle: handler.onWfsSeleccionarButton
@@ -812,9 +883,7 @@ componentes.wfsLimpiarButton = function(){
    
    var wfsLimpiarButton = new Ext.Button({
         tooltip: 'Limpiar',
-//        text:"Limpiar",
         icon: 'img/broom.png',
-        disabled: true,
         hidden: true,
         id: "wfsLimpiarButton",
         handler: handler.onWfsLimpiarButton
@@ -838,12 +907,15 @@ componentes.wfsExportarAExcelLink = function(){
     
 };
 
+/**
+ * Devuelve el botón para cerrar el panel de atributos.
+ * @returns {Ext.Button}
+ */
 componentes.wfsCerrarButton = function(){
   
     var wfsCerrarButton = new Ext.Button({
         tooltip: 'Cerrar',
-        icon: 'img/close.png',
-        disabled: true,
+        icon: 'img/close.png',        
         hidden: true,
         id: "wfsCerrarButton",
         handler: function(){
@@ -852,10 +924,6 @@ componentes.wfsCerrarButton = function(){
             Ext.getCmp("viewportPanel").doLayout();   
             app.isAttributesPanelHidden = true;
             Ext.getCmp("buttonNav").toggle(true);
-            Ext.getCmp("wfsReconocerButton").setDisabled(true);
-            Ext.getCmp("wfsSeleccionarButton").setDisabled(true);
-            Ext.getCmp("wfsLimpiarButton").setDisabled(true);
-            Ext.getCmp("wfsCerrarButton").setDisabled(true);
             Ext.getCmp("wfsReconocerButton").hide();
             Ext.getCmp("wfsSeleccionarButton").hide();
             Ext.getCmp("wfsLimpiarButton").hide();
