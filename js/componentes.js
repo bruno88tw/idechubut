@@ -326,7 +326,7 @@ componentes.geocoderComboBox = function(){
         bounds: app.max_bounds,
         border: false,
         width: 224,
-        heigh:100,
+        heigh:150,
         boxMaxHeight: 100,
         boxMinHeight: 100
     });
@@ -900,7 +900,7 @@ componentes.wfsLimpiarButton = function(){
 componentes.wfsExportarAExcelLink = function(){
     
     var wfsExportarAExcelLink = new Ext.ux.Exporter.Button({
-        store: app.wfsStoreExport
+        store: app.wfsStoreExport,
     });
     
     return wfsExportarAExcelLink;

@@ -105,7 +105,7 @@ panel.westPanel = function(){
             panel.minimapPanel()                                                 
         ],
         bbar:[
-            componentes.geocoderComboBox(),
+            componentes.geocoderComboBox()
         ]
     });
     
@@ -438,11 +438,11 @@ panel.ordenPanel = function(){
             root: new GeoExt.tree.OverlayLayerContainer({
                 map: app.map,
                 expanded: false,
-//                loader: {
-//                    createNode: function(attr) {
-//                        // add a WMS legend to each node created
-//                        attr.icon = "img/layers3.png";
-//                        attr.checked = false;
+                loader: {
+                    createNode: function(attr) {
+                        // add a WMS legend to each node created
+                        attr.icon = "img/layers3.png";
+                        attr.checked = false;
 //                        attr.uiProvider = "custom_ui";
 //                        attr.component = new GeoExt.WMSLegend({
 //                            layerRecord: store.getByLayer(attr.layer),
@@ -456,9 +456,9 @@ panel.ordenPanel = function(){
 //                                style: 'padding-left:30px',
 //                            }
 //                        });                        
-//                        return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
-//                    }
-//                }                           
+                        return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
+                    }
+                }                           
             }),
             rootVisible: false,
             enableDD: true

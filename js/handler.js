@@ -1028,7 +1028,7 @@ handler.onAtributosButton = function(leaf){
             
             columns.push(new Ext.grid.RowNumberer());
             for(var x = 0; x < atributos.length; x++){
-                if(atributos[x].attributes.name.nodeValue != "the_geom"){
+                if(atributos[x].attributes.name.nodeValue != "the_geom" && atributos[x].attributes.name.nodeValue != "gid"){
                     columns.push({header: atributos[x].attributes.name.nodeValue, dataIndex: atributos[x].attributes.name.nodeValue, sortable: true});
                     if(atributos[x].attributes.type.nodeValue == "xsd:string"){
                         fields.push({name: atributos[x].attributes.name.nodeValue, type: "string"});
