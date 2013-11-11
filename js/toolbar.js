@@ -40,6 +40,7 @@ toolbar.mapPanelTopBar = function(){
         componentes.zoomPosteriorButton(),
         componentes.distanciaButton(),
         componentes.superficieButton(),
+        componentes.informacionButton(), 
         componentes.wfsReconocerButton(), 
         componentes.wfsSeleccionarButton(), 
         componentes.wfsLimpiarButton(),    

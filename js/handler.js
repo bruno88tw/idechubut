@@ -45,16 +45,17 @@ handler.onImportarCapasButton = function(){
          width: 300,
          height:300,
          resizable: false,
-         items: [                     
-             new Ext.Panel({
-                 bodyStyle: 'padding:5px',
-                 border: false,
-                 autoScroll: true,
-                 layout: "fit",
-                 width: "100%",
-                 heigth: "100%",
-                 items:[inputTextArea]
-             })
+         items: [        
+             inputTextArea
+//             new Ext.Panel({
+//                 bodyStyle: 'padding:5px',
+//                 border: false,
+//                 autoScroll: true,
+//                 layout: "fit",
+//                 width: "100%",
+//                 heigth: "100%",
+//                 items:[inputTextArea]
+//             })
          ],
          bbar:[
             componentes.separador(), 
@@ -117,16 +118,17 @@ handler.onExportarCapasButton = function(){
         width: 300,
         height:300,
         resizable: false,
-        items: [                     
-            new Ext.Panel({
-                bodyStyle: 'padding:5px',
-                border: false,
-                layout: "fit",
-                autoScroll: true,
-                width: "100%",
-                heigth: "100%",
-                items:[inputTextArea]
-            })
+        items: [      
+            inputTextArea
+//            new Ext.Panel({
+//                bodyStyle: 'padding:5px',
+//                border: false,
+//                layout: "fit",
+//                autoScroll: true,
+//                width: "100%",
+//                heigth: "100%",
+//                items:[inputTextArea]
+//            })
         ],
         bbar:[
            componentes.separador(), 
@@ -461,31 +463,14 @@ handler.onAcercaDeButton = function(){
                 width: "100%",
                 heigth: "100%",
                 html: '<div align="center" style="font-size:small">\n\
-                <div align="center" style="color:#333333;font-size:xx-large; background:#548DD4; padding-top:5px; padding-bottom:5px"><b>Visor de mapas</b></div></br>\n\
-                Esta aplicación fue desarrollada por <b>Bruno José Vecchietti</b> para la <b>Universidad Nacional de la Patagonia San Juan Bosco</b> como proyecto de Tesina de la carrera de Licenciatura en Informática. </br>\n\
+                <div style="font-size:xx-large"><b>Visor de mapas</b></div></br>\n\
+                Esta aplicación fue desarrollada por el Departamento de Sistemas Informáticos en conjunto con el Departamento de Cartografía pertenecientes a la Dirección General de Estadística y Censos del Gobierno de la Provincia del Chubut.</br>\n\
                 </br>\n\
-                Para su desarrollo se utilizó:</br>\n\
+                Para su desarrollo se utilizó OpenLayers, Ext JS y GeoExt.</br>\n\
                 </br>\n\
-                <div align="center"><a href="http://openlayers.org/"><img src="img/OpenLayers.png" alt="ayuda" style="height:30px; width:160px"></a></div></br>\n\
-                <div align="center"><a href="http://www.sencha.com/products/extjs3"><img src="img/ExtJS.png" alt="ayuda" style="height:20px; width:70px"></a></div></br>\n\
-                <div align="center"><a href="http://www.geoext.org/"><img src="img/GeoExt.png" alt="ayuda" style="height:30px; width:110px"></a></div></br>\n\
-                \n\
-                <div style="background:#EBEBEB; font-size:xx-small; padding:5px">\n\
-                Copyright (C) 2013  Bruno José Vecchietti <a href="bruno88tw@gmail.com">bruno88tw@gmail.com</a>\n\
-                </br>\n\
-                This program is free software: you can redistribute it and/or modify</br>\n\
-                it under the terms of the GNU General Public License as published by</br>\n\
-                the Free Software Foundation, either version 3 of the License, or</br>\n\
-                (at your option) any later version.</br>\n\
-                </br>\n\
-                This program is distributed in the hope that it will be useful,</br>\n\
-                but WITHOUT ANY WARRANTY; without even the implied warranty of</br>\n\
-                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</br>\n\
-                GNU General Public License for more details.</br>\n\
-                </br>\n\
-                You should have received a copy of the GNU General Public License</br>\n\
-                along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</br>\n\
-                </div>\n\
+                <div align="center"><img src="img/OpenLayers.png" alt="ayuda"></div></br></br>\n\
+                <div align="center"><img src="img/ExtJS.png" alt="ayuda"></div></br></br>\n\
+                <div align="center"><img src="img/GeoExt.png" alt="ayuda"></div></br></br>\n\
                 </div>'
             })
         ]
@@ -1417,25 +1402,33 @@ handler.onAgregarCapasButton = function(node, capabilitiesGridPanel, capabilitie
 handler.onGetFeatureInfo = function(e){
     
     var info = [];
-    Ext.each(e.features, function(feature) {    
-        var p;                             
-        p = new Ext.grid.PropertyGrid({
-            title: feature.gml.featureType
-        });    
-        delete p.getStore().sortInfo; // Remove default sorting
-        p.getColumnModel().getColumnById('name').sortable = false; // set sorting of first column to false
-        p.setSource(feature.attributes); // Now load data
-        var source = feature.attributes;
-        info.push(p); 
+    Ext.each(e.features, function(feature) {  
+        if((feature.gml.featureNS == "http://www.dgeyc.com/rural" && feature.gml.featureType == "batimetria") ||
+           (feature.gml.featureNS == "http://www.dgeyc.com/rural" && feature.gml.featureType == "continente") ||    
+           (feature.gml.featureNS == "http://www.dgeyc.com/rural" && feature.gml.featureType == "provincias")){
+            
+        }else{
+            
+            var p;                             
+            p = new Ext.grid.PropertyGrid({
+                title: feature.gml.featureType
+            });    
+            delete p.getStore().sortInfo; // Remove default sorting
+            p.getColumnModel().getColumnById('name').sortable = false; // set sorting of first column to false
+            p.setSource(feature.attributes); // Now load data
+            var source = feature.attributes;
+            info.push(p);             
+            
+        }
+
     });
     new Ext.Window({
         title: "Información",
         iconCls: "informacionIcon",                    
-        width: 340,
-        height: (Ext.getCmp("mapPanel").getHeight()) - 56,
+        width: 350,
+        height: (Ext.getCmp("mapPanel").getHeight()) / 2,
         x: Ext.getCmp("mapPanel").getPosition()[0],
-//        y: Ext.getCmp("mapPanel").getPosition()[1] + ((Ext.getCmp("mapPanel").getHeight()) / 2) - 30,
-        y: Ext.getCmp("mapPanel").getPosition()[1] + 28,
+        y: Ext.getCmp("mapPanel").getPosition()[1] + ((Ext.getCmp("mapPanel").getHeight()) / 2) - 25,
         shadow: false,
         layout: "border",                               
         items: new Ext.TabPanel({
@@ -1445,6 +1438,6 @@ handler.onGetFeatureInfo = function(e){
             animScroll: true,
             items: info
         })
-    }).show();    
+    }).show();      
     
 };

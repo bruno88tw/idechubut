@@ -48,49 +48,51 @@ config.tree =
             ]},
             {"type":"folder", "name":"Mapas temáticos", "children":[
                 {"type":"folder","name":"Departamentos","children":[
-                    {"type":"leaf", "title":"Población total 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Índice de debilidad social", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:debilidad_social", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Índice de delincuencia", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:delincuencia", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Porcentaje de población extranjera", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_departamentos_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}                            
+                    {"type":"leaf", "title":"Población 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Población extranjera 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_departamentos_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},                            
+/*                    {"type":"leaf", "title":"Índice de debilidad social", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:debilidad_social", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},*/
                 ]},   
+/*
                 {"type":"folder","name":"Fracciones","children":[
-                    {"type":"leaf", "title":"Población total 2010 por fraccion", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_fracciones_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Población 2010 por fraccion", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_fracciones_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
                 ]},   
+*/
                 {"type":"folder","name":"Radios","children":[
-                    {"type":"leaf", "title":"Población total 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Población 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Población extranjera 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Hogares 2010 con NBI por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_algun_nbi_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                    {"type":"leaf", "title":"Índice femeneidad 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_femeneidad_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+                ]},   
+                {"type":"folder","name":"Localidades","children":[
+                    {"type":"leaf", "title":"Población 2010 por localidad", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_localidades_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
                 ]},   
             ]}            
     ]},
-    {"type":"folder","name":"Otros organismos","children":[
-            {"type":"folder","name":"IGN","children":[]},
-            {"type":"folder","name":"Secretaría de Energía","children":[]},
-            {"type":"folder","name":"SCTyE","children":[]}
-    ]}
-];        
-        
-
-//    Ejemplos
-//    {"type":"folder","name":"_nombre_","children":[]}
-//    {"type":"leaf", "title":"_titulo_", "server":"_server_url_", "params":{layers: "_layers_names_", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-
+//    {"type":"folder","name":"Otros organismos","children":[
+//            {"type":"folder","name":"IGN","children":[]},
+//            {"type":"folder","name":"Secretaría de Energía","children":[]},
+//            {"type":"folder","name":"SCTyE","children":[]}
+//    ]}
+];
 
 /**
  * Orden de las capas.
  * @type Array
  */
 config.index = [
-    //Capas base - Deben ir siempre primero
+    "IGN",
     "OpenStreetMap","Google Streets","Google Terrain",
     "Google Satellite","Google Hybrid","Bing Road",
     "Bing Aerial","Bing Hybrid","MapQuest", "MapQuest Aerial",
-    "Blank",
     
-    //Capas superpuestas - A continuación deben agregarse las capas superpuestas
-    "Población total 2010 por departamento","Población total 2010 por fraccion","Población total 2010 por radio","Índice de debilidad social",
-    "Índice de delincuencia","Porcentaje de población extranjera","Censo Nac. Agropecuario 2002",
+    "Población 2010 por departamento",
+/*  "Población 2010 por fraccion",*/ 
+    "Población 2010 por radio","Población 2010 por localidad",
+/*"Índice de debilidad social",*/
+    "Población extranjera 2010 por departamento","Población extranjera 2010 por radio","Hogares 2010 con NBI por radio",
+    "Índice femeneidad 2010 por radio","Censo Nac. Agropecuario 2002",
     "Censo Nac. Agropecuario 2008","Radios","Fracciones",
     "Departamentos","Comarcas","Manzanas","Calles","Localidades","Ejidos","Barrios",
     
-    //Capas de vectores - Deben ir siempre al final
     "Location","wfsLayer"
 ];        

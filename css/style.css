@@ -136,7 +136,7 @@
    z-index:1005; 
    top:10px; 
    left: 10px;
-   display: none;
+   display: block;
 }
 
 .scalebox{

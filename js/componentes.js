@@ -352,6 +352,8 @@ componentes.configuracionButton = function(){
                 iconCls: 'configuracionIcon',
                 layout: "fit",
                 shadow: false,
+                x: Ext.getCmp("mapPanel").getPosition()[0] + ((Ext.getCmp("mapPanel").getWidth())) - 189,
+                y: Ext.getCmp("mapPanel").getPosition()[1] + 32,
                 width: 185,
                 height:240,
                 resizable: false,

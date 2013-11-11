@@ -46,19 +46,19 @@ app.projection900913 = new OpenLayers.Projection("EPSG:900913");
  * Resoluciones para los niveles de zoom de las capas base Bing.
  * @type Array
  */
-app.resolutionsBing = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(1, 19);
+app.resolutionsBing = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 19);
 
 /**
  * Resoluciones para los niveles de zoom de las capas base OSM y MapQuest.
  * @type Array
  */
-app.resolutionsOSM = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(3, 19);
+app.resolutionsOSM = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 19);
 
 /**
  * Resoluciones para los niveles de zoom de la capa base MapQuest Aerial.
  * @type Array
  */
-app.resolutionsMapQuestAerial = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(3, 12);
+app.resolutionsMapQuestAerial = OpenLayers.Layer.Bing.prototype.serverResolutions.slice(6, 12);
 
 /**
  * Control de reconocimiento WFS.
@@ -125,8 +125,8 @@ app.fullscreen = false;
 app.configuracion = {
     "titulo":false,
     "subtitulo":false,
-    "navegador":true,
-    "leyenda":false,
+    "navegador":false,
+    "leyenda":true,
     "escala":true,
     "localizador":false,
     "norte":false,
@@ -173,6 +173,7 @@ app.crearMapa = function(){
             controls: [],
             projection: app.projection900913,
             displayProjection: app.projection4326, 
+            restrictedExtent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),  
             units: 'm'
         }
     );   
@@ -206,17 +207,23 @@ app.agregarCapas = function(){
     
     // Capas Base
     //NOTA: para OSM zoomOffset debe ser igual que el zoom menor definido en app.resolutionsOSM
-    app.map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 3, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));    
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 3, maxZoomLevel: 19}));
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 3, maxZoomLevel: 15}));
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 3, maxZoomLevel: 19}));
-    app.map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 3, maxZoomLevel: 19}));    
+    app.map.addLayer(new OpenLayers.Layer.WMS(
+        "IGN", 
+        "http://idedgeyc.chubut.gov.ar/geoserver/wms", 
+        {layers: "rural:basemap", transparent: 'false', format: 'image/jpeg', tiled: 'true'}, 
+        {isBaseLayer: true, visibility: false, singleTile: false, displayInLayerSwitcher: false, zoomOffset: 6, resolutions: app.resolutionsBing}
+    ));   
+    app.map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 6, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));    
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Streets",{minZoomLevel: 6, maxZoomLevel: 19}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 15}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Satellite",{type: google.maps.MapTypeId.SATELLITE, minZoomLevel: 6, maxZoomLevel: 19}));
+    app.map.addLayer(new OpenLayers.Layer.Google("Google Hybrid",{type: google.maps.MapTypeId.HYBRID, minZoomLevel: 6, maxZoomLevel: 19}));    
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Road", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Road", zoomOffset: 6, resolutions: app.resolutionsBing}));
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Aerial", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "Aerial", zoomOffset: 6, resolutions: app.resolutionsBing}));
     app.map.addLayer(new OpenLayers.Layer.Bing({name: "Bing Hybrid", key: 'An-hnXUInDJCCN2NgVvNDgZh5h7Otc4CxXZi9TEgJcqjuAu3W9MSzXoAqkxhB1C5', type: "AerialWithLabels", zoomOffset: 6, resolutions: app.resolutionsBing}));
-    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 3, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));  
-    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 3, resolutions: app.resolutionsMapQuestAerial, isBaseLayer:true, sphericalMercator: true}));            
-    app.map.addLayer(new OpenLayers.Layer("Blank",{isBaseLayer: true}));
+    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest",["http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));  
+    app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutionsMapQuestAerial, isBaseLayer:true, sphericalMercator: true}));            
+    app.map.addLayer(new OpenLayers.Layer("Blank",{isBaseLayer: true, zoomOffset: 6, resolutions: app.resolutionsBing}));
 
     // Vector layer para el localizador
     app.map.addLayer(new OpenLayers.Layer.Vector("Location", {
@@ -293,7 +300,7 @@ app.configuracionFinal = function(){
     document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('legenddiv'));                              
 
     // Agrego el control de posición del mouse 
-    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,3)); 
+//    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,3)); 
 
     // Agrego el control de posición del mouse 
     app.map.addControl(new OpenLayers.Control.MousePosition({
@@ -317,21 +324,21 @@ app.configuracionFinal = function(){
         div: document.getElementById('minimap')            
     }));     
     
-    var minimap = new OpenLayers.Control.OverviewMap({
-        layers:[new OpenLayers.Layer.OSM("OSM",null,null,{isBaseLayer: true, maxZoomLevel: 20})],
-        size: new OpenLayers.Size(220, 140),  
-        div: document.getElementById('minimapa')   
-    });
+//    var minimap = new OpenLayers.Control.OverviewMap({
+//        layers:[new OpenLayers.Layer.OSM("OSM",null,null,{isBaseLayer: true, maxZoomLevel: 20})],
+//        size: new OpenLayers.Size(220, 140),  
+//        div: document.getElementById('minimapa')   
+//    });
     
-    app.map.addControl(minimap);    
+//    app.map.addControl(minimap);    
 
     // Agrega el panel de leyenda que se visualiza dentro del mapa
     new GeoExt.LegendPanel({
-        iconCls: "legendIcon",
+//        iconCls: "legendIcon",
         id: "legendPanelOnMap",
         autoScroll: true,
-        collapsible: false,
-        collapsed: false,
+//        collapsible: false,
+//        collapsed: false,
         border: false,
         renderTo: document.getElementById("legenddiv"),
         style: 'background:#ffffff; border-width:2px; border-color:#BCBCBC',
@@ -373,7 +380,7 @@ app.configuracionFinal = function(){
         }
     });  
     
-    app.map.setCenter((new OpenLayers.LonLat(-62,-38).transform(new OpenLayers.Projection("EPSG:4326"), app.map.getProjectionObject())),1);     
+    app.map.setCenter((new OpenLayers.LonLat(-62,-38).transform(new OpenLayers.Projection("EPSG:4326"), app.map.getProjectionObject())));     
     
      
 };

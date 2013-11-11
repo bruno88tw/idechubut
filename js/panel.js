@@ -55,10 +55,10 @@ panel.banner = function(){
     var banner = {
         region: 'north',
         id:"banner",
-        height: 60,
-        bodyStyle:"background: #7db9e8; background: -moz-linear-gradient(left,  #7db9e8 0%, #2989d8 50%, #207cca 56%, #1e5799 100%); background: -webkit-gradient(linear, left top, right top, color-stop(0%,#7db9e8), color-stop(50%,#2989d8), color-stop(56%,#207cca), color-stop(100%,#1e5799)); background: -webkit-linear-gradient(left,  #7db9e8 0%,#2989d8 50%,#207cca 56%,#1e5799 100%); background: -o-linear-gradient(left,  #7db9e8 0%,#2989d8 50%,#207cca 56%,#1e5799 100%); background: -ms-linear-gradient(left,  #7db9e8 0%,#2989d8 50%,#207cca 56%,#1e5799 100%); background: linear-gradient(to right,  #7db9e8 0%,#2989d8 50%,#207cca 56%,#1e5799 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#1e5799',GradientType=1 ); ",
+        height: 30,
+        bodyStyle:"background: #000000",
         border:false,
-        html: '<div align=left><img src="img/unpsjb.png" alt="banner" style="height: 60px; width: 400px"></div>'
+        html: '<div align=left><img src="img/banner-dgeyc.jpg" alt="banner" style="height: 30px"></div>'
     };
     
     return banner;
@@ -102,7 +102,7 @@ panel.westPanel = function(){
                 border-bottom-color:#BCBCBC; border-bottom-width:1px',
         items:[                  
             panel.tabPanel(),
-            panel.minimapPanel()                                                 
+//            panel.minimapPanel()                                                 
         ],
         bbar:[
             componentes.geocoderComboBox()
@@ -127,10 +127,9 @@ panel.tabPanel = function(){
         bodyCfg : { style: {'background':'#F9F9F9'} },        
         items:[   
             panel.layerTreePanel(),     
-            panel.capasBasePanel(),             
-            panel.legendPanel(),
-            panel.ordenPanel()
-            
+            panel.capasBasePanel(),                         
+            panel.ordenPanel(),
+            panel.legendPanel(),            
         ]
     });
     
@@ -227,7 +226,17 @@ panel.capasBasePanel = function(){
         expanded: false,
         icon: "img/folder.png",
         leaf: false,
-    });        
+    });    
+    capasBase.appendChild(
+        new GeoExt.tree.LayerNode({
+            checkedGroup:"capasBase",
+            text: "IGN",
+            layer: "IGN",   
+            icon: "img/ign.png",
+            leaf:true,
+            map: app.map
+        })
+    );
     capasBase.appendChild(
         new GeoExt.tree.LayerNode({
             checkedGroup:"capasBase",
@@ -435,6 +444,7 @@ panel.ordenPanel = function(){
             autoScroll: true,
 //            useArrows: true,
             bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
+//            bodyCfg : { cls:'x-tree-node-cb' , style: {'display':'none'} },
             root: new GeoExt.tree.OverlayLayerContainer({
                 map: app.map,
                 expanded: false,
@@ -442,7 +452,7 @@ panel.ordenPanel = function(){
                     createNode: function(attr) {
                         // add a WMS legend to each node created
                         attr.icon = "img/layers3.png";
-                        attr.checked = false;
+//                        attr.checked = false;
 //                        attr.uiProvider = "custom_ui";
 //                        attr.component = new GeoExt.WMSLegend({
 //                            layerRecord: store.getByLayer(attr.layer),
