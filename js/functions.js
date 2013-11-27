@@ -18,24 +18,7 @@
  *  along with this program.  If not, see {@link http://www.gnu.org/licenses/}. 
  */
 
-/**
- * Dada una url de un servidor wms devuelve la url del getCapabilities.
- * @param {String} wms_url URL del servidor wms.
- * @returns {String} URL del protocolo WMS getCapabilities del servidor WMS dado.
- */
-function getCapabilitiesUrl(wms_url){
 
-    var cap_url;
-
-    if (wms_url.indexOf("?") == -1){
-        cap_url = wms_url + "?service=wms&request=GetCapabilities";
-    }else{
-        cap_url = wms_url + "&service=wms&request=GetCapabilities";
-    }    
-    
-    return cap_url;
-    
-};
 
 /**
  * Dado un nombre de capa corrobora si existe o no en el mapa.
@@ -294,8 +277,15 @@ function createNode(text){
         expanded: false,
         icon: "img/folder.png",
         leaf: false,
+        cls: 'folder',
+        style: {'background':'#000000'},
         listeners:{
-            contextmenu: function(nodo, event){handler.onNodeContextMenu(nodo, event);}
+            click: function(leaf, event){
+                Ext.getCmp("treePanelTopbarEliminar").disable();
+                Ext.getCmp("treePanelTopbarPropiedades").disable();
+                Ext.getCmp("treePanelTopbarAtributos").disable();    
+                Ext.getCmp("treePanelTopbarZoomCapa").disable();  
+            }
         }
     });
 
@@ -311,7 +301,7 @@ function createNode(text){
  * @param {type} options
  * @returns {GeoExt.tree.LayerNode}
  */
-function createLeaf(titulo, servidor, params, options){    
+function createLeaf(titulo, servidor, params, options){             
     
     var layer = new OpenLayers.Layer.WMS(
         titulo, 
@@ -322,43 +312,111 @@ function createLeaf(titulo, servidor, params, options){
     
     app.map.addLayer(layer);   
     
-//    var store = new GeoExt.data.LayerStore({
-//        map: app.map,
-//        layers: app.map.layers
-//    });
-//
-//    var uiClass = Ext.extend(
-//            GeoExt.tree.LayerNodeUI, 
-//            new GeoExt.tree.TreeNodeUIEventMixin()
-//    );    
+    var store = new GeoExt.data.LayerStore({
+        map: app.map,
+        layers: app.map.layers
+    });
+
+    var uiClass = Ext.extend(
+            GeoExt.tree.LayerNodeUI, 
+            new GeoExt.tree.TreeNodeUIEventMixin()
+    );  
+        
+    var item;    
+    var layers = app.capabilities[servidor].data.items;                
+    for(var x=0; x < layers.length; x++){
+        if( layers[x].data.name == params.layers){
+            item = layers[x].data;
+            break;
+        }
+    }        
     
     var leaf = new GeoExt.tree.LayerNode({
         text: titulo,
-        layer: titulo,  
-//        uiProvider: uiClass,
+        layer: titulo,          
         icon: "img/layers3.png",
         leaf:true,
         checked: false,
         listeners:{
-            contextmenu: function(leaf, event){handler.onLeafContextMenu(leaf, event, titulo, params)},
-            checkchange: function(leaf){leaf.select();}
-        },     
-//        component: new GeoExt.WMSLegend({
-//            layerRecord: store.getByLayer(layer),
-//            showTitle: false,
-//            defaults: {
-//                style: 'padding-left:40px;',
-//                baseParams: {
-//                    FORMAT: 'image/png',
-//                    LEGEND_OPTIONS: 'forceLabels:on'
-//                }
-//            }
-//        }),                
+            checkchange: function(leaf, checked){
+                leaf.select();
+                Ext.getCmp("treePanelTopbarEliminar").enable();
+                Ext.getCmp("treePanelTopbarPropiedades").enable();
+                Ext.getCmp("treePanelTopbarAtributos").enable();  
+                Ext.getCmp("treePanelTopbarZoomCapa").enable();  
+                if(checked){
+                    leaf.component.show();
+                }else{
+                    leaf.component.hide();
+                }
+                
+            },
+            click: function(leaf, event){
+                Ext.getCmp("treePanelTopbarEliminar").enable();
+                Ext.getCmp("treePanelTopbarPropiedades").enable();
+                Ext.getCmp("treePanelTopbarAtributos").enable();  
+                Ext.getCmp("treePanelTopbarZoomCapa").enable();  
+            }
+        },                 
+        uiProvider: uiClass,        
+        component: new Ext.Panel({
+            width: 275,
+            hidden:true,
+            autoScroll:true,
+            border: false,
+            bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0)'} },
+            style: {'padding-top':'5px','padding-bottom':'5px'},
+            items:[      
+                {
+                    border: false,
+                    width: 270,
+                    bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0)'} },
+                    html: "<div style='width:270px; font-weight:normal; padding-top:5px; padding-left:5px; padding-right:5px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;'>"+item.abstract+"</div>"
+                },
+                new GeoExt.WMSLegend({
+                    layerRecord: store.getByLayer(layer),
+                    showTitle: false,
+                    hidden: true,
+                    baseParams: {
+                        FORMAT: 'image/png',
+                        LEGEND_OPTIONS: 'forceLabels:on'
+                    },                            
+                    defaults: {
+                        style: 'padding-top:3px; padding-left:3px'
+                    }
+                 })                
+            ]
+        }),              
         map: app.map
     });  
-    
-    
-    
+
     return leaf;
  
 };
+
+/**
+ * Crea y devuelve el panel de capas base.
+ * @returns {Ext.Panel}
+ */
+function capaBase(text, layer, icon){    
+    
+    var capaBase = new GeoExt.tree.LayerNode({
+        checkedGroup:"capasBase",
+        text: text,
+        layer: layer,   
+        icon: icon,
+        leaf:true,
+        map: app.map,
+        listeners:{
+            click: function(leaf, event){
+                Ext.getCmp("treePanelTopbarEliminar").disable();
+                Ext.getCmp("treePanelTopbarPropiedades").disable();
+                Ext.getCmp("treePanelTopbarAtributos").disable(); 
+                Ext.getCmp("treePanelTopbarZoomCapa").disable();  
+            }
+        }   
+    });
+    
+    return capaBase;
+    
+}

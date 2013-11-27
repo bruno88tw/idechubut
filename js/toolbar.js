@@ -31,24 +31,21 @@ var toolbar = {};
  */
 toolbar.mapPanelTopBar = function(){
     
-    var mapPanelToolbar = [          
+    var mapPanelToolbar = [      
         componentes.navegacionButton(),
         componentes.zoomToMaxExtentButton(),
         componentes.zoomInButton(),
-        componentes.zoomOutButton(),
         componentes.zoomAnteriorButton(),
-        componentes.zoomPosteriorButton(),
+        componentes.zoomPosteriorButton(),        
         componentes.distanciaButton(),
         componentes.superficieButton(),
-        componentes.informacionButton(), 
-        componentes.wfsReconocerButton(), 
-        componentes.wfsSeleccionarButton(), 
-        componentes.wfsLimpiarButton(),    
-        componentes.wfsCerrarButton(),        
+        componentes.informacionButton(),
+        componentes.geocoderComboBox(),
         componentes.separador(),  
-        componentes.configuracionButton(),
+        componentes.ordenDeCapasButton(),
         componentes.ayudaButton(),
-        componentes.acercaDeButton()               
+        componentes.acercaDeButton(),       
+        componentes.configuracionButton(),         
     ];
     
     return mapPanelToolbar;
@@ -63,14 +60,18 @@ toolbar.mapPanelTopBar = function(){
 toolbar.mapPanelBottomBar = function(){
     
     var mapPanelBottomBar = [
-//        componentes.geocoderComboBox(),
-//        componentes.blankSpace(),
-        componentes.scaleComboBox(),
-        componentes.separador(),                  
-        componentes.blankSpace(), 
-        componentes.div("position"),        
+        componentes.scaleComboBox(), 
+        
         componentes.blankSpace(),
-        app.map.projection.projCode,                
+//        "Escala 1:" + parseInt(app.map.getScale()),
+        componentes.blankSpace(),
+//        "Capa Base: " + app.map.baseLayer.name,
+        componentes.separador(),                  
+//        componentes.blankSpace(), 
+        componentes.div("position"),   
+        app.map.projection.projCode,
+        
+                       
     ];
 
     return mapPanelBottomBar;
@@ -86,14 +87,47 @@ toolbar.treePanelTopBar = function(){
     
     var treePanelTopBar = [
         componentes.agregarCapasButton(),
-        componentes.agregarCarpetaButton(),        
-        componentes.expandirTodoButton(),
-        componentes.colapsarTodoButton(),
-        componentes.importarCapasButton(),
-        componentes.exportarCapasButton(),                   
+        componentes.eliminarCapasButton(),
+        componentes.propiedadesCapasButton(),
+        componentes.zoomCapasButton(),
+        componentes.atributosCapasButton(),                 
     ];
 
     return treePanelTopBar;
+    
+};
+
+/**
+ * Devuelve un arreglo con los componentes de la barra de
+ * herramientas superior del panel de árbol de capas.
+ * @returns {Array} Arreglo de componentes de la barra de herramientas.
+ */
+toolbar.treePanelBottonBar = function(){
+    
+    var treePanelTopBar = [
+        componentes.geocoderComboBox(),                  
+    ];
+
+    return treePanelTopBar;
+    
+};
+
+/**
+ * Devuelve un arreglo con los componentes de la barra de
+ * herramientas superior del featureGridPanel.
+ * @returns {Array} Arreglo de componentes de la barra de herramientas.
+ */
+toolbar.featureGridPanelTopBar = function(){
+    
+    var featureGridPanelBottomBar = [         
+        componentes.wfsReconocerButton(), 
+        componentes.wfsSeleccionarButton(), 
+        componentes.wfsLimpiarButton(),   
+        componentes.separador(),
+        componentes.wfsCerrarButton(),        
+    ];
+
+    return featureGridPanelBottomBar;
     
 };
 

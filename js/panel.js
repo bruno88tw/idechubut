@@ -38,7 +38,6 @@ panel.viewportPanel = function(){
         items:[
             panel.banner(),
             panel.containerPanel(),                         
-
         ]
     });
     
@@ -76,93 +75,14 @@ panel.containerPanel = function(){
         layout:"border",
         border: false,
         id: "container",
-        items:[                  
-            panel.westPanel(),                     
-            panel.centerPanel()                                              
+        items:[       
+            panel.layerTreePanel(),   
+            panel.centerPanel(),   
+            
         ]
     });
     
     return containerPanel;
-    
-};
-
-/**
- * Crea y devuelve el panel sobre el que se visualizará el tabPanel y el localizador.
- * @returns {Ext.Panel}
- */
-panel.westPanel = function(){
-    
-    var westPanel = new Ext.Panel({
-        region:"west",
-        layout:"border",
-        id: "westPanel",
-        width: 230,
-        border:false,
-        style: 'border-top-color:#BCBCBC; border-top-width:1px;\n\
-                border-bottom-color:#BCBCBC; border-bottom-width:1px',
-        items:[                  
-            panel.tabPanel(),
-//            panel.minimapPanel()                                                 
-        ],
-        bbar:[
-            componentes.geocoderComboBox()
-        ]
-    });
-    
-    return westPanel;
-    
-};
-
-/**
- * Crea y devuelve el tabPanel que contiene los paneles de árbol de capas, capas base, leyenda y orden de capa.
- * @returns {Ext.TabPanel}
- */
-panel.tabPanel = function(){
-    
-    var tabPanel = new Ext.TabPanel({
-        region:"center",
-        activeTab: 0,
-        id: "tabPanel",
-        border:false,
-        bodyCfg : { style: {'background':'#F9F9F9'} },        
-        items:[   
-            panel.layerTreePanel(),     
-            panel.capasBasePanel(),                         
-            panel.ordenPanel(),
-            panel.legendPanel(),            
-        ]
-    });
-    
-    return tabPanel;
-    
-};
-
-/**
- * Crea y devuelve el panel sobre el que se visualizará el localizador.
- * @returns {Ext.Panel}
- */
-panel.minimapPanel = function(){
-       
-    var minimapPanel = new Ext.Panel({
-        region:"south",
-        height: 150,
-        minHeight: 150,
-        maxHeight: 150,
-        split:true,
-        collapseMode:"mini",
-        collapsed: false,
-        id: "minimapPanel",
-        border:false,
-        style: 'background:#BCBCBC;',
-        items:[
-            {
-                border: false,
-                html:"<div id='minimapa' style='padding: 5px; background:#F9F9F9'></div>",
-            }
-        ]
-    });        
-    
-    return minimapPanel;
     
 };
 
@@ -177,9 +97,32 @@ panel.centerPanel = function(){
         layout:"border",
         border:false,
         items:[                  
-            panel.mapPanel(),
-            panel.featureGridPanel()                                                 
+            panel.ordenPanel(),            
+            panel.mapAtributesPanel()                                                 
         ]
+    });
+    
+    return centerPanel;
+    
+};
+
+/**
+ * Crea y devuelve el panel sobre el que se visualizará el mapa y el panel de atributos.
+ * @returns {Ext.Panel}
+ */
+panel.mapAtributesPanel = function(){
+    
+    var centerPanel = new Ext.Panel({
+        region:"center",
+        layout:"border",
+        border:false,
+        id: 'mapAtributesPanel',
+        items:[                  
+            panel.mapPanel(),            
+            panel.featureGridPanel()                                                 
+        ],
+        tbar:toolbar.mapPanelTopBar(),
+//        bbar: toolbar.mapPanelBottomBar()
     });
     
     return centerPanel;
@@ -200,8 +143,6 @@ panel.mapPanel = function(){
         id: "mapPanel",
         extent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),
         stateId: "map",
-        style: 'border-width:1px; border-color:#BCBCBC',
-        tbar:toolbar.mapPanelTopBar(),
         bbar: toolbar.mapPanelBottomBar()
     });
     
@@ -215,191 +156,32 @@ panel.mapPanel = function(){
 };
 
 /**
- * Crea y devuelve el panel de capas base.
- * @returns {Ext.Panel}
- */
-panel.capasBasePanel = function(){
-    
-    // Cargar las capas base al árbol de capas
-    var capasBase = new Ext.tree.TreeNode({
-        text: "Capas base",
-        expanded: false,
-        icon: "img/folder.png",
-        leaf: false,
-    });    
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "IGN",
-            layer: "IGN",   
-            icon: "img/ign.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "OpenStreetMap",
-            layer: "OpenStreetMap",   
-            icon: "img/osm.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Streets",
-            layer: "Google Streets",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Terrain",
-            layer: "Google Terrain",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Satellite",
-            layer: "Google Satellite",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Google Hybrid",
-            layer: "Google Hybrid",   
-            icon: "img/google.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Bing Road",
-            layer: "Bing Road",   
-            icon: "img/bing.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Bing Aerial",
-            layer: "Bing Aerial",   
-            icon: "img/bing.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Bing Hybrid",
-            layer: "Bing Hybrid",   
-            icon: "img/bing.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "MapQuest",
-            layer: "MapQuest",   
-            icon: "img/mapQuest.png",
-            leaf:true,
-            map: app.map
-        })
-    );
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "MapQuest Aerial",
-            layer: "MapQuest Aerial",   
-            icon: "img/mapQuest.png",
-            leaf:true,
-            map: app.map
-        })
-    );     
-    capasBase.appendChild(
-        new GeoExt.tree.LayerNode({
-            checkedGroup:"capasBase",
-            text: "Sin capa base",
-            layer: "Blank",   
-            icon: "img/prohibition.png",
-            leaf:true,
-            map: app.map
-        })
-    );    
-    
-    var capasBasePanel = new Ext.Panel({
-        tabTip: "Capas base",
-        iconCls: "baseLayers-headerIcon",
-        layout:"border",
-        items: new Ext.tree.TreePanel({
-            title: "Capas base",  
-            region: "center",
-            width: 262,
-            border: false,      
-            autoScroll: true,
-//            useArrows: true,
-            lines: true,
-            bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
-            root: capasBase,
-            rootVisible: false,
-//            enableDD: true
-        })
-    });
-    
-    return capasBasePanel;
-    
-};
-
-/**
  * Instancia y devuelve el panel de árbol de capas.
  * @returns {Ext.Panel}
  */
-panel.layerTreePanel = function(){              
+panel.layerTreePanel = function(){                              
         
-    var layerTreePanel = new Ext.Panel({
-        iconCls: "treeLayers-headerIcon",
-        tabTip: "Árbol de capas",
-        layout:"border",        
-        items: new Ext.tree.TreePanel({
-            title: "Árbol de capas",   
-//            plugins: [
-//                new GeoExt.plugins.TreeNodeComponent(),
-//            ],
-            region: "center",
-            width: 262,
-            maxWidth: 262,
-            minWidth: 262,
-            border: false,      
-            autoScroll: true,
-//            lines: false,
-            bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
-            id: "layerTreePanel",
-            root: app.rootnode,
-            rootVisible: false,
-            enableDD: true,
-            tbar: toolbar.treePanelTopBar()
-        })
+    var layerTreePanel = new Ext.tree.TreePanel({
+        title: "Capas",   
+        region: "west",
+        width: 300,
+        iconCls: 'layerNodeIcon',
+        maxWidth: 262,
+        minWidth: 262,
+        border: false,      
+        autoScroll: true,
+
+        plugins: [
+            new GeoExt.plugins.TreeNodeComponent(),
+        ],         
+
+        bodyCfg : { style: {'background':'#F9F9F9;'} },
+        id: "layerTreePanel",
+        root: app.rootnode,
+        rootVisible: false,
+        enableDD: true,
+        tbar: toolbar.treePanelTopBar(),
+
     });
             
     
@@ -411,103 +193,37 @@ panel.layerTreePanel = function(){
  * Crea y devuelve el panel de orden de capas.
  * @returns {Ext.Panel}
  */
-panel.ordenPanel = function(){
-    
-//    var LayerNodeUI = Ext.extend(
-//        GeoExt.tree.LayerNodeUI,
-//        new GeoExt.tree.TreeNodeUIEventMixin()
-//    );    
-//        
-//    var store = new GeoExt.data.LayerStore({
-//        map: app.map,
-//        layers: app.map.layers
-//    });        
-//    
-    var ordenPanel = new Ext.Panel({
-        tabTip: "Orden de capas",
-        iconCls: "ordenLayers-headerIcon",
-        layout:"border",
-        items: new Ext.tree.TreePanel({
-            title: "Orden de capas",
-//            plugins: [
-//                new GeoExt.plugins.TreeNodeComponent(),
-//            ],
-//            loader: {
-//                applyLoader: false,
-//                uiProviders: {
-//                    "custom_ui": LayerNodeUI
-//                }
-//            },
-            region: "center",
-            width: 262,
-            border: false,      
-            autoScroll: true,
-//            useArrows: true,
-            bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
-//            bodyCfg : { cls:'x-tree-node-cb' , style: {'display':'none'} },
+panel.ordenPanel = function(){        
+
+    var ordenPanel = new Ext.tree.TreePanel({
+        
+            title: 'Orden de las capas',
+            iconCls: 'layerNodeIcon',
+            region: "west",
+            id: 'ordenDeCapasTree',
+            width: 300,
+            autoScroll:true,
+            border: false,   
+            hidden: true,
+            bodyCfg : { style: {'background':'#F9F9F9'} },
             root: new GeoExt.tree.OverlayLayerContainer({
                 map: app.map,
-                expanded: false,
+                expanded: true,
+                border:false,
                 loader: {
                     createNode: function(attr) {
                         // add a WMS legend to each node created
                         attr.icon = "img/layers3.png";
-//                        attr.checked = false;
-//                        attr.uiProvider = "custom_ui";
-//                        attr.component = new GeoExt.WMSLegend({
-//                            layerRecord: store.getByLayer(attr.layer),
-//                            showTitle: false,
-//                            hidden: true,
-//                            baseParams: {
-//                                FORMAT: 'image/png',
-//                                LEGEND_OPTIONS: 'forceLabels:on'
-//                            },                            
-//                            defaults: {
-//                                style: 'padding-left:30px',
-//                            }
-//                        });                        
+
                         return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
                     }
                 }                           
             }),
             rootVisible: false,
             enableDD: true
-        })
-    });
+        });
     
     return ordenPanel;
-    
-};
-
-/**
- * Crea y devuelve el panel de leyenda.
- * @returns {Ext.Panel}
- */
-panel.legendPanel = function(){
-    
-    var legendPanel = new Ext.Panel({
-        tabTip: "Leyenda",
-        iconCls: "legendIcon",
-        layout:"border",
-        items: new GeoExt.LegendPanel({
-            title: "Leyenda",
-            region: "center",
-            autoScroll: true,
-            collapsible: false,
-            collapsed: false,
-            border: false,
-            bodyCfg : { style: {'background':'#F9F9F9; padding-top:5px'} },
-            defaults: {
-                style: 'padding:5px',
-                baseParams: {
-                    FORMAT: 'image/png',
-                    LEGEND_OPTIONS: 'forceLabels:on'
-                }
-            }
-        })
-    });
-    
-    return legendPanel;
     
 };
 
@@ -520,10 +236,9 @@ panel.featureGridPanel = function(){
     var featureGridPanel = new Ext.grid.GridPanel({
         region: 'south',
         hidden: true,
-        style: 'border-right-color:#BCBCBC; border-right-width:1px;\n\
-        border-left-color:#BCBCBC; border-left-width:1px;\n\
-        border-bottom-color:#BCBCBC; border-bottom-width:1px',
-        height: 155,     
+        title: 'Atributos',
+        iconCls: 'atributosIcon',
+        height: 250,     
         id: "featureGridPanel",
         viewConfig: {forceFit: false},
         border: false,
@@ -531,6 +246,7 @@ panel.featureGridPanel = function(){
         store: [],
         sm: new GeoExt.grid.FeatureSelectionModel(),
         columns: [],
+        tbar: toolbar.featureGridPanelTopBar(),
         bbar: toolbar.featureGridPanelBottomBar()
     });  
     

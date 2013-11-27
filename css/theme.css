@@ -7,11 +7,11 @@
 */
 
 .x-panel-body {
-    background-color:#FFFFFF;
+    background-color:#ffffff;
 }
 
 .x-panel-header {
-    background: #BCBCBC;
+    background: #CCCCCC;
     /*height: 19px;*/
     padding-top: 6px;
     padding-bottom: 5px;
@@ -59,8 +59,8 @@ ul.x-tab-strip-bottom{
 }
 
 .x-toolbar{
-    border-color:#EBEBEB;
-    background-color:#EBEBEB;
+    border:#CCCCCC;
+    background-color:#CCCCCC;
 }
 
 .x-grid-panel .x-panel-mc .x-panel-body {
@@ -85,6 +85,7 @@ ul.x-tab-strip-bottom{
 
 .x-panel-bbar .x-toolbar, .x-panel-tbar .x-toolbar {
     border-color:#EBEBEB;
+    background-color:#DBDBDB;
 }
 
 .x-panel-tbar-noheader .x-toolbar, .x-panel-mc .x-panel-tbar .x-toolbar {
@@ -120,17 +121,18 @@ ul.x-tab-strip-bottom{
 }
 
 .x-panel-noborder .x-panel-header-noborder {
-    border-bottom-color:#D4D4D4;
+    border-bottom-color:#CCCCCC;
+    /*border-bottom: none;*/
 }
 
 /*Borde inferior de la barra de herramienta superior*/
 .x-panel-noborder .x-panel-tbar-noborder .x-toolbar {
-    border-bottom-color:#BCBCBC;
+    border-bottom-color:#DBDBDB;
 }
 
 /*Borde superior de la barra de herramienta inferior*/
 .x-panel-noborder .x-panel-bbar-noborder .x-toolbar {
-    border-top-color:#BCBCBC;
+    border-top-color:#DBDBDB;
 }
 
 .x-tab-panel-bbar-noborder .x-toolbar {
@@ -151,28 +153,28 @@ ul.x-tab-strip-bottom{
 }
 
 .x-layout-split{
-    background-color:#BCBCBC;
+    background-color:#CCCCCC;
 }
 
 .x-panel-body {
-    border-color:#BCBCBC;
+    border-color:#CCCCCC;
 }
 
 
 .x-panel-body-noheader, .x-panel-mc .x-panel-body {
-    border-top-color:#BCBCBC;
+    border-top-color:#CCCCCC;
 }
 
 .x-window-tc {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
 }
 
 .x-window-tl {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
 }
 
 .x-window-tr {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
 }
 
 /* Borde inferior de ventana */
@@ -183,44 +185,48 @@ ul.x-tab-strip-bottom{
 }
 
 .x-window-bc {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
 }
 
 .x-window-bl {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
 }
 
 .x-window-br {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
 }
 
 .x-window-mc {
-    border-color:#BCBCBC;
+    border-color:#CCCCCC;
 }
 
 .x-window-ml {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
     padding-left: 2px;
 }
 
 /* Borde derecho de ventana*/
 .x-window-mr {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
     padding-right: 2px;
 }
 
 .x-layout-collapsed{
-    background-color:#BCBCBC;
-    border-color:#BCBCBC;
+    background-color:#CCCCCC;
+    border-color:#CCCCCC;
 }
 
 .x-layout-collapsed-over{
-    background-color:#BCBCBC;
+    background-color:#CCCCCC;
 }
 /*Margen de los tree-node*/
 .x-tree-node-el {
     margin-top: 0px;
     margin-bottom: 0px;
+    border-bottom:1px solid #D9D9D9;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;    
 }
 
 /*Pestañas del tabpanel*/
@@ -243,15 +249,15 @@ ul.x-tab-strip-bottom{
 
 /*Borde inferior del header del panel de pestañas*/
 .x-tab-panel-header, .x-tab-panel-footer {
-    border-color: #BCBCBC;
+    border-color: #CCCCCC;
 }
 
 .x-tab-panel-header, .x-tab-panel-footer {
-    background-color: #BCBCBC;
+    background-color: #CCCCCC;
 }
 
 ul.x-tab-strip-top {
-    border-bottom-color: #BCBCBC;
+    border-bottom-color: #CCCCCC;
 }
 
 .x-tab-panel-noborder .x-tab-panel-header-noborder {
@@ -278,15 +284,15 @@ height: 17px;
 
 /*Color de pestaña activa*/
 .x-tab-strip-top .x-tab-strip-active .x-tab-right {
-    background: #BCBCBC;
+    background: #CCCCCC;
 }
 
 .x-tab-strip-top .x-tab-strip-active .x-tab-strip-inner {
-    background: #BCBCBC;
+    background: #CCCCCC;
 }
 
 .x-tab-strip-top .x-tab-strip-active .x-tab-left {
-    background: #BCBCBC;
+    background: #CCCCCC;
 }
 
 /*tab panel header background*/
@@ -304,3 +310,45 @@ ul.x-tab-strip-top {
 /*.gx-tree-layer-icon {
     display: none;
 }*/
+
+/*Oculta los iconos del árbol de capas*/
+.x-tree-node .x-tree-node-inline-icon {
+    background-image: none;
+    padding-right: 5px;
+    /*display:none;*/
+}
+
+/*Oculta el espacio reservado para lineas del árbol de capas*/
+.x-tree-icon, .x-tree-ec-icon, .x-tree-elbow-line, .x-tree-elbow, .x-tree-elbow-end, .x-tree-elbow-plus, .x-tree-elbow-minus, .x-tree-elbow-end-plus, .x-tree-elbow-end-minus {
+    border: 0 none;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    width: 16px;
+    background-repeat: no-repeat;
+    display: none;
+}
+
+/*Modifica el texto del árbol de capas*/
+.x-tree-node a span, .x-dd-drag-ghost a span {
+    color: #000;
+    padding-left: 5px;
+}
+
+.x-tree-node .x-tree-node-over {
+    /*background-color: #ddd;*/
+}
+
+.x-tree-node .x-tree-selected {
+background-color: none;
+font-weight:bold;
+}
+
+.x-tree-node .x-tree-node-over {
+	background-color: none;
+}
+
+.x-toolbar {
+background-color: #DBDBDB;
+}

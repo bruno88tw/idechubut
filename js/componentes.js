@@ -219,6 +219,8 @@ componentes.distanciaButton = function(){
             }
         }),
         map: app.map,
+        id: "distanciaButton",
+        hidden: true,
         toggleGroup: "nav",
         icon: 'img/rulerline.png',
         tooltip: "Medidor de distancias"
@@ -286,6 +288,8 @@ componentes.superficieButton = function(){
             }
         }),
         map: app.map,
+        id: "superficieButton",
+        hidden: true,
         toggleGroup: "nav",
         icon: 'img/rulerarea.png',
         tooltip: "Medidor de superficie"
@@ -304,7 +308,7 @@ componentes.informacionButton = function(){
     var informacionButton = new GeoExt.Action({
             control: app.map.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo')[0],
             map: app.map,
-            icon: "img/cursor-info.png",
+            icon: "img/information2.png",
             toggleGroup: "nav",
             tooltip: "Obtener información"
     });
@@ -323,12 +327,10 @@ componentes.geocoderComboBox = function(){
         layer: app.map.getLayersByName("Location")[0],
         emptyText: "Buscar un lugar ...",
         map: app.map,                
-        bounds: app.max_bounds,
         border: false,
-        width: 224,
-        heigh:150,
-        boxMaxHeight: 100,
-        boxMinHeight: 100
+        hidden: true,
+        id: "buscador",
+        width: 200
     });
     
     return geocoderComboBox;
@@ -353,9 +355,9 @@ componentes.configuracionButton = function(){
                 layout: "fit",
                 shadow: false,
                 x: Ext.getCmp("mapPanel").getPosition()[0] + ((Ext.getCmp("mapPanel").getWidth())) - 189,
-                y: Ext.getCmp("mapPanel").getPosition()[1] + 32,
+                y: Ext.getCmp("mapPanel").getPosition()[1] + 5,
                 width: 185,
-                height:240,
+                height:265,
                 resizable: false,
                 items: [
                         new Ext.FormPanel({
@@ -363,16 +365,17 @@ componentes.configuracionButton = function(){
                             padding: 10,
                             items: [
                                 componentes.configuracionTituloField(),
-                                componentes.configuracionSubtituloField(),
+                                componentes.configuracionSubtituloField(),                                
                                 componentes.configuracionNavegadorCheckbox(),
                                 componentes.configuracionLeyendaCheckbox(),
                                 componentes.configuracionEscalaCheckbox(),
                                 componentes.configuracionMinimapaCheckbox(),
                                 componentes.configuracionNorteCheckbox(),
                                 componentes.configuracionGrillaCheckbox(),
+                                componentes.configuracionAvanzadoCheckbox(),
                              ]
                          })
-                ]
+                ],
             });
             window.show();   
             window.on('close',function(){Ext.getCmp("configuracionButton").enable();});
@@ -485,6 +488,22 @@ componentes.configuracionCambiarSubtituloButton = function(){
  * Devuelve el checkbox de navegador.
  * @returns {Ext.menu.CheckItem}
  */
+componentes.configuracionBuscadorCheckbox = function(){    
+    
+    var configuracionBuscadorCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Buscador',
+        checked: app.configuracion.buscador,
+        listeners:{check: handler.onConfiguracionBuscadorCheckbox}
+    });
+    
+    return configuracionBuscadorCheckbox;
+    
+};
+
+/**
+ * Devuelve el checkbox de navegador.
+ * @returns {Ext.menu.CheckItem}
+ */
 componentes.configuracionNavegadorCheckbox = function(){    
     
     var configuracionNavegadorCheckbox = new Ext.form.Checkbox({
@@ -562,6 +581,22 @@ componentes.configuracionNorteCheckbox = function(){
 };
 
 /**
+ * Devuelve el checkbox de norte.
+ * @returns {Ext.menu.CheckItem}
+ */
+componentes.configuracionAvanzadoCheckbox = function(){
+
+    var avanzadoCheckbox = new Ext.form.Checkbox({
+        fieldLabel: 'Avanzado',
+        checked: app.configuracion.avanzado,
+        listeners:{check: handler.AvanzadoCheckbox}
+    });
+    
+    return avanzadoCheckbox;
+    
+};
+
+/**
  * Devuelve el checkbox de grilla.
  * @returns {Ext.menu.CheckItem}
  */
@@ -633,7 +668,7 @@ componentes.scaleComboBox = function(){
     
     var scaleComboBox = new Ext.form.ComboBox({
         id: "scaleCombo",
-        width: 150,
+        width: 130,
         mode: "local", // keep the combo box from forcing a lot of unneeded data refreshes
         emptyText: "Scale",
         triggerAction: "all", // needed so that the combo box doesn't filter by its current content
@@ -720,9 +755,99 @@ componentes.agregarCapasButton = function(){
     
     var agregarCapasButton = new Ext.Button({
         tooltip: 'Agregar capas WMS',
-        icon: 'img/map-plus.png',
+        icon: 'img/map-plus3.png',
         id: "treePanelTopbarAgregar",
-        handler: function(){handler.onAgregarCapas(null);}
+        handler: function(){handler.onAgregarCapas();}
+    });
+    
+    return agregarCapasButton;
+    
+};
+
+/**
+ * Devuelve el botón de agregar capas.
+ * @returns {Ext.Button}
+ */
+componentes.eliminarCapasButton = function(){
+    
+    var agregarCapasButton = new Ext.Button({
+        tooltip: 'Eliminar capa',
+        icon: 'img/minus-circle.png',
+        id: "treePanelTopbarEliminar",
+        disabled: true,
+        handler: function(){
+            var leaf = Ext.getCmp("layerTreePanel").getSelectionModel().getSelectedNode();
+            leaf.remove();
+            app.map.removeLayer(app.map.getLayersByName(leaf.attributes.layer)[0]);
+            Ext.getCmp("treePanelTopbarEliminar").disable();
+            Ext.getCmp("treePanelTopbarPropiedades").disable();
+            Ext.getCmp("treePanelTopbarAtributos").disable(); 
+            Ext.getCmp("treePanelTopbarZoomCapa").disable(); 
+        }
+    });
+    
+    return agregarCapasButton;
+    
+};
+
+/**
+ * Devuelve el botón de agregar capas.
+ * @returns {Ext.Button}
+ */
+componentes.zoomCapasButton = function(){
+    
+    var agregarCapasButton = new Ext.Button({
+        tooltip: 'Zoom a la capa',
+        icon: 'img/magnifier.png',
+        id: "treePanelTopbarZoomCapa",
+        hidden: true,
+        disabled: true,
+        handler: function(){
+            var leaf = Ext.getCmp("layerTreePanel").getSelectionModel().getSelectedNode();
+            handler.onZoomALaCapaButton(leaf,leaf.layer.params)
+        }
+    });
+    
+    return agregarCapasButton;
+    
+};
+
+/**
+ * Devuelve el botón de agregar capas.
+ * @returns {Ext.Button}
+ */
+componentes.propiedadesCapasButton = function(){
+    
+    var agregarCapasButton = new Ext.Button({
+        tooltip: 'Propiedades de la capa',
+        icon: 'img/gear.png',
+        id: "treePanelTopbarPropiedades",
+        disabled: true,
+        handler: function(){
+            var leaf = Ext.getCmp("layerTreePanel").getSelectionModel().getSelectedNode();
+            handler.onPropiedadesButton(leaf, leaf.layer.name, leaf.layer.params)
+        }
+    });
+    
+    return agregarCapasButton;
+    
+};
+
+/**
+ * Devuelve el botón de agregar capas.
+ * @returns {Ext.Button}
+ */
+componentes.atributosCapasButton = function(){
+    
+    var agregarCapasButton = new Ext.Button({
+        tooltip: 'Consultar atributos de la capa',
+        icon: 'img/table.png',
+        id: "treePanelTopbarAtributos",
+        disabled: true,
+        handler: function(){
+            var leaf = Ext.getCmp("layerTreePanel").getSelectionModel().getSelectedNode();
+            handler.onAtributosButton(leaf);
+        }
     });
     
     return agregarCapasButton;
@@ -737,7 +862,9 @@ componentes.ordenDeCapasButton = function(){
     
     var ordenDeCapasButton = new Ext.Button({
         tooltip: 'Orden de las capas',
-        icon: 'img/maps-stack.png',
+        icon: 'img/layers3.png',
+        id: "ordenDeCapasButton",
+        hidden: true,
         enableToggle: true,
         allowDepress: true,
         handler: handler.onOrdenDeCapasButton
@@ -841,10 +968,11 @@ componentes.wfsReconocerButton = function(){
     var wfsReconocerButton = new Ext.Button({
         id: "wfsReconocerButton",
         tooltip: 'Reconocer',
+        text: 'Reconocer',
         icon: 'img/cursor-question.png',
         toggleGroup: "nav", 
         allowDepress: true,
-        hidden: true,
+//        hidden: true,
         listeners: {
            toggle: handler.onWfsReconocerButton
         }
@@ -864,10 +992,11 @@ componentes.wfsSeleccionarButton = function(){
    var wfsSeleccionarButton = new Ext.Button({
         id: "wfsSeleccionarButton",
         tooltip: 'Seleccionar',
+        text: 'Seleccionar',
         icon: 'img/cursor.png',
         toggleGroup: "nav", 
         allowDepress: true,
-        hidden: true,
+//        hidden: true,
         listeners: {
            toggle: handler.onWfsSeleccionarButton
         }
@@ -885,8 +1014,9 @@ componentes.wfsLimpiarButton = function(){
    
    var wfsLimpiarButton = new Ext.Button({
         tooltip: 'Limpiar',
+        text: 'Limpiar',
         icon: 'img/broom.png',
-        hidden: true,
+//        hidden: true,
         id: "wfsLimpiarButton",
         handler: handler.onWfsLimpiarButton
     });
@@ -918,7 +1048,7 @@ componentes.wfsCerrarButton = function(){
     var wfsCerrarButton = new Ext.Button({
         tooltip: 'Cerrar',
         icon: 'img/close.png',        
-        hidden: true,
+//        hidden: true,
         id: "wfsCerrarButton",
         handler: function(){
             app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
@@ -926,10 +1056,10 @@ componentes.wfsCerrarButton = function(){
             Ext.getCmp("viewportPanel").doLayout();   
             app.isAttributesPanelHidden = true;
             Ext.getCmp("buttonNav").toggle(true);
-            Ext.getCmp("wfsReconocerButton").hide();
-            Ext.getCmp("wfsSeleccionarButton").hide();
-            Ext.getCmp("wfsLimpiarButton").hide();
-            Ext.getCmp("wfsCerrarButton").hide();
+//            Ext.getCmp("wfsReconocerButton").hide();
+//            Ext.getCmp("wfsSeleccionarButton").hide();
+//            Ext.getCmp("wfsLimpiarButton").hide();
+//            Ext.getCmp("wfsCerrarButton").hide();
         }
     });
             
@@ -1010,7 +1140,7 @@ componentes.capabilitiesCombo = function(){
  * @param {type} node
  * @returns {Ext.grid.GridPanel}
  */
-componentes.capabilitiesGridPanel = function(node){
+componentes.capabilitiesGridPanel = function(){
     
     var mask;
     var capabilitiesStore = componentes.capabilitiesStore();
@@ -1045,6 +1175,7 @@ componentes.capabilitiesGridPanel = function(node){
     });
     capabilitiesStore.on("load",function(){
         mask.hide();
+        app.capabilities[capabilitiesCombo.getValue()] = this;
     });
     capabilitiesStore.on("exception",function(){
         mask.hide();
@@ -1052,11 +1183,27 @@ componentes.capabilitiesGridPanel = function(node){
     });
     
     capabilitiesCombo.on("select",function(){
-        capabilitiesStore.proxy.conn.url = getCapabilitiesUrl(capabilitiesCombo.getValue());
-        capabilitiesStore.load();        
+
+        if(app.capabilities[capabilitiesCombo.getValue()] == null){
+            capabilitiesStore.proxy.conn.url = getCapabilitiesUrl(capabilitiesCombo.getValue());
+            capabilitiesStore.load();            
+        }else{
+            capabilitiesGridPanel.reconfigure(
+                app.capabilities[capabilitiesCombo.getValue()],
+                new Ext.grid.ColumnModel({
+                    columns: [
+                        componentes.rowExpander(),
+                        {header: "Título", dataIndex: "title", sortable: true},
+                        {header: "Nombre", dataIndex: "name", sortable: true}            
+                ]})
+            );            
+        }
+        
+
+
     });
     
-    agregarCapasButton.setHandler(function(){handler.onAgregarCapasButton(node, capabilitiesGridPanel, capabilitiesCombo)});
+    agregarCapasButton.setHandler(function(){handler.onAgregarCapasButton(capabilitiesGridPanel, capabilitiesCombo)});
     
     return capabilitiesGridPanel;
     

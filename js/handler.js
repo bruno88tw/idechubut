@@ -207,6 +207,23 @@ handler.onConfiguracionCambiarSubtituloButton = function(){
 };
 
 /**
+ * Handler correspondiente al evento asociado al checkbox de configuración "Leyenda".
+ * @returns {undefined} Esta función no devuelve resultados.
+ */
+handler.onConfiguracionBuscadorCheckbox = function(){
+    
+    var div = document.getElementById("toponimosdiv");
+    if (this.getValue() == true){
+        app.configuracion.buscador = true;
+        div.style.display = "block";
+    }else{
+        app.configuracion.buscador = false;
+        div.style.display = "none";
+    } 
+    
+};
+
+/**
  * Handler correspondiente al evento asociado al checkbox de configuración "Navegador".
  * @returns {undefined} Esta función no devuelve resultados.
  */
@@ -270,6 +287,36 @@ handler.ConfiguracionMinimapaCheckbox = function(){
         app.configuracion.localizador = false;
         minimapcontainer.style.display = "none";
     }    
+    
+};
+
+/**
+ * Handler correspondiente al evento asociado al checkbox de configuración "Avanzado".
+ * @returns {undefined} Esta función no devuelve resultados.
+ */
+handler.AvanzadoCheckbox = function(){
+
+    if (this.getValue() == true){
+        app.configuracion.avanzado = true;
+        Ext.getCmp("treePanelTopbarZoomCapa").show();
+        Ext.getCmp("buscador").show();
+        Ext.getCmp("distanciaButton").show();
+        Ext.getCmp("superficieButton").show();
+        Ext.getCmp("ordenDeCapasButton").show();
+        if(!app.fullscreen){
+            Ext.getCmp("mapPanel").getBottomToolbar().show();
+        }        
+        Ext.getCmp("viewportPanel").doLayout();  
+    }else{
+        app.configuracion.avanzado = false;
+        Ext.getCmp("treePanelTopbarZoomCapa").hide();
+        Ext.getCmp("buscador").hide();
+        Ext.getCmp("distanciaButton").hide();
+        Ext.getCmp("superficieButton").hide();
+        Ext.getCmp("ordenDeCapasButton").hide();
+        Ext.getCmp("mapPanel").getBottomToolbar().hide();
+        Ext.getCmp("viewportPanel").doLayout();  
+    }
     
 };
 
@@ -392,47 +439,34 @@ handler.onAyudaButton = function(){
                 <img src="img/move2.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta de paneo permite desplazarse por el mapa. Al hacer doble click sobre un punto del mapa se realiza un acercamiento a dicha zona. Del mismo modo puede utilizarse el scroll del mouse para acercarse o alejarse a una zona del mapa. </br></br>\n\
                 <img src="img/magnifier-zoom-fit.png" alt="ayuda">&nbsp&nbsp&nbspAl hacer clikc sobre el botón de zoom a la máxima extensión automáticamente se cambiará el nivel de zoom al menor grado definido por la aplicación.</br></br>\n\
                 <img src="img/magnifier-zoom-in.png" alt="ayuda">&nbsp&nbsp&nbspZoom in nos permite realizar acercamientos a un punto o zona en particular. Funciona haciendo click sobre un punto en el mapa o dibujando un cuadro sobre una zona determinada.</br></br>\n\
-                <img src="img/magnifier-zoom-out.png" alt="ayuda">&nbsp&nbsp&nbspZoom out nos permite realizar alejamientos en el mapa. </br></br>\n\
                 <img src="img/history-zoom-left.png" alt="ayuda">&nbsp&nbsp&nbspZoom anterior nos devuelve al nivel de zoom anterior en el historial de zoom realizados.</br></br>\n\
                 <img src="img/history-zoom-right.png" alt="ayuda">&nbsp&nbsp&nbspZoom posterior nos devuelve al nivel de zoom siguiente en el historial de zoom realizados.</br></br>\n\
                 <div style="background:#EBEBEB; padding:5px;"><b>Herramientas de medición</b></div></br>\n\
                 <img src="img/rulerline.png" alt="ayuda">&nbsp&nbsp&nbspEl medidor de distancias nos permite calcular la distancia comprendida entre dos o mas puntos en el mapa.</br></br>\n\
                 <img src="img/rulerarea.png" alt="ayuda">&nbsp&nbsp&nbspEl medidor de superficie nos permite calcular la superficie comprendida dentro de un polígono en el mapa.</br></br>\n\
-                <div style="background:#EBEBEB; padding:5px;"><b>Buscador de topónimos</b></div></br>\n\
-                <img src="img/buscador.png" alt="ayuda">&nbsp&nbsp&nbspEl buscador de topónimos permite realizar una consulta por un nombre propio de una ubicación geográfica y devuelve un listado de coincidencias de las cuales al seleccionar alguna ajusta en nivel de zoom y posiciona el visor del mapa en la coordenada asociada a ese topónimo en particular.</br></br>\n\
-                <div style="background:#EBEBEB; padding:5px;"><b>Configuración</b></div></br>\n\
-                <img src="img/equalizer.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta de configuración nos abre una nueva ventana que nos permitirá realizar una configuración sobre los elementos contenidos dentro del mapa. Entre las opciones encontramos:</br></br>\n\
-                * Activar / desactivar / cambiar título del mapa</br>\n\
-                * Activar / desactivar / cambiar subtítulo del mapa</br>\n\
-                * Activar / desactivar leyenda</br>\n\
-                * Activar / desactivar escala</br>\n\
-                * Activar / desactivar localizador</br>\n\
-                * Activar / desactivar norte</br>\n\
-                * Activar / desactivar grilla</br></br>\n\
+                <div style="background:#EBEBEB; padding:5px;"><b>Consulta de información</b></div></br>\n\
+                <img src="img/information2.png" alt="ayuda">&nbsp&nbsp&nbspEsta herramienta nos permite obtenere la información de las capas activas haciendo click en un punto determinado del mapa.</br></br>\n\
+                <div style="background:#EBEBEB; padding:5px;"><b>Orden de las capas</b></div></br>\n\
+                <img src="img/layers3.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta "Orden de capas" cambia la vista por directorios del árbol de capas por una vista según el orden de superposición de las capas. Desde aquí es posible arrastrar una capa más arriba o más abajo que otra para cambiar el orden de superposición de la misma.</br></br>\n\
                 <div style="background:#EBEBEB; padding:5px;"><b>Ayuda</b></div></br>\n\
                 <img src="img/question.png" alt="ayuda">&nbsp&nbsp&nbspEl botón de ayuda nos muestra una breve descripción de cada uno de los elementos con los que podemos interactuar en la aplicación.</br></br>\n\
                 <div style="background:#EBEBEB; padding:5px;"><b>Acerca de</b></div></br>\n\
-                <img src="img/star.png" alt="ayuda">&nbsp&nbsp&nbspMuestra información correspondiente al desarrollo de la aplicación.</br></br>\n\
+                <img src="img/information-italic.png" alt="ayuda">&nbsp&nbsp&nbspMuestra información correspondiente al desarrollo de la aplicación.</br></br>\n\
+                <div style="background:#EBEBEB; padding:5px;"><b>Configuración</b></div></br>\n\
+                <img src="img/equalizer.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta de configuración nos abre una nueva ventana que nos permitirá realizar una configuración sobre los elementos contenidos dentro del mapa.</br></br>\n\
                 <div style="background:#EBEBEB; padding:5px;"><b>Herramientas del panel de capas</b></div></br>\n\
-                <img src="img/map-plus.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta "Agregar capas" nos permite conectarnos con servidores de mapas y obtener de ellos nuevas capas de información.</br></br>\n\
-                <img src="img/maps-stack.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta "Orden de capas" cambia la vista por directorios del árbol de capas por una vista según el orden de superposición de las capas. Desde aquí es posible arrastrar una capa más arriba o más abajo que otra para cambiar el orden de superposición de la misma.</br></br>\n\
-                <img src="img/folder-add.png" alt="ayuda">&nbsp&nbsp&nbspNos permite agregar una nueva carpeta al árbol de capas.</br></br>\n\
-                <img src="img/folder-expandir.png" alt="ayuda">&nbsp&nbsp&nbspExpande todas las carpetas y las subcarpetas correspondientes al árbol de capas.</br></br>\n\
-                <img src="img/folder-colapsar.png" alt="ayuda">&nbsp&nbsp&nbspColapsa todas las carpetas y las subcarpetas correspondientes al árbol de capas.</br></br>\n\
-                <img src="img/folder-open.png" alt="ayuda">&nbsp&nbsp&nbsp"Importar capas" nos permite restaurar un árbol de capas.</br></br>\n\
-                <img src="img/folder-save.png" alt="ayuda">&nbsp&nbsp&nbsp"Guardar capas" nos permite exportar el árbol de capas actual.</br></br>\n\
-                <div style="background:#EBEBEB; padding:5px;"><b>Menús desplegables del árbol de capas</b></div></br>\n\
-                Estas herramientas pueden encontrarse haciendo click derecho sobre una carpeta o una capa en el árbol de capas</br></br>\n\
-                <img src="img/folder-edit.png" alt="ayuda">&nbsp&nbsp&nbspNos permite cambiar el nombre de una carpeta determinada.</br></br>\n\
-                <img src="img/zoom-to-map.png" alt="ayuda">&nbsp&nbsp&nbspCambia el zoom del visor de mapas para adaptarse a una capa determinada.</br></br>\n\
-                <img src="img/map-minus.png" alt="ayuda">&nbsp&nbsp&nbspElimina una capa del árbol de capas.</br></br>\n\
-                <img src="img/map-properties.png" alt="ayuda">&nbsp&nbsp&nbspMuestra las propiedades de la capa.</br></br>\n\
-                <img src="img/information-italic.png" alt="ayuda">&nbsp&nbsp&nbspConecta con la información asociada a la capa y despliega el panel de atributos.</br></br>\n\
+                <img src="img/map-plus3.png" alt="ayuda">&nbsp&nbsp&nbspLa herramienta "Agregar capas" nos permite conectarnos con servidores de mapas y obtener de ellos nuevas capas de información.</br></br>\n\
+                <img src="img/minus-circle.png" alt="ayuda">&nbsp&nbsp&nbspElimina una capa del árbol de capas.</br></br>\n\
+                <img src="img/gear.png" alt="ayuda">&nbsp&nbsp&nbspMuestra las propiedades de la capa.</br></br>\n\
+                <img src="img/magnifier.png" alt="ayuda">&nbsp&nbsp&nbspCambia el zoom del visor de mapas para adaptarse a una capa determinada.</br></br>\n\
+                <img src="img/table.png" alt="ayuda">&nbsp&nbsp&nbspConecta con la información asociada a la capa y despliega el panel de atributos.</br></br>\n\
                 <div style="background:#EBEBEB; padding:5px;"><b>Herramientas del panel de atributos</b></div></br>\n\
                 <img src="img/cursor-question.png" alt="ayuda">&nbsp&nbsp&nbspPermite reconocer elementos de una capa y obtener información de ellos. Funciona haciendo click sobre puntos en el mapa o dibujando un recuadro sobre el mismo. Las teclas shift y control permiten añadir nuevos elementos al conjunto de elementos reconocidos.</br></br>\n\
                 <img src="img/cursor.png" alt="ayuda">&nbsp&nbsp&nbspUna vez hecho el reconocimiento de elementos de una capa, es posible mediante esta herramienta seleccionarlos haciendo click sobre ellos. Los elementos seleccionados serán iluminados de color azul en el mapa y las filas correspondientes a estos elementos serán también seleccionadas en el panel de atributos.</br></br>\n\
                 <img src="img/broom.png" alt="ayuda">&nbsp&nbsp&nbspLimpia los elementos reconocidos en el mapa.</br></br>\n\
                 <img src="img/close.png" alt="ayuda">&nbsp&nbsp&nbspDesconecta el reconocimiento de elementos de una capa y cierra el panel de atributos.</br></br>\n\
+                <div style="background:#EBEBEB; padding:5px;"><b>Buscador de topónimos</b></div></br>\n\
+                <img src="img/buscador.png" alt="ayuda">&nbsp&nbsp&nbspEl buscador de topónimos permite realizar una consulta por un nombre propio de una ubicación geográfica y devuelve un listado de coincidencias de las cuales al seleccionar alguna ajusta en nivel de zoom y posiciona el visor del mapa en la coordenada asociada a ese topónimo en particular.</br></br>\n\
                 </div>'
             })
         ]
@@ -484,18 +518,18 @@ handler.onAcercaDeButton = function(){
  * @param {type} node
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onAgregarCapas = function(node){
+handler.onAgregarCapas = function(){
 
     new Ext.Window({
         title: "Agregar nuevas capas",
         iconCls: 'layerIcon',
         layout: "fit",
         width: 500,
-        height:300,
+        height:400,
         resizable: false,
         autoScroll: true,
         shadow: false,
-        items: [componentes.capabilitiesGridPanel(node)]
+        items: [componentes.capabilitiesGridPanel()]
     }).show(); 
 
 };
@@ -511,7 +545,7 @@ handler.onServidoresWmsButton = function(){
        iconCls: 'serverIcon',
        layout: "fit",
        width: 500,
-       height:300,
+       height:400,
        resizable: false,
        autoScroll: true,
        shadow: false,
@@ -525,30 +559,17 @@ handler.onServidoresWmsButton = function(){
  * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onOrdenDeCapasButton = function(){
-
+    
    if(this.pressed){
-       Ext.getCmp("treePanelTopbarAgregar").disable();
-       Ext.getCmp("treePanelTopbarAgregarCarpeta").disable();
-//       Ext.getCmp("treePanelTopbarExpandir").disable();
-//       Ext.getCmp("treePanelTopbarColapsar").disable();
-       Ext.getCmp("treePanelBottombarImportar").disable();
-       Ext.getCmp("treePanelBottombarExportar").disable();  
-       Ext.getCmp("layerTreePanel").root = null;
-       Ext.getCmp("layerTreePanel").setRootNode(new GeoExt.tree.OverlayLayerContainer({
-           text: "Capas",
-           icon: "img/layers3.png",
-           iconCls: "layerNodeIcon",
-           map: app.map,
-           expanded: true
-       }));
+       app.isLayerTreePanelHidden = true;
+       Ext.getCmp("layerTreePanel").hide();
+       Ext.getCmp("ordenDeCapasTree").show();
+       Ext.getCmp("viewportPanel").doLayout(); 
    }else{
-       Ext.getCmp("treePanelTopbarAgregar").enable();
-       Ext.getCmp("treePanelTopbarAgregarCarpeta").enable();
-//       Ext.getCmp("treePanelTopbarExpandir").enable();
-//       Ext.getCmp("treePanelTopbarColapsar").enable();
-       Ext.getCmp("treePanelBottombarImportar").enable();
-       Ext.getCmp("treePanelBottombarExportar").enable();
-       Ext.getCmp("layerTreePanel").setRootNode(app.rootnode);
+       app.isLayerTreePanelHidden = false;
+       Ext.getCmp("ordenDeCapasTree").hide();
+       Ext.getCmp("layerTreePanel").show();
+       Ext.getCmp("viewportPanel").doLayout(); 
    }     
 
 };
@@ -740,36 +761,32 @@ handler.onRootNodeContextMenu = function(nodo, event){
  * @param {type} params
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onLeafContextMenu = function(leaf, event, titulo, params){
+handler.onLeafContextMenu = function(leaf, event){
     
     leaf.select();
     var menu = new Ext.menu.Menu({
         items: [{
             text: 'Zoom a la capa',
             icon: "img/zoom-to-map.png",                        
-            handler: function(){handler.onZoomALaCapaButton(leaf,params)     
-
-            }
+            handler: function(){handler.onZoomALaCapaButton(leaf,leaf.layer.params)}
         },{
             text: 'Eliminar capa',
             icon: "img/map-minus.png",
-            handler: function(){
-                leaf.remove();
-                app.map.removeLayer(app.map.getLayersByName(leaf.attributes.layer)[0]);   
-            }
+            handler: function(){leaf.remove();app.map.removeLayer(app.map.getLayersByName(leaf.attributes.layer)[0]);}
         },{
             text: 'Propiedades',
             icon: "img/map-properties.png",
-            handler: function(){handler.onPropiedadesButton(leaf, titulo, params)}
+            handler: function(){handler.onPropiedadesButton(leaf, leaf.layer.name, leaf.layer.params)}
         },{
             text: 'Atributos',
             icon: "img/table.png",
             handler: function(){handler.onAtributosButton(leaf)}
-        },{
-            text: 'Descargar',
-            icon: "img/folder-save.png",
-            handler: function(){handler.onDescargarButton(leaf, titulo, params)}
-        }
+        },
+//        {
+//            text: 'Descargar',
+//            icon: "img/folder-save.png",
+////            handler: function(){handler.onDescargarButton(leaf, leaf.layer.name, leaf.layer.params)}
+//        }
     ]
     });
 
@@ -806,7 +823,7 @@ handler.onZoomALaCapaButton = function(leaf, params){
             load: function(){
                 var item;
                 for(var x = 0; x < this.data.items.length; x++){
-                    if(this.data.items[x].data.name == params.layers){
+                    if(this.data.items[x].data.name == params.LAYERS){
                         item = x;
                         break;
                     }
@@ -835,129 +852,118 @@ handler.onZoomALaCapaButton = function(leaf, params){
  * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onPropiedadesButton = function(leaf, titulo, params){
-    
-    new GeoExt.data.WMSCapabilitiesStore({  
-        url: getCapabilitiesUrl(leaf.layer.url),
-        autoLoad: true,
-        listeners:{
-            beforeload: function(){
-                mask = new Ext.LoadMask(Ext.getBody(), {msg:"Conectando..."});
-                mask.show();
-            },
-            load: function(){
-                var descripcionEstiloField;
-                var styleCombo;
-                var styledata = [];
-                var styleabstract = {};
 
-                mask.hide();
-                var item = this.find('name', params.layers);
-                var propiedades = this.data.items[item].data;
-                var estilos = propiedades.styles;
-                for(var x = 0; x < estilos.length; x++){
-                    styledata.push([estilos[x].title,estilos[x].name]);
-                    styleabstract[estilos[x].name] = estilos[x].abstract;
-                }                                       
+    var item;
+    var descripcionEstiloField;
+    var styleCombo;
+    var styledata = [];
+    var styleabstract = {};
 
-                new Ext.Window({
-                    title: titulo,
-                    iconCls: 'configuracionIcon',
-                    layout: "anchor",
-                    resizable: false,   
-                    shadow: false,
-                    items: [
-                        new Ext.Panel({
-                            border: false,
-                            autoScroll: true,
-                            width: "100%",
-                            heigth: "100%",
-                            items: new Ext.FormPanel({
-                                 labelWidth: 85, // label settings here cascade unless overridden
-                                 frame:true,
-                                 border: false,
-                                 width: 335,
-                                 items: [
-                                     new Ext.form.TextField({
-                                         fieldLabel: 'Título',
-                                         width: 230,
-                                         readOnly: true,
-                                         value: propiedades.title
-                                     }), 
-                                     new Ext.form.TextField({
-                                         fieldLabel: 'Nombre',
-                                         width: 230,
-                                         readOnly: true,
-                                         value: propiedades.name
-                                     }),
-                                     new Ext.form.TextField({
-                                         fieldLabel: 'Servidor',
-                                         width: 230,
-                                         readOnly: true,
-                                         value: leaf.layer.url
-                                     }),                                                              
-                                     new Ext.form.TextArea({
-                                         fieldLabel: 'Resumen',
-                                         width: 230,
-                                         readOnly: true,
-                                         value: propiedades.abstract
-                                     }),
-                                     styleCombo = new Ext.form.ComboBox({
-                                         fieldLabel: 'Estilos',
-                                         width: 230,
-                                         typeAhead: true,
-                                         triggerAction: 'all',
-                                         lazyRender:true,
-                                         mode: 'local',
-                                         store: new Ext.data.ArrayStore({
-                                             fields: [
-                                                 'titulo',
-                                                 'name'
-                                             ],
-                                             data: styledata
-                                         }),
-                                         valueField: 'name',
-                                         displayField: 'titulo',
-                                         listeners:{
-                                             select: function(combo, record, index){
-                                                 leaf.layer.mergeNewParams({styles:record.data.name});
-                                                 descripcionEstiloField.setValue(styleabstract[record.data.name]);
-                                             }
-                                         }
-                                     }),
-                                     descripcionEstiloField = new Ext.form.TextArea({
-                                         fieldLabel: 'Descripción',
-                                         width: 230,
-                                         readOnly: true
-                                     }),                                                            
-                                     new Ext.form.CompositeField({
-                                         fieldLabel: 'Transparencia',
-                                         items: [
-                                             new Ext.form.Hidden({}),
-                                             new GeoExt.LayerOpacitySlider({
-                                                 width: 230,
-                                                 layer: leaf.layer,
-                                                 plugins: new GeoExt.LayerOpacitySliderTip({template: '<div>Opacidad: {opacity}%</div>'})
-                                             })                                                        
-                                         ]
-                                     })
-                                 ]
-                             })
-                        })
-
-                    ]                                            
-                }).show();
-
-                styleCombo.getStore().loadData(styledata);  //carga el store del stylecombo
-                styleCombo.setValue(styleCombo.getStore().getAt(0).data.titulo); //selecciona el primer valor
-                descripcionEstiloField.setValue(styleabstract[styleCombo.getStore().getAt(0).data.name]); //actualiza la descripción del estilo                                       
-
-            },
-            exception: function(){
-                mask.hide();
-                Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-            }
+    var layers = app.capabilities[leaf.layer.url].data.items;                
+    for(var x=0; x < layers.length; x++){
+        if( layers[x].data.name == params.LAYERS){
+            item = layers[x].data;
+            break;
         }
-    });    
+    }
+
+    var estilos = item.styles;
+    for(var x = 0; x < estilos.length; x++){
+        styledata.push([estilos[x].title,estilos[x].name]);
+        styleabstract[estilos[x].name] = estilos[x].abstract;
+    }                                       
+
+    new Ext.Window({
+        title: titulo,
+        iconCls: 'configuracionIcon',
+        layout: "anchor",
+        resizable: false,   
+        shadow: false,
+        items: [
+            new Ext.Panel({
+                border: false,
+                autoScroll: true,
+                width: "100%",
+                heigth: "100%",
+                items: new Ext.FormPanel({
+                     labelWidth: 85, // label settings here cascade unless overridden
+                     frame:true,
+                     border: false,
+                     width: 335,
+                     items: [
+                         new Ext.form.TextField({
+                             fieldLabel: 'Título',
+                             width: 230,
+                             readOnly: true,
+                             value: item.title
+                         }), 
+                         new Ext.form.TextField({
+                             fieldLabel: 'Nombre',
+                             width: 230,
+                             readOnly: true,
+                             value: item.name
+                         }),
+                         new Ext.form.TextField({
+                             fieldLabel: 'Servidor',
+                             width: 230,
+                             readOnly: true,
+                             value: leaf.layer.url
+                         }),                                                              
+                         new Ext.form.TextArea({
+                             fieldLabel: 'Resumen',
+                             width: 230,
+                             readOnly: true,
+                             value: item.abstract
+                         }),
+                         styleCombo = new Ext.form.ComboBox({
+                             fieldLabel: 'Estilos',
+                             width: 230,
+                             typeAhead: true,
+                             triggerAction: 'all',
+                             lazyRender:true,
+                             mode: 'local',
+                             store: new Ext.data.ArrayStore({
+                                 fields: [
+                                     'titulo',
+                                     'name'
+                                 ],
+                                 data: styledata
+                             }),
+                             valueField: 'name',
+                             displayField: 'titulo',
+                             listeners:{
+                                 select: function(combo, record, index){
+                                     leaf.layer.mergeNewParams({styles:record.data.name});
+                                     descripcionEstiloField.setValue(styleabstract[record.data.name]);
+                                 }
+                             }
+                         }),
+                         descripcionEstiloField = new Ext.form.TextArea({
+                             fieldLabel: 'Descripción',
+                             width: 230,
+                             readOnly: true
+                         }),                                                            
+                         new Ext.form.CompositeField({
+                             fieldLabel: 'Transparencia',
+                             items: [
+                                 new Ext.form.Hidden({}),
+                                 new GeoExt.LayerOpacitySlider({
+                                     width: 230,
+                                     layer: leaf.layer,
+                                     plugins: new GeoExt.LayerOpacitySliderTip({template: '<div>Opacidad: {opacity}%</div>'})
+                                 })                                                        
+                             ]
+                         })
+                     ]
+                 })
+            })
+
+        ]                                            
+    }).show();
+
+    styleCombo.getStore().loadData(styledata);  //carga el store del stylecombo
+    styleCombo.setValue(styleCombo.getStore().getAt(0).data.titulo); //selecciona el primer valor
+    descripcionEstiloField.setValue(styleabstract[styleCombo.getStore().getAt(0).data.name]); //actualiza la descripción del estilo                                       
     
 };
 
@@ -968,9 +974,10 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
  */
 handler.onAtributosButton = function(leaf){
     
-    if(app.isAttributesPanelHidden){
+    Ext.getCmp("featureGridPanel").setTitle(leaf.text);
+    if(app.isAttributesPanelHidden){        
         Ext.getCmp("featureGridPanel").show();
-        Ext.getCmp("viewportPanel").doLayout(); 
+        Ext.getCmp("viewportPanel").doLayout();         
         app.isAttributesPanelHidden = false;
     }
     var mask = new Ext.LoadMask(Ext.getCmp("featureGridPanel").el, {msg:"Conectando..."});
@@ -1028,10 +1035,10 @@ handler.onAtributosButton = function(leaf){
                 
             }
                         
-            Ext.getCmp("wfsReconocerButton").show();
-            Ext.getCmp("wfsSeleccionarButton").show();
-            Ext.getCmp("wfsLimpiarButton").show();
-            Ext.getCmp("wfsCerrarButton").show();
+//            Ext.getCmp("wfsReconocerButton").show();
+//            Ext.getCmp("wfsSeleccionarButton").show();
+//            Ext.getCmp("wfsLimpiarButton").show();
+//            Ext.getCmp("wfsCerrarButton").show();
                         
             app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
 
@@ -1338,11 +1345,12 @@ handler.onAgregarServidorWmsButton = function(){
                 Ext.MessageBox.prompt('Agregar servidor WMS', 'URL del servidor', function(btn, text){
                     if (btn == "ok"){
                         wms_url = text;
-                        app.wmsServerStore.loadData([[nombre,wms_url]],true);
+                        agregarServidor(nombre,wms_url);
+//                        app.wmsServerStore.loadData([[nombre,wms_url]],true);
                     }
                 })
             }else{
-                Ext.MessageBox.alert('Error', 'Ya existe un servido con ese nombre');
+                Ext.MessageBox.alert('Error', 'Ya existe un servidor con ese nombre');
             }
         }
     });       
@@ -1369,23 +1377,18 @@ handler.onEliminarServidorWmsButton = function(wmsServersGridPanel){
  * @param {type} capabilitiesCombo
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onAgregarCapasButton = function(node, capabilitiesGridPanel, capabilitiesCombo){
+handler.onAgregarCapasButton = function(capabilitiesGridPanel, capabilitiesCombo){
     
     capabilitiesGridPanel.getSelectionModel().each(function(record){
 
             var nombrecapa = record.data.title;
             var servidorWMS = capabilitiesCombo.getValue();
-
+            
             if (existeNombreCapa(nombrecapa) == true){
-                nombrecapa = numerarNombre(nombrecapa)                            
-            }
-
-            var newLeaf = createLeaf(nombrecapa, servidorWMS, {layers: record.data.name, transparent: 'true', format: 'image/png'},{isBaseLayer: false, visibility: false, singleTile: false});
-            if (node == null){
-                Ext.getCmp("layerTreePanel").getRootNode().appendChild(newLeaf);  
-            }else{
-                Ext.getCmp("layerTreePanel").getRootNode().findChild("id",node.attributes.id,true).appendChild(newLeaf);  
-            }    
+                nombrecapa = numerarNombre(nombrecapa);                            
+            } 
+                
+            app.otrosnode.appendChild(createLeaf(nombrecapa, servidorWMS, {layers: record.data.name, transparent: 'true', format: 'image/png'}, {isBaseLayer: false, visibility: false, singleTile: false}));    
 
             app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
             app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
@@ -1428,7 +1431,7 @@ handler.onGetFeatureInfo = function(e){
         width: 350,
         height: (Ext.getCmp("mapPanel").getHeight()) / 2,
         x: Ext.getCmp("mapPanel").getPosition()[0],
-        y: Ext.getCmp("mapPanel").getPosition()[1] + ((Ext.getCmp("mapPanel").getHeight()) / 2) - 25,
+        y: Ext.getCmp("mapPanel").getPosition()[1] + ((Ext.getCmp("mapPanel").getHeight()) / 2),
         shadow: false,
         layout: "border",                               
         items: new Ext.TabPanel({

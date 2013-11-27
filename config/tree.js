@@ -36,44 +36,66 @@ config.tree =
             {"type":"leaf", "title":"Fracciones", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:fracciones", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
             {"type":"leaf", "title":"Radios", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:radios", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
             {"type":"leaf", "title":"Localidades", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:localidades", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: true}},
-            {"type":"leaf", "title":"Ejidos", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:ejidos", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-            {"type":"folder", "name":"Urbano", "children":[
-                {"type":"leaf", "title":"Calles", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:calles", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                {"type":"leaf", "title":"Manzanas", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:manzanas", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                {"type":"leaf", "title":"Barrios", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:barrios", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
-            ]},
-            {"type":"folder", "name":"Rural", "children":[
-                {"type":"leaf", "title":"Censo Nac. Agropecuario 2002", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:cna2002", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                {"type":"leaf", "title":"Censo Nac. Agropecuario 2008", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:CNA2008", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
-            ]},
-            {"type":"folder", "name":"Mapas temáticos", "children":[
-                {"type":"folder","name":"Departamentos","children":[
-                    {"type":"leaf", "title":"Población 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Población extranjera 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_departamentos_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},                            
-/*                    {"type":"leaf", "title":"Índice de debilidad social", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:debilidad_social", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},*/
-                ]},   
-/*
-                {"type":"folder","name":"Fracciones","children":[
-                    {"type":"leaf", "title":"Población 2010 por fraccion", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_fracciones_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                ]},   
-*/
-                {"type":"folder","name":"Radios","children":[
-                    {"type":"leaf", "title":"Población 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Población extranjera 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Hogares 2010 con NBI por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_algun_nbi_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                    {"type":"leaf", "title":"Índice femeneidad 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_femeneidad_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                ]},   
-                {"type":"folder","name":"Localidades","children":[
-                    {"type":"leaf", "title":"Población 2010 por localidad", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_localidades_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
-                ]},   
-            ]}            
+            {"type":"leaf", "title":"Ejidos", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:ejidos", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},                      
     ]},
-//    {"type":"folder","name":"Otros organismos","children":[
-//            {"type":"folder","name":"IGN","children":[]},
-//            {"type":"folder","name":"Secretaría de Energía","children":[]},
-//            {"type":"folder","name":"SCTyE","children":[]}
-//    ]}
+    {"type":"folder", "name":"Urbano", "children":[
+        {"type":"leaf", "title":"Calles", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:calles", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Manzanas", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:manzanas", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Barrios", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:barrios", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
+    ]},
+    {"type":"folder", "name":"Rural", "children":[
+        {"type":"leaf", "title":"Censo Nac. Agropecuario 2002", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:cna2002", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Censo Nac. Agropecuario 2008", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:CNA2008", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
+    ]},
+    {"type":"folder", "name":"Mapas temáticos", "children":[
+
+        {"type":"leaf", "title":"Población 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Población extranjera 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_departamentos_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},                            
+        {"type":"leaf", "title":"Población 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Población extranjera 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Hogares 2010 con NBI por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_algun_nbi_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Índice femeneidad 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_femeneidad_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+        {"type":"leaf", "title":"Población 2010 por localidad", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_localidades_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+ 
+    ]} ,
+
 ];
+
+//config.tree = 
+//[    
+//    {"type":"folder","name":"DGEyC","children":[               
+//            {"type":"leaf", "title":"Comarcas", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:comarcas", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//            {"type":"leaf", "title":"Departamentos", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:departamentos", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//            {"type":"leaf", "title":"Fracciones", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:fracciones", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//            {"type":"leaf", "title":"Radios", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:radios", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//            {"type":"leaf", "title":"Localidades", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:localidades", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: true}},
+//            {"type":"leaf", "title":"Ejidos", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:ejidos", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//            {"type":"folder", "name":"Urbano", "children":[
+//                {"type":"leaf", "title":"Calles", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:calles", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                {"type":"leaf", "title":"Manzanas", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:manzanas", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                {"type":"leaf", "title":"Barrios", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "urbano:barrios", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
+//            ]},
+//            {"type":"folder", "name":"Rural", "children":[
+//                {"type":"leaf", "title":"Censo Nac. Agropecuario 2002", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:cna2002", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                {"type":"leaf", "title":"Censo Nac. Agropecuario 2008", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:CNA2008", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}}
+//            ]},
+//            {"type":"folder", "name":"Mapas temáticos", "children":[
+//                {"type":"folder","name":"Departamentos","children":[
+//                    {"type":"leaf", "title":"Población 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                    {"type":"leaf", "title":"Población extranjera 2010 por departamento", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_departamentos_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},                            
+//                ]},   
+//                {"type":"folder","name":"Radios","children":[
+//                    {"type":"leaf", "title":"Población 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                    {"type":"leaf", "title":"Población extranjera 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_extranjeros_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                    {"type":"leaf", "title":"Hogares 2010 con NBI por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_algun_nbi_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                    {"type":"leaf", "title":"Índice femeneidad 2010 por radio", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_radios_femeneidad_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                ]},   
+//                {"type":"folder","name":"Localidades","children":[
+//                    {"type":"leaf", "title":"Población 2010 por localidad", "server":"http://idedgeyc.chubut.gov.ar/geoserver/wms", "params":{layers: "rural:v_localidades_poblacion_2010", transparent: 'true', format: 'image/png', tiled: 'true'}, "options":{isBaseLayer: false, visibility: false, singleTile: false}},
+//                ]},   
+//            ]}            
+//    ]}
+//];
 
 /**
  * Orden de las capas.
@@ -81,7 +103,8 @@ config.tree =
  */
 config.index = [
     "IGN",
-    "OpenStreetMap","Google Streets","Google Terrain",
+    "OpenStreetMap",
+    "Google Streets","Google Terrain",
     "Google Satellite","Google Hybrid","Bing Road",
     "Bing Aerial","Bing Hybrid","MapQuest", "MapQuest Aerial",
     
