@@ -32,11 +32,16 @@ var toolbar = {};
 toolbar.mapPanelTopBar = function(){
     
     var mapPanelToolbar = [      
-        componentes.navegacionButton(),
+        componentes.navegacionButton(),                 
         componentes.zoomToMaxExtentButton(),
         componentes.zoomInButton(),
         componentes.zoomAnteriorButton(),
-        componentes.zoomPosteriorButton(),        
+        componentes.zoomPosteriorButton(),
+        componentes.agregarCapasButton(),
+        componentes.eliminarCapasButton(),
+        componentes.propiedadesCapasButton(),
+        componentes.zoomCapasButton(),
+        componentes.atributosCapasButton(), 
         componentes.distanciaButton(),
         componentes.superficieButton(),
         componentes.informacionButton(),
@@ -86,11 +91,11 @@ toolbar.mapPanelBottomBar = function(){
 toolbar.treePanelTopBar = function(){
     
     var treePanelTopBar = [
-        componentes.agregarCapasButton(),
-        componentes.eliminarCapasButton(),
-        componentes.propiedadesCapasButton(),
-        componentes.zoomCapasButton(),
-        componentes.atributosCapasButton(),                 
+//        componentes.agregarCapasButton(),
+//        componentes.eliminarCapasButton(),
+//        componentes.propiedadesCapasButton(),
+//        componentes.zoomCapasButton(),
+//        componentes.atributosCapasButton(),                 
     ];
 
     return treePanelTopBar;

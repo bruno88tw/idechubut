@@ -180,7 +180,7 @@ panel.layerTreePanel = function(){
         root: app.rootnode,
         rootVisible: false,
         enableDD: true,
-        tbar: toolbar.treePanelTopBar(),
+//        tbar: toolbar.treePanelTopBar(),
 
     });
             

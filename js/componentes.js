@@ -84,6 +84,8 @@ componentes.zoomToMaxExtentButton = function(){
     var zoomToMaxExtentButton = new GeoExt.Action({
         control: new OpenLayers.Control.ZoomToMaxExtent(),
         map: app.map,
+        id: "zoomToMaxExtent",
+        hidden: true,
         icon: "img/magnifier-zoom-fit.png",
         tooltip: 'Zoom general'
     });
@@ -101,6 +103,8 @@ componentes.zoomInButton = function (){
     var zoomInButton = new GeoExt.Action({
         control: new OpenLayers.Control.ZoomBox(),
         map: app.map,
+        id: "zoomIn",
+        hidden: true,
         icon: "img/magnifier-zoom-in.png",
         toggleGroup: "nav",
         tooltip: "Acercar zoom"
@@ -119,6 +123,8 @@ componentes.zoomOutButton = function(){
     var zoomOutButton = new GeoExt.Action({
         control: new OpenLayers.Control.ZoomBox({out: true}),
         map: app.map,
+        id: "zoomOut",
+        hidden: true,
         icon: "img/magnifier-zoom-out.png",
         toggleGroup: "nav",
         tooltip: "Alejar zoom"
@@ -138,6 +144,8 @@ componentes.zoomAnteriorButton = function(){
         icon: "img/history-zoom-left.png",
         control: app.map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].previous,
         disabled: true,
+        id: "zoomAnterior",
+        hidden: true,
         tooltip: "Zoom anterior"
     });
     
@@ -155,6 +163,8 @@ componentes.zoomPosteriorButton = function(){
         icon: "img/history-zoom-right.png",
         control: app.map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].next,
         disabled: true,
+        id: "zoomPosterior",
+        hidden: true,
         tooltip: "Zoom siguiente"
     });
     

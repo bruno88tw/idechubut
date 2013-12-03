@@ -302,6 +302,10 @@ handler.AvanzadoCheckbox = function(){
         Ext.getCmp("buscador").show();
         Ext.getCmp("distanciaButton").show();
         Ext.getCmp("superficieButton").show();
+        Ext.getCmp("zoomToMaxExtent").show();
+        Ext.getCmp("zoomIn").show();
+        Ext.getCmp("zoomAnterior").show();
+        Ext.getCmp("zoomPosterior").show();
         Ext.getCmp("ordenDeCapasButton").show();
         if(!app.fullscreen){
             Ext.getCmp("mapPanel").getBottomToolbar().show();
@@ -313,6 +317,10 @@ handler.AvanzadoCheckbox = function(){
         Ext.getCmp("buscador").hide();
         Ext.getCmp("distanciaButton").hide();
         Ext.getCmp("superficieButton").hide();
+        Ext.getCmp("zoomToMaxExtent").hide();
+        Ext.getCmp("zoomIn").hide();
+        Ext.getCmp("zoomAnterior").hide();
+        Ext.getCmp("zoomPosterior").hide();        
         Ext.getCmp("ordenDeCapasButton").hide();
         Ext.getCmp("mapPanel").getBottomToolbar().hide();
         Ext.getCmp("viewportPanel").doLayout();  
