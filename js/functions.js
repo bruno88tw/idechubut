@@ -18,8 +18,6 @@
  *  along with this program.  If not, see {@link http://www.gnu.org/licenses/}. 
  */
 
-
-
 /**
  * Dado un nombre de capa corrobora si existe o no en el mapa.
  * @param {String} nombre nombre de la capa.
@@ -120,58 +118,6 @@ function getHemi(coordinate, type) {
 };
 
 /**
- * Crea el archivo de exportación del árbol de capas.
- * @param {type} father
- * @param {type} children
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function saveLayerTree(father, children){
-    
-    for(var i = 0; i < children.length; i++){
-        if(children[i].isLeaf()){
-            var layer = app.map.getLayersByName(children[i].attributes.layer)[0];
-            father.push({"type":"leaf", "title":children[i].attributes.text, "server":layer.url, "options":layer.options, "params":layer.params});
-        }else{
-            var grandchildren = [];
-            saveLayerTree(grandchildren,children[i].childNodes);
-            father.push({"type":"folder","name":children[i].attributes.text,"children":grandchildren});
-        }
-    }    
-    
-};
-
-/**
- * Crea el archivo de exportación del índice de las capas.
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function saveLayerIndex(){
-    
-    var index = [];
-    
-    for(var i = 0; i < app.map.layers.length; i++){
-        index[i] = app.map.layers[i].name;
-    }    
-    
-    return index;
-    
-};
-
-/**
- * Restaura el índice de las capas dado un archivo de resguardo.
- * @param {type} index
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function restoreIndex(index){
-    
-    var layer;
-    for(var i = 0; i < index.length; i++){
-        layer = app.map.getLayersByName(index[i])[0];
-        app.map.setLayerIndex(layer,i);
-    }      
-    
-};
-
-/**
  * Dado un archivo de resguardo de árbol de capas, agrega la descendencia a un nodo padre dado
  * @param {type} father
  * @param {type} children
@@ -181,7 +127,7 @@ function restoreTree(father,children){
     
     var newNode;
     
-    for(var x = 0; x < children.length;x++){
+    for(var x = 0; x < children.length; x++){
         if(children[x].type == "folder"){
             newNode = createNode(children[x].name);
             father.appendChild(newNode);
@@ -194,75 +140,28 @@ function restoreTree(father,children){
     
 };
 
+
 /**
- * Dado un nodo, expande todos sus nodos hijos.
- * @param {type} node
- * @returns {undefined} Esta función no devuelve resultados.
+ * 
+ * @param {type} capas
+ * @returns {undefined}
  */
-function expandAll(node){
-    if (!node.isLeaf()){
-        node.expand();
-        node.eachChild(function(childnode){
-            expandAll(childnode);
-        });
+function restoreLayers(capas){
+    
+    for(var x = 0; x < capas.length; x++){
+        
+        app.map.addLayer(new OpenLayers.Layer.WMS(
+            capas[x].title, 
+            capas[x].server, 
+            capas[x].params, 
+            capas[x].options
+        ));    
+        
+        app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
+        app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
+        
     }
-};
 
-/**
- * Dado un nodo, colapsa todos sus nodos hijos.
- * @param {type} node
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function collapseAll(node){
-    if (!node.isLeaf()){
-        node.collapse();
-        node.eachChild(function(childnode){
-            collapseAll(childnode);
-        });
-    }    
-};
-
-/**
- * Dado un nodo, elimina todos sus nodos hijos y a sí mismo.
- * @param {type} node
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function removeLayers(node){
-    
-    if (node.isLeaf()){
-        app.map.removeLayer(app.map.getLayersByName(node.attributes.layer)[0]);        
-    }else{
-        for(var i = 0; i < node.childNodes.length; i++){
-            removeLayers(node.childNodes[i]);
-        }
-        
-    } 
-    
-//    node.eachChild(function(childnode){
-//        if (childnode.isLeaf()){
-//            app.map.removeLayer(app.map.getLayersByName(childnode.attributes.layer)[0]);        
-//        }else{
-//            removeLayers(childnode);
-//        } 
-//    });
-    
-};
-
-/**
- * Dado un nodo, le asigna un nombre.
- * @param {type} e
- * @returns {undefined} Esta función no devuelve resultados.
- */
-function setFolderName(e){       
-    
-    var folder = e;
-    
-    Ext.MessageBox.prompt('Nombre de carpeta', 'Ingrese el nombre de la carpeta', function(btn, text){
-        if (btn == "ok"){
-            folder.setText(text);
-        }
-    });
-        
 };
 
 /**
@@ -277,7 +176,6 @@ function createNode(text){
         expanded: false,
         icon: "img/folder.png",
         leaf: false,
-        cls: 'folder',
         style: {'background':'#000000'},
         listeners:{
             click: function(leaf, event){
@@ -285,6 +183,12 @@ function createNode(text){
                 Ext.getCmp("treePanelTopbarPropiedades").disable();
                 Ext.getCmp("treePanelTopbarAtributos").disable();    
                 Ext.getCmp("treePanelTopbarZoomCapa").disable();  
+            },
+            beforecollapse: function(leaf, event){
+                this.setIcon("img/folder.png");
+            },
+            beforeexpand: function(leaf, event){
+                this.setIcon("img/folder-open.png");
             }
         }
     });
@@ -301,16 +205,12 @@ function createNode(text){
  * @param {type} options
  * @returns {GeoExt.tree.LayerNode}
  */
-function createLeaf(titulo, servidor, params, options){             
+function createLeaf(titulo){                
     
-    var layer = new OpenLayers.Layer.WMS(
-        titulo, 
-        servidor, 
-        params, 
-        options
-    );
-    
-    app.map.addLayer(layer);   
+    var layer = app.map.getLayersByName(titulo)[0];
+    var servidor = layer.url;
+    var params = layer.params;
+    var options = layer.options;
     
     var store = new GeoExt.data.LayerStore({
         map: app.map,
@@ -325,7 +225,7 @@ function createLeaf(titulo, servidor, params, options){
     var item;    
     var layers = app.capabilities[servidor].data.items;                
     for(var x=0; x < layers.length; x++){
-        if( layers[x].data.name == params.layers){
+        if( layers[x].data.name == params.LAYERS){
             item = layers[x].data;
             break;
         }
@@ -360,18 +260,18 @@ function createLeaf(titulo, servidor, params, options){
         },                 
         uiProvider: uiClass,        
         component: new Ext.Panel({
-            width: 275,
+            width: 285,
             hidden:true,
             autoScroll:true,
             border: false,
-            bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0)'} },
+            bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255,0.3)'} },
             style: {'padding-top':'5px','padding-bottom':'5px'},
             items:[      
                 {
                     border: false,
                     width: 270,
                     bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0)'} },
-                    html: "<div style='width:270px; font-weight:normal; padding-top:5px; padding-left:5px; padding-right:5px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;'>"+item.abstract+"</div>"
+                    html: "<div style='width:275px; font-weight:normal; padding-top:5px; padding-left:5px; padding-right:5px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;'>"+item.abstract+"</div>"
                 },
                 new GeoExt.WMSLegend({
                     layerRecord: store.getByLayer(layer),
@@ -395,8 +295,11 @@ function createLeaf(titulo, servidor, params, options){
 };
 
 /**
- * Crea y devuelve el panel de capas base.
- * @returns {Ext.Panel}
+ * 
+ * @param {type} text
+ * @param {type} layer
+ * @param {type} icon
+ * @returns {unresolved}
  */
 function capaBase(text, layer, icon){    
     

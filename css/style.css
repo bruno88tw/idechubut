@@ -269,3 +269,48 @@
 .folder{
     background-color: #EEEEEE;
 }
+
+.categoria1{
+    background: #B5DD6D;
+    color: #ffffff;
+}
+
+.categoria1sub{
+    background: #DEF2C1;
+}
+
+.categoria2{
+    background: #73B0E4;
+    color: #ffffff;
+}
+
+.categoria2sub{
+    background: #BACFE1;
+}
+
+.categoria3{
+    background: #BA6AE4;
+    color: #ffffff;
+}
+
+.categoria3sub{
+    background: #D1AEE3;
+}
+
+.categoria4{
+    background: #FF5C33;
+    color: #ffffff;
+}
+
+.categoria4sub{
+    background: #FFAD99;
+}
+
+.categoria5{
+    background: #FF9900;
+    color: #ffffff;
+}
+
+.categoria5sub{
+    background: #B5DD6D;
+}

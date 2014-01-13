@@ -25,126 +25,6 @@
 var handler = {};
 
 /**
- * Handler para la herramienta importar capas.
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onImportarCapasButton = function(){
-    
-    var inputTextArea = new Ext.form.TextArea({
-        width: "97%",
-        heigth: "97%",
-        readOnly: false,
-        emptyText: "Copie el contenido del archivo de exportación y haga click en 'Importar'"
-    });
-
-     var window = new Ext.Window({
-         title: "Importar capas",
-         iconCls: 'abrirIcon',
-         layout: "fit",
-         shadow: false,
-         width: 300,
-         height:300,
-         resizable: false,
-         items: [        
-             inputTextArea
-//             new Ext.Panel({
-//                 bodyStyle: 'padding:5px',
-//                 border: false,
-//                 autoScroll: true,
-//                 layout: "fit",
-//                 width: "100%",
-//                 heigth: "100%",
-//                 items:[inputTextArea]
-//             })
-         ],
-         bbar:[
-            componentes.separador(), 
-            new Ext.Button({
-                tooltip: 'Importar',
-                text: "Importar",
-                icon: 'img/folder-open.png',
-                handler: function(){
-
-                    try {
-
-                        var loadtree = JSON.parse(inputTextArea.getValue());
-                        removeLayers(app.rootnode);
-                        app.rootnode.removeAll();
-//                        for(var i = 0; i < app.rootnode.childNodes.length; i++){
-//                            app.rootnode.childNodes[0].remove();
-//                        }
-                        restoreTree(app.rootnode,loadtree[0]);   
-                        restoreIndex(loadtree[1]);
-                        window.close();
-
-                    }catch (e){
-                        Ext.MessageBox.alert('Error', 'Ha ocurrido un error. Compruebe que el archivo no esté vacío ni corrupto.');
-                    }
-
-
-                }
-            })                  
-         ]
-     });
-     window.show();      
-        
-};
-
-/**
- * Handler para la herramienta exportar capas.
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onExportarCapasButton = function(){
-    
-    var savetree = [];
-    index = [];
-    saveLayerTree(savetree,Ext.getCmp("layerTreePanel").getRootNode().childNodes); 
-//    savetree.splice(0,1);
-    index = saveLayerIndex();
-    var jsonobject = JSON.stringify([savetree,index]);
-
-    var inputTextArea = new Ext.form.TextArea({
-       width: "97%",
-       heigth: "97%",
-       readOnly: true,
-       emptyText: "Haga click en 'Generar' para generar el archivo de exportación, luego haga triple click sobre el contenido y copie y pegue en un archivo local."
-    });             
-
-    var window = new Ext.Window({
-        title: "Guardar capas",
-        iconCls: 'guardarIcon',
-        layout: "fit",
-        shadow: false,
-        width: 300,
-        height:300,
-        resizable: false,
-        items: [      
-            inputTextArea
-//            new Ext.Panel({
-//                bodyStyle: 'padding:5px',
-//                border: false,
-//                layout: "fit",
-//                autoScroll: true,
-//                width: "100%",
-//                heigth: "100%",
-//                items:[inputTextArea]
-//            })
-        ],
-        bbar:[
-           componentes.separador(), 
-           new Ext.Button({
-               tooltip: 'Guardar capas',
-               text: "Generar",
-               icon: 'img/folder-save.png',
-               handler: function(){inputTextArea.setValue(jsonobject);}
-           })                  
-        ]
-    });
-    window.show();     
-    
-};
-
-/**
 * Handler correspondiente al evento asociado al checkbox de configuración "Título".
 * @returns {undefined} Esta función no devuelve resultados.
 */
@@ -203,23 +83,6 @@ handler.onConfiguracionCambiarSubtituloButton = function(){
             document.getElementById("subtitulodiv").innerHTML = text;
         }
     });    
-    
-};
-
-/**
- * Handler correspondiente al evento asociado al checkbox de configuración "Leyenda".
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onConfiguracionBuscadorCheckbox = function(){
-    
-    var div = document.getElementById("toponimosdiv");
-    if (this.getValue() == true){
-        app.configuracion.buscador = true;
-        div.style.display = "block";
-    }else{
-        app.configuracion.buscador = false;
-        div.style.display = "none";
-    } 
     
 };
 
@@ -299,11 +162,8 @@ handler.AvanzadoCheckbox = function(){
     if (this.getValue() == true){
         app.configuracion.avanzado = true;
         Ext.getCmp("treePanelTopbarZoomCapa").show();
-        Ext.getCmp("buscador").show();
         Ext.getCmp("distanciaButton").show();
         Ext.getCmp("superficieButton").show();
-        Ext.getCmp("zoomToMaxExtent").show();
-        Ext.getCmp("zoomIn").show();
         Ext.getCmp("zoomAnterior").show();
         Ext.getCmp("zoomPosterior").show();
         Ext.getCmp("ordenDeCapasButton").show();
@@ -314,11 +174,8 @@ handler.AvanzadoCheckbox = function(){
     }else{
         app.configuracion.avanzado = false;
         Ext.getCmp("treePanelTopbarZoomCapa").hide();
-        Ext.getCmp("buscador").hide();
         Ext.getCmp("distanciaButton").hide();
         Ext.getCmp("superficieButton").hide();
-        Ext.getCmp("zoomToMaxExtent").hide();
-        Ext.getCmp("zoomIn").hide();
         Ext.getCmp("zoomAnterior").hide();
         Ext.getCmp("zoomPosterior").hide();        
         Ext.getCmp("ordenDeCapasButton").hide();
@@ -361,63 +218,6 @@ handler.ConfiguracionGrillaCheckbox = function(){
     }    
     
 };
-
-/**
- * Handler correspondiente al evento asociado al botón "Imprimir".
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onImprimirButton = function(){
-    
-    Ext.getCmp("layerTreePanel").hide();
-    Ext.getCmp("featureGridPanel").hide();
-    Ext.getCmp("mapPanel").getTopToolbar().hide();
-    Ext.getCmp("mapPanel").getBottomToolbar().hide();
-    Ext.getCmp("viewportPanel").doLayout();
-//    var divmap = document.getElementById("mapPanel").getElementsByClassName('x-panel-body')[0];
-//    var mapp = Ext.getCmp("mapPanel");
-//    var height = mapp.lastSize.height - 52;
-//    var width = mapp.lastSize.width;
-//
-//    var mywindow = window.open('', '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height='+ height + ',width=' + width);       
-//    mywindow.document.write('<html><head><title>Imprimir mapa</title>');
-//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/style.css">');
-//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/ext-all.css">');
-//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/ExtJS/resources/css/xtheme-gray.css">');                                                    
-//    mywindow.document.write('<link rel="stylesheet" type="text/css" href="js/libs/OpenLayers/theme/default/style.css">');
-//    mywindow.document.write('<script type="text/javascript" src="js/libs/HTML2Canvas.js"></script>');    
-//    mywindow.document.write('<script type="text/javascript" src="js/libs/OpenLayers/OpenLayers.js" ></script>');
-////    mywindow.document.write('<script>function load(){html2canvas(document.body, {onrendered: function(canvas) {var dataUrl = canvas.toDataURL("image/png");console.log(dataUrl);}});}</scrim  imipt>');
-////    mywindow.document.write('<script>function load(){window.print();window.close()}</script>');
-//    mywindow.document.write('</head><body onload="load()" style="margin: 0;padding: 0;">');
-//    mywindow.document.write(divmap.innerHTML);
-//    mywindow.document.write('</body></html>');
-//    mywindow.document.close();
-//    mywindow.focus();    
-
-    
-
-//    html2canvas(divmap, {
-//        "proxy":"/cgi-bin/html2canvasproxy.php",
-//        "logging":true,
-//        onrendered: function(canvas) {
-//            var dataUrl = canvas.toDataURL("image/png");
-//            console.log(dataUrl);
-//        }
-//    });
-
-//    html2canvas( [ document.body ], {
-//        "proxy":"/cgi-bin/html2canvas2.php",
-//        "logging":true,
-//        "allowTaint":true,
-//        "taintTest":true,
-//        "useCORS":true,
-//        "onrendered": function(canvas) {
-//            var uridata = canvas.toDataURL("image/png");
-//            console.log(uridata);
-//        }
-//    });    
-              
-}; 
 
 /**
  * Handler correspondiente al evento asociado al botón "Ayuda".
@@ -522,9 +322,8 @@ handler.onAcercaDeButton = function(){
 };
 
 /**
- * Handler correspondiente al evento asociado al botón "Agregar capas".
- * @param {type} node
- * @returns {undefined} Esta función no devuelve resultados.
+ * 
+ * @returns {undefined}
  */
 handler.onAgregarCapas = function(){
 
@@ -583,38 +382,6 @@ handler.onOrdenDeCapasButton = function(){
 };
 
 /**
- * Handler correspondiente al evento asociado al botón "Agregar carpeta".
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onAgregarCarpetaButton = function(){
-
-   var newFolder = createNode("Nueva carpeta");
-   Ext.getCmp("layerTreePanel").getRootNode().appendChild(newFolder);
-   setFolderName(newFolder);     
-
-};
- 
-/**
- * Handler correspondiente al evento asociado al botón "Expandir todo".
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onExpandirTodoButton = function(){
-
-   expandAll(Ext.getCmp("layerTreePanel").getRootNode());     
-
-};
-
-/**
- * Handler correspondiente al evento asociado al botón "Colapsar todo".
- * @returns {undefined} Esta función no devuelve resultados.
- */   
-handler.onColapsarTodoButton = function(){
-
-   collapseAll(Ext.getCmp("layerTreePanel").getRootNode());
-
-};
-
-/**
  * Handler correspondiente al evento asociado al botón "Reconocer".
  * @returns {undefined} Esta función no devuelve resultados.
  */
@@ -653,156 +420,6 @@ handler.onWfsSeleccionarButton = function(){
 handler.onWfsLimpiarButton = function(){
     
     app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
-    
-};
-
-/**
- * Handler correspondiente al evento "ContextMenu" de una componente tipo nodo.
- * @param {type} nodo
- * @param {type} event
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onNodeContextMenu = function(nodo, event){
-    
-    Ext.getCmp("layerTreePanel").getRootNode().findChild("id",nodo.attributes.id,true).select();
-    var menu = new Ext.menu.Menu({
-        items: [
-            {
-                text: 'Agregar capa',
-                icon: "img/map-plus.png",
-                handler: function(){
-                    handler.onAgregarCapas(nodo);
-                }
-            },{
-                text: 'Renombrar carpeta',
-                icon: "img/folder-edit.png",
-                handler: function(){
-                    setFolderName(nodo);
-                }
-            },{
-                text: 'Nueva carpeta',
-                icon: "img/folder-add.png",
-                handler: function(){
-                    var newFolder = createNode("Nueva carpeta");
-                    Ext.getCmp("layerTreePanel").getRootNode().findChild("id",nodo.attributes.id,true).appendChild(newFolder);
-                    setFolderName(newFolder);
-                }
-            },{
-                text: 'Eliminar carpeta',
-                icon: "img/folder-delete.png",
-                handler: function(){
-                    removeLayers(nodo);
-                    nodo.remove();
-                }
-            },{
-                text: 'Expandir todo',
-                icon: "img/folder-expandir.png",
-                handler: function(){
-                    expandAll(nodo);
-                }
-            },{
-                text: 'Colapsar todo',
-                icon: "img/folder-colapsar.png",
-                handler: function(){
-                    collapseAll(nodo);
-                }
-            }
-        ]
-    });
-
-    menu.showAt([event.browserEvent.clientX,event.browserEvent.clientY]);
-
-    menu.on('hide', function() {
-        menu.destroy();
-    });     
-    
-};
-
-/**
- * Handler correspondiente al evento "ContextMenu" de una componente tipo nodo.
- * @param {type} nodo
- * @param {type} event
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onRootNodeContextMenu = function(nodo, event){
-    
-    Ext.getCmp("layerTreePanel").getRootNode().select();
-    var menu = new Ext.menu.Menu({
-        items: [
-            {
-                text: 'Nueva carpeta',
-                icon: "img/folder-add.png",
-                handler: function(){
-                    var newFolder = createNode("Nueva carpeta");
-                    Ext.getCmp("layerTreePanel").getRootNode().appendChild(newFolder);
-                    setFolderName(newFolder);
-                }
-            },{
-                text: 'Expandir todo',
-                icon: "img/folder-expandir.png",
-                handler: function(){
-                    expandAll(nodo);
-                }
-            },{
-                text: 'Colapsar todo',
-                icon: "img/folder-colapsar.png",
-                handler: function(){
-                    collapseAll(nodo);
-                }
-            }
-        ]
-    });
-
-    menu.showAt([event.browserEvent.clientX,event.browserEvent.clientY]);
-
-    menu.on('hide', function() {
-        menu.destroy();
-    });     
-    
-};
-
-/**
- * Handler correspondiente al evento "ContextMenu" de una componente tipo leaf.
- * @param {type} leaf
- * @param {type} event
- * @param {type} titulo
- * @param {type} params
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onLeafContextMenu = function(leaf, event){
-    
-    leaf.select();
-    var menu = new Ext.menu.Menu({
-        items: [{
-            text: 'Zoom a la capa',
-            icon: "img/zoom-to-map.png",                        
-            handler: function(){handler.onZoomALaCapaButton(leaf,leaf.layer.params)}
-        },{
-            text: 'Eliminar capa',
-            icon: "img/map-minus.png",
-            handler: function(){leaf.remove();app.map.removeLayer(app.map.getLayersByName(leaf.attributes.layer)[0]);}
-        },{
-            text: 'Propiedades',
-            icon: "img/map-properties.png",
-            handler: function(){handler.onPropiedadesButton(leaf, leaf.layer.name, leaf.layer.params)}
-        },{
-            text: 'Atributos',
-            icon: "img/table.png",
-            handler: function(){handler.onAtributosButton(leaf)}
-        },
-//        {
-//            text: 'Descargar',
-//            icon: "img/folder-save.png",
-////            handler: function(){handler.onDescargarButton(leaf, leaf.layer.name, leaf.layer.params)}
-//        }
-    ]
-    });
-
-    menu.showAt([event.browserEvent.clientX,event.browserEvent.clientY]);
-
-    menu.on('hide', function() {
-        menu.destroy();
-    });     
     
 };
 
@@ -1013,41 +630,75 @@ handler.onAtributosButton = function(leaf){
             var fields = [];
             
             var sequence = null;
-            var atributos = null;  
+            var atributos = null; 
             
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
-                         
-            if(navigator.appVersion.indexOf("Chrome") != -1){
-                sequence = xmlDoc.getElementsByTagName("sequence")[0];
-                atributos = sequence.getElementsByTagName("element");
-            }else{
-                sequence = xmlDoc.getElementsByTagName("xsd:sequence")[0];
-                atributos = sequence.getElementsByTagName("xsd:element");
-            }
+            var parser;
+            var xmlDoc;
             
-            columns.push(new Ext.grid.RowNumberer());
-            for(var x = 0; x < atributos.length; x++){
-                if(atributos[x].attributes.name.nodeValue != "the_geom" && atributos[x].attributes.name.nodeValue != "gid"){
-                    columns.push({header: atributos[x].attributes.name.nodeValue, dataIndex: atributos[x].attributes.name.nodeValue, sortable: true});
-                    if(atributos[x].attributes.type.nodeValue == "xsd:string"){
-                        fields.push({name: atributos[x].attributes.name.nodeValue, type: "string"});
-                    }else if(atributos[x].attributes.type.nodeValue == "xsd:double" ||
-                             atributos[x].attributes.type.nodeValue == "xsd:float" ||
-                             atributos[x].attributes.type.nodeValue == "xsd:decimal" ||
-                             atributos[x].attributes.type.nodeValue == "xsd:long" ||
-                             atributos[x].attributes.type.nodeValue == "xsd:integer"){
-                        fields.push({name: atributos[x].attributes.name.nodeValue, type: "float"});
-                    }                    
-                }
+            if (window.DOMParser)
+            {
+                parser=new DOMParser();
+                xmlDoc = parser.parseFromString(request.responseText,"text/xml");  
+                
+                if(navigator.appVersion.indexOf("Chrome") != -1){
+                    sequence = xmlDoc.getElementsByTagName("sequence")[0];
+                    atributos = sequence.getElementsByTagName("element");
+                }else{
+                    sequence = xmlDoc.getElementsByTagName("xsd:sequence")[0];
+                    atributos = sequence.getElementsByTagName("xsd:element");
+                }            
+                
+                columns.push(new Ext.grid.RowNumberer());
+                for(var x = 0; x < atributos.length; x++){
+                    if(atributos[x].attributes.name.nodeValue != "the_geom" && atributos[x].attributes.name.nodeValue != "gid"){
+                        columns.push({header: atributos[x].attributes.name.nodeValue, dataIndex: atributos[x].attributes.name.nodeValue, sortable: true});
+                        if(atributos[x].attributes.type.nodeValue == "xsd:string"){
+                            fields.push({name: atributos[x].attributes.name.nodeValue, type: "string"});
+                        }else if(atributos[x].attributes.type.nodeValue == "xsd:double" ||
+                                 atributos[x].attributes.type.nodeValue == "xsd:float" ||
+                                 atributos[x].attributes.type.nodeValue == "xsd:decimal" ||
+                                 atributos[x].attributes.type.nodeValue == "xsd:long" ||
+                                 atributos[x].attributes.type.nodeValue == "xsd:integer"){
+                            fields.push({name: atributos[x].attributes.name.nodeValue, type: "float"});
+                        }                    
+                    }
+
+                }                 
                 
             }
-                        
-//            Ext.getCmp("wfsReconocerButton").show();
-//            Ext.getCmp("wfsSeleccionarButton").show();
-//            Ext.getCmp("wfsLimpiarButton").show();
-//            Ext.getCmp("wfsCerrarButton").show();
-                        
+            else // Internet Explorer
+            {
+                xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+                xmlDoc.async=false;
+                xmlDoc.loadXML(request.responseText);    
+                
+                if(navigator.appVersion.indexOf("Chrome") != -1){
+                    sequence = xmlDoc.getElementsByTagName("sequence")[0];
+                    atributos = sequence.getElementsByTagName("element");
+                }else{
+                    sequence = xmlDoc.getElementsByTagName("xsd:sequence")[0];
+                    atributos = sequence.getElementsByTagName("xsd:element");
+                }  
+                
+                columns.push(new Ext.grid.RowNumberer());
+                for(var x = 0; x < atributos.length; x++){
+                    if(atributos[x].attributes[2].text != "the_geom" && atributos[x].attributes[2].text != "gid"){
+                        columns.push({header: atributos[x].attributes[2].text, dataIndex: atributos[x].attributes[2].text, sortable: true});
+                        if(atributos[x].attributes[4].text == "xsd:string"){
+                            fields.push({name: atributos[x].attributes[2].text, type: "string"});
+                        }else if(atributos[x].attributes[4].text == "xsd:double" ||
+                                 atributos[x].attributes[4].text == "xsd:float" ||
+                                 atributos[x].attributes[4].text == "xsd:decimal" ||
+                                 atributos[x].attributes[4].text == "xsd:long" ||
+                                 atributos[x].attributes[4].text == "xsd:integer"){
+                            fields.push({name: atributos[x].attributes[2].text, type: "float"});
+                        }                    
+                    }
+
+                }  
+                
+            } 
+       
             app.map.getLayersByName("wfsLayer")[0].removeAllFeatures();
 
             var x = 3;
@@ -1121,222 +772,228 @@ handler.onAtributosButton = function(leaf){
 };
 
 /**
- * Handler correspondiente al evento asociado al botón "Descargar".
- * @param {type} leaf
- * @returns {undefined} Esta función no devuelve resultados.
- */
-handler.onDescargarButton = function(leaf, titulo, params){
-    
-    new GeoExt.data.WMSCapabilitiesStore({  
-        url: getCapabilitiesUrl(leaf.layer.url),
-        autoLoad: true,
-        listeners:{
-            beforeload: function(){
-                mask = new Ext.LoadMask(Ext.getBody(), {msg:"Conectando..."});
-                mask.show();
-            },
-            load: function(){
-
-                mask.hide();
-                var item = this.find('name', params.layers);
-                var propiedades = this.data.items[item].data;
-                var servidor = propiedades.layer.url.split("?")[0];
-                var srs;
-                for(var key in propiedades.srs) {
-                    if(propiedades.srs.hasOwnProperty(key)) {
-                        srs = key;
-                        break;
-                    }
-                }
-                var url = servidor+'?service=wfs&version=2.0.0&request=GetFeature&typeName='+propiedades.name+'&outputFormat=shape-zip&SRSNAME=EPSG:4326';
-                window.open(url, '_blank', 'location=no, scrollbars=no, menubar=no, status=no, titlebar=no, center=1, height=50, width=50');
-
-            },
-            exception: function(){
-                mask.hide();
-                Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-            }
-        }
-    });        
-    
-    
-};
-
-/**
  * Handler correspondiente al evento asociado al botón "Información" de la ventana de servidores WMS.
  * @param {type} wmsServersGridPanel
  * @returns {undefined} Esta función no devuelve resultados.
  */
 handler.onWmsServersInformationButton = function(wmsServersGridPanel){
     
-    var url = wmsServersGridPanel.getSelectionModel().getSelected().data.url;                            
-    var infomask = new Ext.LoadMask(wmsServersGridPanel.getEl(), {msg:"Conectando..."});
-    infomask.show();
-
-    Ext.Ajax.request({
-        url : getCapabilitiesUrl(url), 
-        method: 'GET',
-        success: function ( result, request )
-        { 
-            infomask.hide();
-
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(result.responseText,"text/xml");
-
-            try{var service = xmlDoc.getElementsByTagName("Service")[0];}catch(e){};
-            try{var name = service.getElementsByTagName("Name")[0].textContent;}catch(e){};
-            try{var title = service.getElementsByTagName("Title")[0].textContent;}catch(e){};
-            try{var abstract = service.getElementsByTagName("Abstract")[0].textContent;}catch(e){};
-            try{var contactPerson = service.getElementsByTagName("ContactPerson")[0].textContent;}catch(e){};
-            try{var contactOrganization = service.getElementsByTagName("ContactOrganization")[0].textContent;}catch(e){};
-            try{var contactPosition = service.getElementsByTagName("ContactPosition")[0].textContent;}catch(e){};
-            try{var addressType = service.getElementsByTagName("AddressType")[0].textContent;}catch(e){};
-            try{var address = service.getElementsByTagName("Address")[0].textContent;}catch(e){};
-            try{var city = service.getElementsByTagName("City")[0].textContent;}catch(e){};
-            try{var stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].textContent;}catch(e){};
-            try{var postCode = service.getElementsByTagName("PostCode")[0].textContent;}catch(e){};
-            try{var country = service.getElementsByTagName("Country")[0].textContent;}catch(e){};
-            try{var contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].textContent;}catch(e){};
-            try{var contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].textContent;}catch(e){};
-            try{var contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].textContent;}catch(e){};
-
-            new Ext.Window({
-                title: wmsServersGridPanel.getSelectionModel().getSelected().data.nombre,
-                iconCls: 'configuracionIcon',
-                layout: "anchor",
-                resizable: false,  
-                shadow: false,
-                items: [
-                    new Ext.Panel({
-                        border: false,
-                        autoScroll: true,
-                        width: "100%",
-                        heigth: "100%",
-                        items: new Ext.FormPanel({
-                             labelWidth: 85, // label settings here cascade unless overridden
-                             frame:true,
-                             border: false,
-                             width: 380,
-                             items: [
-                                 new Ext.form.FieldSet({
-                                    title: "WMS",
-                                    items: [
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Nombre',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: name
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Título',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: title
-                                        }),   
-                                        new Ext.form.TextArea({
-                                            fieldLabel: 'Descripción',
-                                            width: 255,
-                                            readOnly: true,
-                                            value: abstract
-                                        })                                                 
-                                    ]
-                                 }),
-                                 new Ext.form.FieldSet({
-                                    title: "Contacto",
-                                    items: [
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Nombre',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: contactPerson
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Organización',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: contactOrganization
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Posición',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: contactPosition
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Tipo de dirección',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: addressType
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Dirección',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: address
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Ciudad',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: city
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Provincia o estado',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: stateOrProvince
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Código Postal',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: postCode
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'País',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: country
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Teléfono',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: contactVoiceTelephone
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Fax',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: contactFacsimileTelephone
-                                        }),  
-                                        new Ext.form.TextField({
-                                             fieldLabel: 'Email',
-                                             width: 255,
-                                             readOnly: true,
-                                             value: contactElectronicMailAddress
-                                        })
-                                    ]
-                                 })                                         
-                             ]
-                         })
-                    })
-
-                ]                                            
-            }).show();
-        },
-        failure: function(){
-            infomask.hide();
-            Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-        },
-        listeners: {
-             requestexception: function(){
-                  infomask.hide();
-                  Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
-             }
-        }
-    });    
+    var selectedItem = wmsServersGridPanel.getSelectionModel().getSelected();
     
+    if(selectedItem !== undefined){
+        
+        var url = selectedItem.data.url;                            
+        var infomask = new Ext.LoadMask(wmsServersGridPanel.getEl(), {msg:"Conectando..."});
+        infomask.show();
+
+        Ext.Ajax.request({
+            url : getCapabilitiesUrl(url), 
+            method: 'GET',
+            success: function ( result, request )
+            { 
+                infomask.hide();
+                var parser;
+                var xmlDoc;
+                var service;
+                var name;
+                var title;
+                var abstract;
+                var contactPerson;
+                var contactOrganization;
+                var contactPosition;
+                var addressType;
+                var address;
+                var city;
+                var stateOrProvince;
+                var postCode;
+                var country;
+                var contactVoiceTelephone;
+                var contactFacsimileTelephone;
+                var contactElectronicMailAddress;
+
+                if (window.DOMParser)
+                {
+                    parser=new DOMParser();
+                    xmlDoc = parser.parseFromString(result.responseText,"text/xml");
+                    try{service = xmlDoc.getElementsByTagName("Service")[0];}catch(e){};
+                    try{name = service.getElementsByTagName("Name")[0].textContent;}catch(e){};
+                    try{title = service.getElementsByTagName("Title")[0].textContent;}catch(e){};
+                    try{abstract = service.getElementsByTagName("Abstract")[0].textContent;}catch(e){};
+                    try{contactPerson = service.getElementsByTagName("ContactPerson")[0].textContent;}catch(e){};
+                    try{contactOrganization = service.getElementsByTagName("ContactOrganization")[0].textContent;}catch(e){};
+                    try{contactPosition = service.getElementsByTagName("ContactPosition")[0].textContent;}catch(e){};
+                    try{addressType = service.getElementsByTagName("AddressType")[0].textContent;}catch(e){};
+                    try{address = service.getElementsByTagName("Address")[0].textContent;}catch(e){};
+                    try{city = service.getElementsByTagName("City")[0].textContent;}catch(e){};
+                    try{stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].textContent;}catch(e){};
+                    try{postCode = service.getElementsByTagName("PostCode")[0].textContent;}catch(e){};
+                    try{country = service.getElementsByTagName("Country")[0].textContent;}catch(e){};
+                    try{contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].textContent;}catch(e){};
+                    try{contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].textContent;}catch(e){};
+                    try{contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].textContent;}catch(e){};                
+                }
+                else // Internet Explorer
+                {
+                    xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+                    xmlDoc.async=false;
+                    xmlDoc.loadXML(result.responseText); 
+                    try{service = xmlDoc.getElementsByTagName("Service")[0];}catch(e){};
+                    try{name = service.getElementsByTagName("Name")[0].text;}catch(e){};
+                    try{title = service.getElementsByTagName("Title")[0].text;}catch(e){};
+                    try{abstract = service.getElementsByTagName("Abstract")[0].text;}catch(e){};
+                    try{contactPerson = service.getElementsByTagName("ContactPerson")[0].text;}catch(e){};
+                    try{contactOrganization = service.getElementsByTagName("ContactOrganization")[0].text;}catch(e){};
+                    try{contactPosition = service.getElementsByTagName("ContactPosition")[0].text;}catch(e){};
+                    try{addressType = service.getElementsByTagName("AddressType")[0].text;}catch(e){};
+                    try{address = service.getElementsByTagName("Address")[0].text;}catch(e){};
+                    try{city = service.getElementsByTagName("City")[0].text;}catch(e){};
+                    try{stateOrProvince = service.getElementsByTagName("StateOrProvince")[0].text;}catch(e){};
+                    try{postCode = service.getElementsByTagName("PostCode")[0].text;}catch(e){};
+                    try{country = service.getElementsByTagName("Country")[0].text;}catch(e){};
+                    try{contactVoiceTelephone = service.getElementsByTagName("ContactVoiceTelephone")[0].text;}catch(e){};
+                    try{contactFacsimileTelephone = service.getElementsByTagName("ContactFacsimileTelephone")[0].text;}catch(e){};
+                    try{contactElectronicMailAddress = service.getElementsByTagName("ContactElectronicMailAddress")[0].text;}catch(e){};                  
+                } 
+
+                new Ext.Window({
+                    title: wmsServersGridPanel.getSelectionModel().getSelected().data.nombre,
+                    iconCls: 'configuracionIcon',
+                    layout: "anchor",
+                    resizable: false,  
+                    shadow: false,
+                    items: [
+                        new Ext.Panel({
+                            border: false,
+                            autoScroll: true,
+                            width: "100%",
+                            heigth: "100%",
+                            items: new Ext.FormPanel({
+                                 labelWidth: 85, // label settings here cascade unless overridden
+                                 frame:true,
+                                 border: false,
+                                 width: 380,
+                                 items: [
+                                     new Ext.form.FieldSet({
+                                        title: "WMS",
+                                        items: [
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Nombre',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: name
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Título',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: title
+                                            }),   
+                                            new Ext.form.TextArea({
+                                                fieldLabel: 'Descripción',
+                                                width: 255,
+                                                readOnly: true,
+                                                value: abstract
+                                            })                                                 
+                                        ]
+                                     }),
+                                     new Ext.form.FieldSet({
+                                        title: "Contacto",
+                                        items: [
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Nombre',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactPerson
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Organización',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactOrganization
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Posición',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactPosition
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Tipo de dirección',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: addressType
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Dirección',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: address
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Ciudad',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: city
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Provincia o estado',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: stateOrProvince
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Código Postal',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: postCode
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'País',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: country
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Teléfono',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactVoiceTelephone
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Fax',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactFacsimileTelephone
+                                            }),  
+                                            new Ext.form.TextField({
+                                                 fieldLabel: 'Email',
+                                                 width: 255,
+                                                 readOnly: true,
+                                                 value: contactElectronicMailAddress
+                                            })
+                                        ]
+                                     })                                         
+                                 ]
+                             })
+                        })
+
+                    ]                                            
+                }).show();
+            },
+            failure: function(){
+                infomask.hide();
+                Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
+            },
+            listeners: {
+                 requestexception: function(){
+                      infomask.hide();
+                      Ext.MessageBox.alert('Error', 'Ha ocurrido un error en la conexión con el servidor indicado.');
+                 }
+            }
+        });         
+
+    }
+
 };
 
 /**
@@ -1354,9 +1011,8 @@ handler.onAgregarServidorWmsButton = function(){
                     if (btn == "ok"){
                         wms_url = text;
                         agregarServidor(nombre,wms_url);
-//                        app.wmsServerStore.loadData([[nombre,wms_url]],true);
                     }
-                })
+                });
             }else{
                 Ext.MessageBox.alert('Error', 'Ya existe un servidor con ese nombre');
             }
@@ -1379,11 +1035,10 @@ handler.onEliminarServidorWmsButton = function(wmsServersGridPanel){
 };
 
 /**
- * Handler correspondiente al evento asociado al botón "Agregar" de la ventana "Agregar capas".
- * @param {type} node
+ * 
  * @param {type} capabilitiesGridPanel
  * @param {type} capabilitiesCombo
- * @returns {undefined} Esta función no devuelve resultados.
+ * @returns {undefined}
  */
 handler.onAgregarCapasButton = function(capabilitiesGridPanel, capabilitiesCombo){
     
@@ -1395,8 +1050,27 @@ handler.onAgregarCapasButton = function(capabilitiesGridPanel, capabilitiesCombo
             if (existeNombreCapa(nombrecapa) == true){
                 nombrecapa = numerarNombre(nombrecapa);                            
             } 
+            
+            app.map.addLayer(new OpenLayers.Layer.WMS(
+                nombrecapa, 
+                servidorWMS, 
+                {layers: record.data.name, transparent: 'true', format: 'image/png'}, 
+                {isBaseLayer: false, visibility: false, singleTile: false}
+            ));   
                 
-            app.otrosnode.appendChild(createLeaf(nombrecapa, servidorWMS, {layers: record.data.name, transparent: 'true', format: 'image/png'}, {isBaseLayer: false, visibility: false, singleTile: false}));    
+            if(!app.rootnode.contains(app.otrosnode)){
+                app.rootnode.appendChild(app.otrosnode);
+                
+            var categoria = document.querySelectorAll(".categoria4");
+            for(var x = 0; x < categoria.length; x++){
+                var ct = categoria[x].parentNode.childNodes[1];
+                ct.className = ct.className + " categoria4sub";
+            }                  
+                
+            }    
+                
+            app.otrosnode.appendChild(createLeaf(nombrecapa));    
+            app.otrosnode.expand();
 
             app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
             app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
@@ -1416,7 +1090,8 @@ handler.onGetFeatureInfo = function(e){
     Ext.each(e.features, function(feature) {  
         if((feature.gml.featureNS == "http://www.dgeyc.com/rural" && feature.gml.featureType == "batimetria") ||
            (feature.gml.featureNS == "http://www.dgeyc.com/rural" && feature.gml.featureType == "continente") ||    
-           (feature.gml.featureNS == "http://www.dgeyc.com/rural" && feature.gml.featureType == "provincias")){
+           (feature.gml.featureNS == "http://www.dgeyc.com/rural" && feature.gml.featureType == "provincias") ||
+           (feature.gml.featureNS == null)){
             
         }else{
             

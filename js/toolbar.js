@@ -35,6 +35,7 @@ toolbar.mapPanelTopBar = function(){
         componentes.navegacionButton(),                 
         componentes.zoomToMaxExtentButton(),
         componentes.zoomInButton(),
+        componentes.zoomOutButton(),
         componentes.zoomAnteriorButton(),
         componentes.zoomPosteriorButton(),
         componentes.agregarCapasButton(),
@@ -44,13 +45,11 @@ toolbar.mapPanelTopBar = function(){
         componentes.atributosCapasButton(), 
         componentes.distanciaButton(),
         componentes.superficieButton(),
-        componentes.informacionButton(),
-        componentes.geocoderComboBox(),
-        componentes.separador(),  
+        componentes.separador(),
         componentes.ordenDeCapasButton(),
         componentes.ayudaButton(),
-        componentes.acercaDeButton(),       
-        componentes.configuracionButton(),         
+        componentes.acercaDeButton(),
+        componentes.configuracionButton()         
     ];
     
     return mapPanelToolbar;
@@ -65,55 +64,14 @@ toolbar.mapPanelTopBar = function(){
 toolbar.mapPanelBottomBar = function(){
     
     var mapPanelBottomBar = [
-        componentes.scaleComboBox(), 
-        
+        componentes.scaleComboBox(),
+        componentes.separador(),                         
+        componentes.div("position"),  
         componentes.blankSpace(),
-//        "Escala 1:" + parseInt(app.map.getScale()),
-        componentes.blankSpace(),
-//        "Capa Base: " + app.map.baseLayer.name,
-        componentes.separador(),                  
-//        componentes.blankSpace(), 
-        componentes.div("position"),   
-        app.map.projection.projCode,
-        
-                       
+        app.map.projection.projCode
     ];
 
     return mapPanelBottomBar;
-    
-};
-
-/**
- * Devuelve un arreglo con los componentes de la barra de
- * herramientas superior del panel de árbol de capas.
- * @returns {Array} Arreglo de componentes de la barra de herramientas.
- */
-toolbar.treePanelTopBar = function(){
-    
-    var treePanelTopBar = [
-//        componentes.agregarCapasButton(),
-//        componentes.eliminarCapasButton(),
-//        componentes.propiedadesCapasButton(),
-//        componentes.zoomCapasButton(),
-//        componentes.atributosCapasButton(),                 
-    ];
-
-    return treePanelTopBar;
-    
-};
-
-/**
- * Devuelve un arreglo con los componentes de la barra de
- * herramientas superior del panel de árbol de capas.
- * @returns {Array} Arreglo de componentes de la barra de herramientas.
- */
-toolbar.treePanelBottonBar = function(){
-    
-    var treePanelTopBar = [
-        componentes.geocoderComboBox(),                  
-    ];
-
-    return treePanelTopBar;
     
 };
 
@@ -129,7 +87,8 @@ toolbar.featureGridPanelTopBar = function(){
         componentes.wfsSeleccionarButton(), 
         componentes.wfsLimpiarButton(),   
         componentes.separador(),
-        componentes.wfsCerrarButton(),        
+        componentes.wfsExportarAExcelLink(),   
+        componentes.wfsCerrarButton()        
     ];
 
     return featureGridPanelBottomBar;

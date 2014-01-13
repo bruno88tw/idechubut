@@ -84,16 +84,21 @@ app.rootnode = new Ext.tree.TreeNode({
  */
 app.capasbasenode = new Ext.tree.TreeNode({
     text: "Capas base",
-    expanded: false,
     icon: "img/folder.png",
     leaf: false,
-    cls: 'folder',
+    cls: 'categoria1',
     listeners:{
         click: function(leaf, event){
             Ext.getCmp("treePanelTopbarEliminar").disable();
             Ext.getCmp("treePanelTopbarPropiedades").disable();
             Ext.getCmp("treePanelTopbarAtributos").disable();  
             Ext.getCmp("treePanelTopbarZoomCapa").disable();  
+        },
+        beforecollapse: function(leaf, event){
+            this.setIcon("img/folder.png");
+        },
+        beforeexpand: function(leaf, event){
+            this.setIcon("img/folder-open.png");
         }
     }        
 }); 
@@ -103,17 +108,22 @@ app.capasbasenode = new Ext.tree.TreeNode({
  * @type Ext.tree.TreeNode
  */
 app.otrosnode = new Ext.tree.TreeNode({
-   text: "Otros",
+   text: "WMS",
    icon: "img/folder.png",
    leaf:false,
-   expanded: true,
-   cls: 'folder',
+   cls: 'categoria4',
    listeners:{
         click: function(leaf, event){
             Ext.getCmp("treePanelTopbarEliminar").disable();
             Ext.getCmp("treePanelTopbarPropiedades").disable();
             Ext.getCmp("treePanelTopbarAtributos").disable();  
             Ext.getCmp("treePanelTopbarZoomCapa").disable();  
+        },
+        beforecollapse: function(leaf, event){
+            this.setIcon("img/folder.png");
+        },
+        beforeexpand: function(leaf, event){
+            this.setIcon("img/folder-open.png");
         }
    }   
 }); 
@@ -150,8 +160,6 @@ app.configuracion = {
     "avanzado":false
 };
 
-
-
 /**
  * Flag del panel de atributos
  * @type Boolean
@@ -163,8 +171,6 @@ app.isAttributesPanelHidden = true;
  * @type Boolean
  */
 app.isLayerTreePanelHidden = false;
-
-
 
 /**
  * Ubicación del proxy cgi.
@@ -178,7 +184,7 @@ OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
  */
 Ext.onReady(function() {
     
- app.iniciar();   
+    app.iniciar();   
     
 });
 
@@ -210,9 +216,7 @@ app.crearMapa = function(){
             units: 'm'
         }
     );   
-        
-       
-        
+
 };
 
 /**
@@ -228,7 +232,7 @@ app.agregarControles = function(){
         drillDown: true,
         infoFormat: "application/vnd.ogc.gml",
         maxFeatures: 20,
-        eventListeners: {"getfeatureinfo": function(e){handler.onGetFeatureInfo(e)}}
+        eventListeners: {"getfeatureinfo": function(e){handler.onGetFeatureInfo(e);}}
     })); 
 };
 
@@ -307,9 +311,7 @@ app.agregarCapas = function(){
     app.capasbasenode.appendChild(capaBase("Bing Hybrid","Bing Hybrid","img/bing.png"));
     app.capasbasenode.appendChild(capaBase("MapQuest","MapQuest","img/mapQuest.png"));
     app.capasbasenode.appendChild(capaBase("MapQuest Aerial","MapQuest Aerial","img/mapQuest.png"));
-    app.capasbasenode.appendChild(capaBase("Sin capa base","Blank","img/prohibition.png"));      
-             
- 
+    app.capasbasenode.appendChild(capaBase("Sin capa base","Blank","img/prohibition.png")); 
         
 };
 
@@ -335,19 +337,22 @@ app.generarViewport = function(){
  */
 app.configuracionFinal = function(){ 
 
-    //Agrega al mapPanel los div sobre los cuales se renderizarán los siguientes componentes
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('scalelinediv'));
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('minimapcontainer'));
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('rosa'));
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('fullscreen'));
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('titulodiv'));
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('subtitulodiv'));
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('legenddiv'));
-    document.getElementById('mapPanel').getElementsByClassName('x-panel-body')[0].firstChild.appendChild(document.getElementById('statusbar'));
-    document.getElementById('mapPanel').appendChild(document.getElementById('toponimosdiv'));
-
-    // Agrego el control de posición del mouse 
-//    app.map.addControl(new OpenLayers.Control.PanZoomBar(),new OpenLayers.Pixel(6,3)); 
+    var scalelinediv = document.getElementById('scalelinediv');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(scalelinediv);
+    var minimapcontainer = document.getElementById('minimapcontainer');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(minimapcontainer);
+    var rosa = document.getElementById('rosa');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(rosa);
+    var fullscreen = document.getElementById('fullscreen');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(fullscreen);
+    var titulodiv = document.getElementById('titulodiv');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(titulodiv);
+    var subtitulodiv = document.getElementById('subtitulodiv');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(subtitulodiv);
+    var legenddiv = document.getElementById('legenddiv');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(legenddiv);
+    var statusbar = document.getElementById('statusbar');
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(statusbar);
 
     // Agrego el control de posición del mouse 
     app.map.addControl(new OpenLayers.Control.MousePosition({
@@ -370,8 +375,6 @@ app.configuracionFinal = function(){
         size: new OpenLayers.Size(150, 130),
         div: document.getElementById('minimap')            
     }));        
-    
-//    app.map.addControl(minimap);    
 
     // Agrega el panel de leyenda que se visualiza dentro del mapa
     new GeoExt.LegendPanel({
@@ -379,7 +382,6 @@ app.configuracionFinal = function(){
         border: false,
         renderTo: document.getElementById("legenddiv"),
         style: 'background:#ffffff;',
-//        bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 1.0)'} },
         defaults: {
             style: 'padding:5px',
             baseParams: {
@@ -392,6 +394,8 @@ app.configuracionFinal = function(){
     //Agrega el botón de fullscreen
     new Ext.Button({
         cls: "fullscreenButton",
+        height: "29px",
+        width: "29px",
         renderTo: document.getElementById("fullscreen"),
         handler: function(){
             if(app.fullscreen){
@@ -424,37 +428,53 @@ app.configuracionFinal = function(){
             }
             
         }
-    });  
-    
-//    new GeoExt.form.GeocoderComboBox({       
-//        layer: app.map.getLayersByName("Location")[0],
-//        emptyText: "Buscar un lugar ...",
-//        map: app.map,                
-//        border: false,
-//        width: 260,
-//        renderTo: document.getElementById("toponimosdiv")
-//    });        
+    });        
     
     var nombre = "Dirección General de Estadística y Censos";
     var server = "http://idedgeyc.chubut.gov.ar/geoserver/wms";    
+    var initmask = new Ext.LoadMask(Ext.getBody(), {msg:"Cargando..."});
+    initmask.show();
     
     new GeoExt.data.WMSCapabilitiesStore({  
         url: getCapabilitiesUrl(server),
         autoLoad: true,
         listeners:{           
-            load: function(){                                   
+            load: function(){                      
                 app.capabilities[server] = this;
                 app.wmsServerStore.loadData([[nombre,server]],true);
+                restoreLayers(config.capas);
                 restoreTree(app.rootnode,config.tree);
-                app.rootnode.appendChild(app.otrosnode);
-                restoreIndex(config.index); 
+                
+                app.colorTree();
+                initmask.hide();
             },
             exception: function(){
-
+                alert("Error al cargar las capas");
+                initmask.hide();
             }             
         }
-    }); 
-    
-    Ext.getCmp("mapPanel").getBottomToolbar().hide();
+    });  
      
+};
+
+app.colorTree = function(){ 
+    
+    var categorias = new Array("categoria1","categoria2","categoria3","categoria4","categoria5");
+    var subCategorias = new Array(" categoria1sub"," categoria2sub"," categoria3sub"," categoria4sub"," categoria5sub");
+    
+    for(var x = 0; x < app.rootnode.childNodes.length; x++){
+       var nodo = app.rootnode.childNodes[x];
+       app.rootnode.childNodes[x].setCls(categorias[x]);
+    };
+    
+    for(var j = 0; j < categorias.length; j++){
+        
+        var categoria = document.querySelectorAll("."+categorias[j]);
+        for(var x = 0; x < categoria.length; x++){
+            var ct = categoria[x].parentNode.childNodes[1];
+            ct.className = ct.className + subCategorias[j];
+        }        
+                
+    }
+
 };

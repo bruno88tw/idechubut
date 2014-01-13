@@ -11,10 +11,10 @@
 }
 
 .x-panel-header {
-    background: #CCCCCC;
-    /*height: 19px;*/
-    padding-top: 6px;
-    padding-bottom: 5px;
+    background: #DBDBDB;
+    height: 22px;
+    padding-top: 9px;
+    padding-bottom: 2px;
 }
 
 .x-tab-panel-header, .x-tab-panel-footer {
@@ -59,8 +59,8 @@ ul.x-tab-strip-bottom{
 }
 
 .x-toolbar{
-    border:#CCCCCC;
-    background-color:#CCCCCC;
+    border:#DBDBDB;
+    background-color:#DBDBDB;
 }
 
 .x-grid-panel .x-panel-mc .x-panel-body {
@@ -85,7 +85,7 @@ ul.x-tab-strip-bottom{
 
 .x-panel-bbar .x-toolbar, .x-panel-tbar .x-toolbar {
     border-color:#EBEBEB;
-    background-color:#DBDBDB;
+    background-color:#F3F3F3;
 }
 
 .x-panel-tbar-noheader .x-toolbar, .x-panel-mc .x-panel-tbar .x-toolbar {
@@ -121,18 +121,18 @@ ul.x-tab-strip-bottom{
 }
 
 .x-panel-noborder .x-panel-header-noborder {
-    border-bottom-color:#CCCCCC;
+    border-bottom-color:#DBDBDB;
     /*border-bottom: none;*/
 }
 
 /*Borde inferior de la barra de herramienta superior*/
 .x-panel-noborder .x-panel-tbar-noborder .x-toolbar {
-    border-bottom-color:#DBDBDB;
+    border-bottom-color:#F3F3F3;
 }
 
 /*Borde superior de la barra de herramienta inferior*/
 .x-panel-noborder .x-panel-bbar-noborder .x-toolbar {
-    border-top-color:#DBDBDB;
+    border-top-color:#F3F3F3;
 }
 
 .x-tab-panel-bbar-noborder .x-toolbar {
@@ -153,28 +153,28 @@ ul.x-tab-strip-bottom{
 }
 
 .x-layout-split{
-    background-color:#CCCCCC;
+    background-color:#DBDBDB;
 }
 
 .x-panel-body {
-    border-color:#CCCCCC;
+    border-color:#DBDBDB;
 }
 
 
 .x-panel-body-noheader, .x-panel-mc .x-panel-body {
-    border-top-color:#CCCCCC;
+    border-top-color:#DBDBDB;
 }
 
 .x-window-tc {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
 }
 
 .x-window-tl {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
 }
 
 .x-window-tr {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
 }
 
 /* Borde inferior de ventana */
@@ -185,45 +185,45 @@ ul.x-tab-strip-bottom{
 }
 
 .x-window-bc {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
 }
 
 .x-window-bl {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
 }
 
 .x-window-br {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
 }
 
 .x-window-mc {
-    border-color:#CCCCCC;
+    border-color:#DBDBDB;
 }
 
 .x-window-ml {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
     padding-left: 2px;
 }
 
 /* Borde derecho de ventana*/
 .x-window-mr {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
     padding-right: 2px;
 }
 
 .x-layout-collapsed{
-    background-color:#CCCCCC;
-    border-color:#CCCCCC;
+    background-color:#DBDBDB;
+    border-color:#DBDBDB;
 }
 
 .x-layout-collapsed-over{
-    background-color:#CCCCCC;
+    background-color:#DBDBDB;
 }
 /*Margen de los tree-node*/
 .x-tree-node-el {
     margin-top: 0px;
     margin-bottom: 0px;
-    border-bottom:1px solid #D9D9D9;
+/*    border-bottom:1px solid #D9D9D9;*/
     padding-left: 5px;
     padding-bottom: 5px;
     padding-top: 5px;    
@@ -249,15 +249,15 @@ ul.x-tab-strip-bottom{
 
 /*Borde inferior del header del panel de pestañas*/
 .x-tab-panel-header, .x-tab-panel-footer {
-    border-color: #CCCCCC;
+    border-color: #DBDBDB;
 }
 
 .x-tab-panel-header, .x-tab-panel-footer {
-    background-color: #CCCCCC;
+    background-color: #DBDBDB;
 }
 
 ul.x-tab-strip-top {
-    border-bottom-color: #CCCCCC;
+    border-bottom-color: #DBDBDB;
 }
 
 .x-tab-panel-noborder .x-tab-panel-header-noborder {
@@ -284,15 +284,15 @@ height: 17px;
 
 /*Color de pestaña activa*/
 .x-tab-strip-top .x-tab-strip-active .x-tab-right {
-    background: #CCCCCC;
+    background: #DBDBDB;
 }
 
 .x-tab-strip-top .x-tab-strip-active .x-tab-strip-inner {
-    background: #CCCCCC;
+    background: #DBDBDB;
 }
 
 .x-tab-strip-top .x-tab-strip-active .x-tab-left {
-    background: #CCCCCC;
+    background: #DBDBDB;
 }
 
 /*tab panel header background*/
@@ -315,7 +315,7 @@ ul.x-tab-strip-top {
 .x-tree-node .x-tree-node-inline-icon {
     background-image: none;
     padding-right: 5px;
-    /*display:none;*/
+    display: inline-block;
 }
 
 /*Oculta el espacio reservado para lineas del árbol de capas*/
@@ -341,14 +341,55 @@ ul.x-tab-strip-top {
 }
 
 .x-tree-node .x-tree-selected {
-background-color: none;
-font-weight:bold;
+    background-color: none;
+    font-weight:bold;
 }
 
 .x-tree-node .x-tree-node-over {
-	background-color: none;
+    background-color: none;
 }
 
 .x-toolbar {
-background-color: #DBDBDB;
+    background-color: #F3F3F3;
+}
+
+.x-tree-node-anchor{
+    white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;
+}
+
+.x-tree-node-cb{
+    display: inline-block;   
+}
+
+.x-tree-node a{
+    display: inline-block;
+}
+
+.x-tree-node a span{
+    display: inline-block;
+    width: 230px;
+}
+
+input.x-tree-node-cb {
+    margin-left: 1px;
+    margin-top: 1px;
+    height: 19px;
+    vertical-align: top;
+}
+
+.x-tree-node {
+    color: #000;
+    font: normal 11px arial, tahoma, helvetica, sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    /*margin-top: 2px;*/
+    margin-top: 2px;
+    font-size: 12px;
+}
+
+.x-tree-node-ct {
+    margin-top: 2px;
 }

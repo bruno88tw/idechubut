@@ -37,7 +37,7 @@ panel.viewportPanel = function(){
         border:false,
         items:[
             panel.banner(),
-            panel.containerPanel(),                         
+            panel.containerPanel()                         
         ]
     });
     
@@ -54,10 +54,10 @@ panel.banner = function(){
     var banner = {
         region: 'north',
         id:"banner",
-        height: 30,
+        height: 35,
         bodyStyle:"background: #000000",
         border:false,
-        html: '<div align=left><img src="img/banner-dgeyc.jpg" alt="banner" style="height: 30px"></div>'
+        html: '<div align=left><img src="img/banner-dgeyc.jpg" alt="banner" style="height: 35px"></div>'
     };
     
     return banner;
@@ -77,8 +77,7 @@ panel.containerPanel = function(){
         id: "container",
         items:[       
             panel.layerTreePanel(),   
-            panel.centerPanel(),   
-            
+            panel.centerPanel()
         ]
     });
     
@@ -118,11 +117,10 @@ panel.mapAtributesPanel = function(){
         border:false,
         id: 'mapAtributesPanel',
         items:[                  
-            panel.mapPanel(),            
+            panel.mapPanel(),
             panel.featureGridPanel()                                                 
         ],
-        tbar:toolbar.mapPanelTopBar(),
-//        bbar: toolbar.mapPanelBottomBar()
+        tbar:toolbar.mapPanelTopBar()
     });
     
     return centerPanel;
@@ -139,16 +137,12 @@ panel.mapPanel = function(){
         region: 'center',
         border:false,
         map: app.map,  
-        center: new OpenLayers.LonLat(-69, -44).transform(new OpenLayers.Projection("EPSG:4326"), app.map.getProjectionObject()),
         id: "mapPanel",
-        extent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),
         stateId: "map",
         bbar: toolbar.mapPanelBottomBar()
     });
     
-    Ext.getCmp("mapPanel").on({
-        
-    });
+    mapPanel.getBottomToolbar().hide();
     
     return mapPanel;
     
@@ -161,8 +155,7 @@ panel.mapPanel = function(){
  */
 panel.layerTreePanel = function(){                              
         
-    var layerTreePanel = new Ext.tree.TreePanel({
-        title: "Capas",   
+    var layerTreePanel = new Ext.tree.TreePanel({  
         region: "west",
         width: 300,
         iconCls: 'layerNodeIcon',
@@ -170,18 +163,14 @@ panel.layerTreePanel = function(){
         minWidth: 262,
         border: false,      
         autoScroll: true,
-
         plugins: [
-            new GeoExt.plugins.TreeNodeComponent(),
+            new GeoExt.plugins.TreeNodeComponent()
         ],         
-
-        bodyCfg : { style: {'background':'#F9F9F9;'} },
+        bodyCfg : { style: {'background':'#F3F3F3;'} },
         id: "layerTreePanel",
         root: app.rootnode,
         rootVisible: false,
-        enableDD: true,
-//        tbar: toolbar.treePanelTopBar(),
-
+        enableDD: false
     });
             
     
@@ -196,32 +185,31 @@ panel.layerTreePanel = function(){
 panel.ordenPanel = function(){        
 
     var ordenPanel = new Ext.tree.TreePanel({
-        
-            title: 'Orden de las capas',
-            iconCls: 'layerNodeIcon',
-            region: "west",
-            id: 'ordenDeCapasTree',
-            width: 300,
-            autoScroll:true,
-            border: false,   
-            hidden: true,
-            bodyCfg : { style: {'background':'#F9F9F9'} },
-            root: new GeoExt.tree.OverlayLayerContainer({
-                map: app.map,
-                expanded: true,
-                border:false,
-                loader: {
-                    createNode: function(attr) {
-                        // add a WMS legend to each node created
-                        attr.icon = "img/layers3.png";
+        title: "Orden de las capas",
+        iconCls: 'layerNodeIcon',
+        region: "west",
+        id: 'ordenDeCapasTree',
+        width: 300,
+        autoScroll:true,
+        border: false,   
+        hidden: true,
+        bodyCfg : { style: {'background':'#F3F3F3'} },
+        root: new GeoExt.tree.OverlayLayerContainer({
+            map: app.map,
+            expanded: true,
+            border:false,
+            loader: {
+                createNode: function(attr) {
+                    // add a WMS legend to each node created
+                    attr.icon = "img/layers3.png";
 
-                        return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
-                    }
-                }                           
-            }),
-            rootVisible: false,
-            enableDD: true
-        });
+                    return GeoExt.tree.LayerLoader.prototype.createNode.call(this, attr);
+                }
+            }                           
+        }),
+        rootVisible: false,
+        enableDD: true
+    });
     
     return ordenPanel;
     
@@ -246,8 +234,8 @@ panel.featureGridPanel = function(){
         store: [],
         sm: new GeoExt.grid.FeatureSelectionModel(),
         columns: [],
-        tbar: toolbar.featureGridPanelTopBar(),
-        bbar: toolbar.featureGridPanelBottomBar()
+        tbar: toolbar.featureGridPanelTopBar()
+//        bbar: toolbar.featureGridPanelBottomBar()
     });  
     
     return featureGridPanel;
