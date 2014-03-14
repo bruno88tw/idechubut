@@ -38,13 +38,13 @@ toolbar.mapPanelTopBar = function(){
         componentes.zoomOutButton(),
         componentes.zoomAnteriorButton(),
         componentes.zoomPosteriorButton(),
-        componentes.agregarCapasButton(),
-        componentes.eliminarCapasButton(),
-        componentes.propiedadesCapasButton(),
-        componentes.zoomCapasButton(),
-        componentes.atributosCapasButton(), 
         componentes.distanciaButton(),
-        componentes.superficieButton(),
+        componentes.superficieButton(),        
+        componentes.agregarCapasButton(),
+//        componentes.eliminarCapasButton(),
+//        componentes.propiedadesCapasButton(),
+//        componentes.zoomCapasButton(),
+//        componentes.atributosCapasButton(), 
         componentes.separador(),
         componentes.ordenDeCapasButton(),
         componentes.ayudaButton(),
@@ -87,7 +87,11 @@ toolbar.featureGridPanelTopBar = function(){
         componentes.wfsSeleccionarButton(), 
         componentes.wfsLimpiarButton(),   
         componentes.separador(),
-        componentes.wfsExportarAExcelLink(),   
+        {
+          xtype: 'exportbutton',
+          store: app.wfsStoreExport
+        }, 
+        componentes.blankSpace(),
         componentes.wfsCerrarButton()        
     ];
 

@@ -61,7 +61,7 @@ componentes.div = function(id){
  */
 componentes.navegacionButton = function(){
     
-    var navegacionButon = new GeoExt.Action({
+    return new GeoExt.Action({
         control: new OpenLayers.Control.Navigation(),
         map: app.map,
         id: "buttonNav",
@@ -71,9 +71,7 @@ componentes.navegacionButton = function(){
         height: "29px",
         width: "29px",
         checked: true
-    });
-    
-    return navegacionButon;
+    });    
             
 };
 
@@ -83,7 +81,7 @@ componentes.navegacionButton = function(){
  */
 componentes.zoomToMaxExtentButton = function(){
     
-    var zoomToMaxExtentButton = new GeoExt.Action({
+    return new GeoExt.Action({
         control: new OpenLayers.Control.ZoomToMaxExtent(),
         map: app.map,
         id: "zoomToMaxExtent",
@@ -93,8 +91,6 @@ componentes.zoomToMaxExtentButton = function(){
         tooltip: 'Zoom general'
     });
     
-    return zoomToMaxExtentButton;
-    
 };
 
 /**
@@ -103,7 +99,7 @@ componentes.zoomToMaxExtentButton = function(){
  */
 componentes.zoomInButton = function (){
     
-    var zoomInButton = new GeoExt.Action({
+    return new GeoExt.Action({
         control: new OpenLayers.Control.ZoomBox(),
         map: app.map,
         id: "zoomIn",
@@ -114,8 +110,6 @@ componentes.zoomInButton = function (){
         tooltip: "Acercar zoom"
     });
     
-    return zoomInButton;
-    
 };
 
 /**
@@ -124,7 +118,7 @@ componentes.zoomInButton = function (){
  */
 componentes.zoomOutButton = function(){
     
-    var zoomOutButton = new GeoExt.Action({
+    return new GeoExt.Action({
         control: new OpenLayers.Control.ZoomBox({out: true}),
         map: app.map,
         id: "zoomOut",
@@ -135,8 +129,6 @@ componentes.zoomOutButton = function(){
         tooltip: "Alejar zoom"
     });
     
-    return zoomOutButton;
-    
 };
 
 /**
@@ -145,7 +137,7 @@ componentes.zoomOutButton = function(){
  */
 componentes.zoomAnteriorButton = function(){
     
-    var zoomAnteriorButton = new GeoExt.Action({
+    return new GeoExt.Action({
         icon: "img/history-zoom-left.png",
         control: app.map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].previous,
         disabled: true,
@@ -156,8 +148,6 @@ componentes.zoomAnteriorButton = function(){
         tooltip: "Zoom anterior"
     });
     
-    return zoomAnteriorButton;
-    
 };
 
 /**
@@ -166,7 +156,7 @@ componentes.zoomAnteriorButton = function(){
  */
 componentes.zoomPosteriorButton = function(){
     
-    var zoomPosteriorButton = new GeoExt.Action({
+    return new GeoExt.Action({
         icon: "img/history-zoom-right.png",
         control: app.map.getControlsByClass('OpenLayers.Control.NavigationHistory')[0].next,
         disabled: true,
@@ -176,8 +166,6 @@ componentes.zoomPosteriorButton = function(){
         width: "29px",
         tooltip: "Zoom siguiente"
     });
-    
-    return zoomPosteriorButton;
     
 };
 
@@ -214,7 +202,7 @@ componentes.distanciaButton = function(){
 
     var styleMap = new OpenLayers.StyleMap({"default": style}); 
     
-    var distanciaButton = new GeoExt.Action({
+    return new GeoExt.Action({
         control: new OpenLayers.Control.Measure(OpenLayers.Handler.Path, {
             handlerOptions: {
                 layerOptions:{
@@ -246,8 +234,6 @@ componentes.distanciaButton = function(){
         width: "29px",
         tooltip: "Medidor de distancias"
     });
-    
-    return distanciaButton;
     
 };
 
@@ -285,7 +271,7 @@ componentes.superficieButton = function(){
 
     var styleMap = new OpenLayers.StyleMap({"default": style});   
     
-    var superficieButton = new GeoExt.Action({
+    return new GeoExt.Action({
         control: new OpenLayers.Control.Measure(OpenLayers.Handler.Polygon, {
             handlerOptions: {
                 layerOptions:{
@@ -318,8 +304,6 @@ componentes.superficieButton = function(){
         tooltip: "Medidor de superficie"
     });
     
-    return superficieButton;
-    
 };
 
 /**
@@ -328,7 +312,7 @@ componentes.superficieButton = function(){
  */
 componentes.informacionButton = function(){
     
-    var informacionButton = new GeoExt.Action({
+    return new GeoExt.Action({
         control: app.map.getControlsByClass('OpenLayers.Control.WMSGetFeatureInfo')[0],
         map: app.map,
         icon: "img/information2.png",
@@ -338,8 +322,6 @@ componentes.informacionButton = function(){
         tooltip: "Obtener información"
     });
     
-    return informacionButton;
-    
 };
 
 /**
@@ -348,7 +330,7 @@ componentes.informacionButton = function(){
  */
 componentes.geocoderComboBox = function(){
     
-    var geocoderComboBox = new GeoExt.form.GeocoderComboBox({       
+    return new GeoExt.form.GeocoderComboBox({       
         layer: app.map.getLayersByName("Location")[0],
         emptyText: "Buscar un lugar ...",
         map: app.map,                
@@ -356,8 +338,6 @@ componentes.geocoderComboBox = function(){
         id: "buscador",
         width: 200
     });
-    
-    return geocoderComboBox;
     
 };
 
@@ -367,7 +347,7 @@ componentes.geocoderComboBox = function(){
  */
 componentes.configuracionButton = function(){
     
-    var configuracionButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Configuración',
         icon: 'img/equalizer.png',
         id:'configuracionButton',
@@ -408,8 +388,6 @@ componentes.configuracionButton = function(){
         }
     });                                   
     
-    return configuracionButton;
-    
 };
 
 /**
@@ -418,7 +396,7 @@ componentes.configuracionButton = function(){
  */
 componentes.configuracionTituloField = function(){
     
-    var configuracionTituloField = new Ext.form.CompositeField({
+    return new Ext.form.CompositeField({
         border: false,
         fieldLabel: 'Título',
         items: [
@@ -426,8 +404,6 @@ componentes.configuracionTituloField = function(){
             componentes.configuracionCambiarTituloButton()                                      
         ]
     });
-    
-    return configuracionTituloField;
     
 };
 
@@ -437,12 +413,10 @@ componentes.configuracionTituloField = function(){
  */
 componentes.configuracionTituloCheckbox = function(){    
     
-    var configuracionTituloCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         checked: app.configuracion.titulo,
         listeners:{check: handler.onConfiguracionTituloCheckbox}
     });
-    
-    return configuracionTituloCheckbox;
     
 };
 
@@ -452,12 +426,10 @@ componentes.configuracionTituloCheckbox = function(){
  */
 componentes.configuracionCambiarTituloButton = function(){
     
-    var configuracionCambiarTituloButton = new Ext.Button({
+    return new Ext.Button({
         icon: 'img/pencil.png',
         handler: handler.onConfiguracionCambiarTituloButton
      });
-     
-     return configuracionCambiarTituloButton;
     
 };
 
@@ -467,7 +439,7 @@ componentes.configuracionCambiarTituloButton = function(){
  */
 componentes.configuracionSubtituloField = function(){
     
-    var configuracionSubtituloField = new Ext.form.CompositeField({
+    return new Ext.form.CompositeField({
         border: false,
         fieldLabel: 'Subtítulo',
         items: [
@@ -475,8 +447,6 @@ componentes.configuracionSubtituloField = function(){
             componentes.configuracionCambiarSubtituloButton()                                     
         ]
     });
-    
-    return configuracionSubtituloField;
     
 };
 
@@ -486,12 +456,10 @@ componentes.configuracionSubtituloField = function(){
  */
 componentes.configuracionSubtituloCheckbox = function(){
     
-    var configuracionSubtituloCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         checked: app.configuracion.subtitulo,
         listeners:{check: handler.onConfiguracionSubtituloCheckbox}
     });        
-    
-    return configuracionSubtituloCheckbox;
         
 };
 
@@ -501,12 +469,10 @@ componentes.configuracionSubtituloCheckbox = function(){
  */
 componentes.configuracionCambiarSubtituloButton = function(){
     
-    var configuracionCambiarSubtituloButton = new Ext.Button({
+    return new Ext.Button({
         icon: 'img/pencil.png',
         handler: handler.onConfiguracionCambiarSubtituloButton
      });
-    
-    return configuracionCambiarSubtituloButton;
 
 };
 
@@ -516,13 +482,11 @@ componentes.configuracionCambiarSubtituloButton = function(){
  */
 componentes.configuracionNavegadorCheckbox = function(){    
     
-    var configuracionNavegadorCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         fieldLabel: 'Navegador',
         checked: app.configuracion.navegador,
         listeners:{check: handler.onConfiguracionNavegadorCheckbox}
     });
-    
-    return configuracionNavegadorCheckbox;
     
 };
 
@@ -532,13 +496,11 @@ componentes.configuracionNavegadorCheckbox = function(){
  */
 componentes.configuracionLeyendaCheckbox = function(){    
     
-    var configuracionLeyendaCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         fieldLabel: 'Leyenda',
         checked: app.configuracion.leyenda,
         listeners:{check: handler.onConfiguracionLeyendaCheckbox}
     });
-    
-    return configuracionLeyendaCheckbox;
     
 };
 
@@ -548,13 +510,11 @@ componentes.configuracionLeyendaCheckbox = function(){
  */
 componentes.configuracionEscalaCheckbox = function(){
 
-    var configuracionEscalaCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         fieldLabel: 'Escala',
         checked: app.configuracion.escala,
         listeners:{check: handler.onConfiguracionEscalaCheckbox}
     });
-    
-    return configuracionEscalaCheckbox;
     
 };
 
@@ -564,13 +524,11 @@ componentes.configuracionEscalaCheckbox = function(){
  */
 componentes.configuracionMinimapaCheckbox = function(){        
     
-    var configuracionMinimapaCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         fieldLabel: 'Localizador',
         checked: app.configuracion.localizador,
         listeners:{check: handler.ConfiguracionMinimapaCheckbox}
     });
-    
-    return configuracionMinimapaCheckbox;
     
 };
 
@@ -580,13 +538,11 @@ componentes.configuracionMinimapaCheckbox = function(){
  */
 componentes.configuracionNorteCheckbox = function(){
 
-    var configuracionNorteCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         fieldLabel: 'Norte',
         checked: app.configuracion.norte,
         listeners:{check: handler.ConfiguracionNorteCheckbox}
     });
-    
-    return configuracionNorteCheckbox;
     
 };
 
@@ -596,13 +552,11 @@ componentes.configuracionNorteCheckbox = function(){
  */
 componentes.configuracionAvanzadoCheckbox = function(){
 
-    var avanzadoCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         fieldLabel: 'Avanzado',
         checked: app.configuracion.avanzado,
         listeners:{check: handler.AvanzadoCheckbox}
     });
-    
-    return avanzadoCheckbox;
     
 };
 
@@ -612,13 +566,11 @@ componentes.configuracionAvanzadoCheckbox = function(){
  */
 componentes.configuracionGrillaCheckbox = function(){
 
-    var configuracionGrillaCheckbox = new Ext.form.Checkbox({
+    return new Ext.form.Checkbox({
         fieldLabel: 'Grilla',
         checked: app.configuracion.grilla,
         listeners:{check: handler.ConfiguracionGrillaCheckbox}
     });
-    
-    return configuracionGrillaCheckbox;
     
 };
 
@@ -628,15 +580,13 @@ componentes.configuracionGrillaCheckbox = function(){
  */
 componentes.ayudaButton = function(){
     
-    var ayudaButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Ayuda',
         icon: 'img/question.png',
         height: "29px",
         width: "29px",
         handler: handler.onAyudaButton
     });
-    
-    return ayudaButton;
     
 };
 
@@ -646,15 +596,13 @@ componentes.ayudaButton = function(){
  */
 componentes.acercaDeButton = function(){
     
-    var acercaDeButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Acerca de',
         icon: 'img/information-italic.png',
         height: "29px",
         width: "29px",
         handler: handler.onAcercaDeButton
     });
-    
-    return acercaDeButton;
     
 };
 
@@ -701,7 +649,7 @@ componentes.scaleComboBox = function(){
  */
 componentes.agregarCapasButton = function(){
     
-    var agregarCapasButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Agregar capas WMS',
         icon: 'img/map-plus3.png',
         id: "treePanelTopbarAgregar",
@@ -709,8 +657,6 @@ componentes.agregarCapasButton = function(){
         width: "29px",
         handler: function(){handler.onAgregarCapas();}
     });
-    
-    return agregarCapasButton;
     
 };
 
@@ -720,7 +666,7 @@ componentes.agregarCapasButton = function(){
  */
 componentes.eliminarCapasButton = function(){
     
-    var agregarCapasButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Eliminar capa',
         icon: 'img/minus-circle.png',
         id: "treePanelTopbarEliminar",
@@ -738,8 +684,6 @@ componentes.eliminarCapasButton = function(){
         }
     });
     
-    return agregarCapasButton;
-    
 };
 
 /**
@@ -748,7 +692,7 @@ componentes.eliminarCapasButton = function(){
  */
 componentes.zoomCapasButton = function(){
     
-    var agregarCapasButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Zoom a la capa',
         icon: 'img/magnifier.png',
         id: "treePanelTopbarZoomCapa",
@@ -762,8 +706,6 @@ componentes.zoomCapasButton = function(){
         }
     });
     
-    return agregarCapasButton;
-    
 };
 
 /**
@@ -772,7 +714,7 @@ componentes.zoomCapasButton = function(){
  */
 componentes.propiedadesCapasButton = function(){
     
-    var agregarCapasButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Propiedades de la capa',
         icon: 'img/gear.png',
         id: "treePanelTopbarPropiedades",
@@ -785,8 +727,6 @@ componentes.propiedadesCapasButton = function(){
         }
     });
     
-    return agregarCapasButton;
-    
 };
 
 /**
@@ -795,7 +735,7 @@ componentes.propiedadesCapasButton = function(){
  */
 componentes.atributosCapasButton = function(){
     
-    var agregarCapasButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Consultar atributos de la capa',
         icon: 'img/table.png',
         id: "treePanelTopbarAtributos",
@@ -808,8 +748,6 @@ componentes.atributosCapasButton = function(){
         }
     });
     
-    return agregarCapasButton;
-    
 };
 
 /**
@@ -818,7 +756,7 @@ componentes.atributosCapasButton = function(){
  */
 componentes.ordenDeCapasButton = function(){
     
-    var ordenDeCapasButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Orden de las capas',
         icon: 'img/layers3.png',
         id: "ordenDeCapasButton",
@@ -830,8 +768,6 @@ componentes.ordenDeCapasButton = function(){
         handler: handler.onOrdenDeCapasButton
     });
     
-    return ordenDeCapasButton;
-    
 };
 
 /**
@@ -840,7 +776,7 @@ componentes.ordenDeCapasButton = function(){
  */
 componentes.wfsReconocerButton = function(){
     
-    var wfsReconocerButton = new Ext.Button({
+    return new Ext.Button({
         id: "wfsReconocerButton",
         tooltip: 'Reconocer',
         text: 'Reconocer',
@@ -853,8 +789,6 @@ componentes.wfsReconocerButton = function(){
         }
     });
     
-    return wfsReconocerButton;    
-    
 };
 
 /**
@@ -863,7 +797,7 @@ componentes.wfsReconocerButton = function(){
  */
 componentes.wfsSeleccionarButton = function(){
    
-   var wfsSeleccionarButton = new Ext.Button({
+   return new Ext.Button({
         id: "wfsSeleccionarButton",
         tooltip: 'Seleccionar',
         text: 'Seleccionar',
@@ -875,8 +809,6 @@ componentes.wfsSeleccionarButton = function(){
            toggle: handler.onWfsSeleccionarButton
         }
     });
-    
-    return wfsSeleccionarButton;
    
 };
 
@@ -886,7 +818,7 @@ componentes.wfsSeleccionarButton = function(){
  */
 componentes.wfsLimpiarButton = function(){
    
-   var wfsLimpiarButton = new Ext.Button({
+   return new Ext.Button({
         tooltip: 'Limpiar',
         text: 'Limpiar',
         icon: 'img/broom.png',
@@ -894,8 +826,6 @@ componentes.wfsLimpiarButton = function(){
         height: "29px",
         handler: handler.onWfsLimpiarButton
     });
-    
-    return wfsLimpiarButton;
     
 };
 
@@ -905,11 +835,9 @@ componentes.wfsLimpiarButton = function(){
  */
 componentes.wfsExportarAExcelLink = function(){
     
-    var wfsExportarAExcelLink = new Ext.ux.Exporter.Button({
+    return new Ext.ux.Exporter.Button({
         store: app.wfsStoreExport
     });
-    
-    return wfsExportarAExcelLink;
     
 };
 
@@ -919,7 +847,7 @@ componentes.wfsExportarAExcelLink = function(){
  */
 componentes.wfsCerrarButton = function(){
   
-    var wfsCerrarButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Cerrar',
         icon: 'img/close.png',        
         id: "wfsCerrarButton",
@@ -933,8 +861,6 @@ componentes.wfsCerrarButton = function(){
             Ext.getCmp("buttonNav").toggle(true);
         }
     });
-            
-    return wfsCerrarButton;
     
 };
 
@@ -944,12 +870,10 @@ componentes.wfsCerrarButton = function(){
  */
 componentes.capabilitiesStore = function(){
 
-    var capabilitiesStore = new GeoExt.data.WMSCapabilitiesStore({  
+    return new GeoExt.data.WMSCapabilitiesStore({  
         url: "asdf",
         autoLoad: false
     });
-    
-    return capabilitiesStore;
     
 };
 
@@ -959,13 +883,11 @@ componentes.capabilitiesStore = function(){
  */
 componentes.rowExpander = function(){
     
-    var rowExpander = new Ext.ux.grid.RowExpander({
+    return new Ext.ux.grid.RowExpander({
         tpl : new Ext.Template(
             '<HR><p><b>Resumen:</b> {abstract}</p><HR>'
         )
     }); 
-    
-    return rowExpander;
     
 };
 
@@ -975,13 +897,11 @@ componentes.rowExpander = function(){
  */
 componentes.confirmarAgregarCapasButton = function(){
     
-    var confirmarAgregarCapasButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Agregar capas',
         text: "Agregar",
         icon: 'img/mas.png'
     });
-    
-    return confirmarAgregarCapasButton;
     
 };
 
@@ -991,7 +911,7 @@ componentes.confirmarAgregarCapasButton = function(){
  */
 componentes.capabilitiesCombo = function(){
     
-    var capabilitiesCombo = new Ext.form.ComboBox({
+    return new Ext.form.ComboBox({
         store: app.wmsServerStore,
         width: 465,
         valueField: 'url',
@@ -1001,8 +921,6 @@ componentes.capabilitiesCombo = function(){
         triggerAction: 'all', // needed so that the combo box doesn't filter by its current content
         mode: 'local' // keep the combo box from forcing a lot of unneeded data refreshes
     });
-    
-    return capabilitiesCombo;
     
 };
 
@@ -1083,14 +1001,11 @@ componentes.capabilitiesGridPanel = function(){
  */
 componentes.servidoresWmsButton = function(){
     
-    var servidoresWmsButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Servidores WMS',
         icon: 'img/server.png',
         handler: handler.onServidoresWmsButton
-    });
-    
-    return servidoresWmsButton;
-    
+    });    
     
 };
 
@@ -1147,13 +1062,11 @@ componentes.wmsServersGridPanel = function(){
  */
 componentes.wmsServersInformationButton = function(){
     
-    var wmsServersInformationButton = new Ext.Button({
+    return new Ext.Button({
         text:"Información",
         tooltip: 'Información',
         icon: 'img/information.png'
-    });
-            
-    return wmsServersInformationButton;        
+    });      
     
 };
 
@@ -1163,13 +1076,11 @@ componentes.wmsServersInformationButton = function(){
  */
 componentes.agregarServidorWmsButton = function(){
     
-    var agregarServidorWmsButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Agregar servidor WMS',
         text: "Agregar",
         icon: 'img/server-plus.png'
     });
-    
-    return agregarServidorWmsButton;
         
 };
 
@@ -1179,12 +1090,10 @@ componentes.agregarServidorWmsButton = function(){
  */
 componentes.eliminarServidorWmsButton = function(){
     
-    var eliminarServidorWmsButton = new Ext.Button({
+    return new Ext.Button({
         tooltip: 'Eliminar servidor WMS',
         text: "Eliminar",
         icon: 'img/server-minus.png'
     });
-    
-    return eliminarServidorWmsButton;
     
 };

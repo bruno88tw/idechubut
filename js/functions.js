@@ -118,6 +118,29 @@ function getHemi(coordinate, type) {
 };
 
 /**
+ * 
+ * @returns {undefined}
+ */
+function loadTree(){    
+    
+    createCapasBaseNode();
+    capaBase("IGN","IGN","img/ign.png");
+    capaBase("OpenStreetMap","OpenStreetMap","img/osm.png");
+    capaBase("Google Streets","Google Streets","img/google.png");
+    capaBase("Google Terrain","Google Terrain","img/google.png");
+    capaBase("Google Satellite","Google Satellite","img/google.png");
+    capaBase("Google Hybrid","Google Hybrid","img/google.png");
+    capaBase("Bing Road","Bing Road","img/bing.png");
+    capaBase("Bing Aerial","Bing Aerial","img/bing.png");
+    capaBase("Bing Hybrid","Bing Hybrid","img/bing.png");
+    capaBase("MapQuest","MapQuest","img/mapQuest.png");
+    capaBase("MapQuest Aerial","MapQuest Aerial","img/mapQuest.png");
+    capaBase("Sin capa base","Blank","img/prohibition.png");                                             
+    restoreTree(app.rootnode,config.tree);     
+    
+}
+
+/**
  * Dado un archivo de resguardo de árbol de capas, agrega la descendencia a un nodo padre dado
  * @param {type} father
  * @param {type} children
@@ -129,166 +152,123 @@ function restoreTree(father,children){
     
     for(var x = 0; x < children.length; x++){
         if(children[x].type == "folder"){
-            newNode = createNode(children[x].name);
-            father.appendChild(newNode);
+            newNode = createNode(children[x].name, children[x].cls, father);
             restoreTree(newNode,children[x].children);
         }else{
-            newNode = createLeaf(children[x].title,children[x].server,children[x].params,children[x].options);
-            father.appendChild(newNode);
+            newNode = createLeaf(children[x].title, father);
         }          
     }
     
 };
 
-
 /**
  * 
- * @param {type} capas
- * @returns {undefined}
- */
-function restoreLayers(capas){
-    
-    for(var x = 0; x < capas.length; x++){
-        
-        app.map.addLayer(new OpenLayers.Layer.WMS(
-            capas[x].title, 
-            capas[x].server, 
-            capas[x].params, 
-            capas[x].options
-        ));    
-        
-        app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
-        app.map.raiseLayer(app.map.getLayersByName("Location")[0],1);
-        
-    }
-
-};
-
-/**
- * Crea una instancia de un nodo que no es hoja.
  * @param {type} text
- * @returns {Ext.tree.TreeNode}
+ * @param {type} cls
+ * @param {type} father
+ * @returns {unresolved}
  */
-function createNode(text){
+function createNode(text, cls, father){
     
     var node = new Ext.tree.TreeNode({
         text: text,
         expanded: false,
         icon: "img/folder.png",
         leaf: false,
-        style: {'background':'#000000'},
+        cls: cls,
         listeners:{
-            click: function(leaf, event){
-                Ext.getCmp("treePanelTopbarEliminar").disable();
-                Ext.getCmp("treePanelTopbarPropiedades").disable();
-                Ext.getCmp("treePanelTopbarAtributos").disable();    
-                Ext.getCmp("treePanelTopbarZoomCapa").disable();  
-            },
-            beforecollapse: function(leaf, event){
-                this.setIcon("img/folder.png");
-            },
-            beforeexpand: function(leaf, event){
-                this.setIcon("img/folder-open.png");
-            }
+            click: function(){this.toggle();},
+            beforecollapse: function(){this.setIcon("img/folder.png");},
+            beforeexpand: function(){this.setIcon("img/folder-open.png");},
+            expand: function(node){handler.onNodeExpand(node);}
         }
-    });
+    });           
+    
+    father.appendChild(node);   
+    
+    if(cls != "none"){
+        var el = node.getUI().getEl();
+        el.childNodes[1].className = app.subCategorias[cls];
+    }
 
     return node;
     
 };
 
 /**
- * Crea una instancia de un nodo hoja.
+ * 
  * @param {type} titulo
- * @param {type} servidor
- * @param {type} params
- * @param {type} options
- * @returns {GeoExt.tree.LayerNode}
+ * @param {type} father
+ * @returns {unresolved}
  */
-function createLeaf(titulo){                
+function createLeaf(titulo, father){                
     
     var layer = app.map.getLayersByName(titulo)[0];
-    var servidor = layer.url;
-    var params = layer.params;
-    var options = layer.options;
     
     var store = new GeoExt.data.LayerStore({
         map: app.map,
         layers: app.map.layers
-    });
-
-    var uiClass = Ext.extend(
-            GeoExt.tree.LayerNodeUI, 
-            new GeoExt.tree.TreeNodeUIEventMixin()
-    );  
-        
-    var item;    
-    var layers = app.capabilities[servidor].data.items;                
+    });          
+    
+    var layers = app.capabilities[layer.url].data.items;                
     for(var x=0; x < layers.length; x++){
-        if( layers[x].data.name == params.LAYERS){
-            item = layers[x].data;
+        if( layers[x].data.name == layer.params.LAYERS){
+            var item = layers[x].data;
             break;
         }
-    }        
-    
+    }   
+
+    var cmpPanel = new Ext.Panel({
+        autoScroll:true,
+        border: false,
+        hidden: true,
+        bodyCfg : { cls:'x-panel-body' , style: {'background':'rgba(255, 255, 255,0.3)'} },
+        style: {'padding-top':'5px','padding-bottom':'5px','margin-bottom':'-5px','margin-top':'5px'},  
+        items:[            
+            {
+                border: false,
+                bodyCfg : { cls:'x-panel-body' , style: {'background':'rgba(255, 255, 255, 0)'} },
+                html: "<div style='font-weight:normal; padding-top:5px; padding-left:5px; padding-right:5px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;'>"+item.abstract+"</div>"
+            },
+            new GeoExt.WMSLegend({
+                layerRecord: store.getByLayer(layer),
+                showTitle: false,
+                baseParams: {
+                    FORMAT: 'image/png',
+                    LEGEND_OPTIONS: 'forceLabels:on'
+                },                            
+                defaults: {
+                    style: 'padding-top:3px; padding-left:3px'
+                }
+             })                
+        ]
+    });
+
     var leaf = new GeoExt.tree.LayerNode({
         text: titulo,
         layer: titulo,          
         icon: "img/layers3.png",
         leaf:true,
-        checked: false,
+        checked: false,    
         listeners:{
             checkchange: function(leaf, checked){
                 leaf.select();
-                Ext.getCmp("treePanelTopbarEliminar").enable();
-                Ext.getCmp("treePanelTopbarPropiedades").enable();
-                Ext.getCmp("treePanelTopbarAtributos").enable();  
-                Ext.getCmp("treePanelTopbarZoomCapa").enable();  
                 if(checked){
                     leaf.component.show();
                 }else{
                     leaf.component.hide();
-                }
-                
-            },
-            click: function(leaf, event){
-                Ext.getCmp("treePanelTopbarEliminar").enable();
-                Ext.getCmp("treePanelTopbarPropiedades").enable();
-                Ext.getCmp("treePanelTopbarAtributos").enable();  
-                Ext.getCmp("treePanelTopbarZoomCapa").enable();  
+                }      
             }
-        },                 
-        uiProvider: uiClass,        
-        component: new Ext.Panel({
-            width: 285,
-            hidden:true,
-            autoScroll:true,
-            border: false,
-            bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255,0.3)'} },
-            style: {'padding-top':'5px','padding-bottom':'5px'},
-            items:[      
-                {
-                    border: false,
-                    width: 270,
-                    bodyCfg : { cls:'x-panel-body your-own-rule' , style: {'background':'rgba(255, 255, 255, 0)'} },
-                    html: "<div style='width:275px; font-weight:normal; padding-top:5px; padding-left:5px; padding-right:5px; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;'>"+item.abstract+"</div>"
-                },
-                new GeoExt.WMSLegend({
-                    layerRecord: store.getByLayer(layer),
-                    showTitle: false,
-                    hidden: true,
-                    baseParams: {
-                        FORMAT: 'image/png',
-                        LEGEND_OPTIONS: 'forceLabels:on'
-                    },                            
-                    defaults: {
-                        style: 'padding-top:3px; padding-left:3px'
-                    }
-                 })                
-            ]
-        }),              
+        },
+        uiProvider: Ext.extend(
+            GeoExt.tree.LayerNodeUI, 
+            new GeoExt.tree.TreeNodeUIEventMixin()
+        ),        
+        component: cmpPanel,              
         map: app.map
-    });  
+    });        
+    
+    father.appendChild(leaf);    
 
     return leaf;
  
@@ -320,6 +300,42 @@ function capaBase(text, layer, icon){
         }   
     });
     
+    app.capasbasenode.appendChild(capaBase);
+    
     return capaBase;
+    
+}
+
+/**
+ * 
+ * @returns {undefined}
+ */
+function createCapasBaseNode(){
+    
+    app.capasbasenode = new Ext.tree.TreeNode({
+        text: "Capas base",
+        icon: "img/folder.png",
+        leaf: false,
+        cls: 'categoria1',
+        listeners:{
+            click: function(leaf, event){
+                if(this.isExpanded()){
+                    this.collapse();
+                }else{
+                    this.expand();
+                }
+            },
+            beforecollapse: function(leaf, event){
+                this.setIcon("img/folder.png");
+            },
+            beforeexpand: function(leaf, event){
+                this.setIcon("img/folder-open.png");
+            }
+        }        
+    }); 
+    
+    app.rootnode.appendChild(app.capasbasenode);
+
+    app.capasbasenode.getUI().getEl().childNodes[1].className = app.subCategorias["categoria1"];     
     
 }

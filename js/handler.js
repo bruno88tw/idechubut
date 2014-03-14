@@ -161,7 +161,7 @@ handler.AvanzadoCheckbox = function(){
 
     if (this.getValue() == true){
         app.configuracion.avanzado = true;
-        Ext.getCmp("treePanelTopbarZoomCapa").show();
+//        Ext.getCmp("treePanelTopbarZoomCapa").show();
         Ext.getCmp("distanciaButton").show();
         Ext.getCmp("superficieButton").show();
         Ext.getCmp("zoomAnterior").show();
@@ -173,7 +173,7 @@ handler.AvanzadoCheckbox = function(){
         Ext.getCmp("viewportPanel").doLayout();  
     }else{
         app.configuracion.avanzado = false;
-        Ext.getCmp("treePanelTopbarZoomCapa").hide();
+//        Ext.getCmp("treePanelTopbarZoomCapa").hide();
         Ext.getCmp("distanciaButton").hide();
         Ext.getCmp("superficieButton").hide();
         Ext.getCmp("zoomAnterior").hide();
@@ -429,43 +429,23 @@ handler.onWfsLimpiarButton = function(){
  * @param {type} params
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onZoomALaCapaButton = function(leaf, params){
+handler.onZoomALaCapaButton = function(layer){    
     
-    var capurl;
-    var layer = app.map.getLayersByName(leaf.attributes.layer)[0];
-    var url = layer.url;
-
-    if (url.indexOf("?") == -1){
-        capurl = url + "?service=wms&request=GetCapabilities";
-    }else{
-        capurl = url + "&service=wms&request=GetCapabilities";
-    }
-
-    new GeoExt.data.WMSCapabilitiesStore({  
-        url: capurl,
-        autoLoad: true,
-        listeners:{
-            load: function(){
-                var item;
-                for(var x = 0; x < this.data.items.length; x++){
-                    if(this.data.items[x].data.name == params.LAYERS){
-                        item = x;
-                        break;
-                    }
-                }
-                var west = this.data.items[item].data.llbbox[0];
-                var south = this.data.items[item].data.llbbox[1];
-                var east = this.data.items[item].data.llbbox[2];
-                var north = this.data.items[item].data.llbbox[3];
-                var bounds = new OpenLayers.Bounds(west, south, east, north);
-                app.map.zoomToExtent(bounds.clone().transform(app.projection4326, app.projection900913));
-            }
+    var item;
+    var layers = app.capabilities[layer.url].data.items;                
+    for(var x=0; x < layers.length; x++){
+        if( layers[x].data.name == layer.params.LAYERS){
+            item = layers[x].data;
+            break;
         }
-    });
-
-
-    var layer = app.map.getLayersByName(leaf.attributes.layer)[0];
-    app.map.zoomToExtent(layer.maxExtent,true);    
+    }
+    
+    var west = item.llbbox[0];
+    var south = item.llbbox[1];
+    var east = item.llbbox[2];
+    var north = item.llbbox[3];
+    var bounds = new OpenLayers.Bounds(west, south, east, north);
+    app.map.zoomToExtent(bounds.clone().transform(app.projection4326, app.projection900913));
     
 };
 
@@ -476,7 +456,7 @@ handler.onZoomALaCapaButton = function(leaf, params){
  * @param {type} params
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onPropiedadesButton = function(leaf, titulo, params){
+handler.onPropiedadesButton = function(layer){
 
     var item;
     var descripcionEstiloField;
@@ -484,9 +464,9 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
     var styledata = [];
     var styleabstract = {};
 
-    var layers = app.capabilities[leaf.layer.url].data.items;                
+    var layers = app.capabilities[layer.url].data.items;                
     for(var x=0; x < layers.length; x++){
-        if( layers[x].data.name == params.LAYERS){
+        if( layers[x].data.name == layer.params.LAYERS){
             item = layers[x].data;
             break;
         }
@@ -499,8 +479,8 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
     }                                       
 
     new Ext.Window({
-        title: titulo,
-        iconCls: 'configuracionIcon',
+        title: layer.name,
+        iconCls: 'propiedadesIcon',
         layout: "anchor",
         resizable: false,   
         shadow: false,
@@ -532,7 +512,7 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
                              fieldLabel: 'Servidor',
                              width: 230,
                              readOnly: true,
-                             value: leaf.layer.url
+                             value: layer.url
                          }),                                                              
                          new Ext.form.TextArea({
                              fieldLabel: 'Resumen',
@@ -558,7 +538,7 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
                              displayField: 'titulo',
                              listeners:{
                                  select: function(combo, record, index){
-                                     leaf.layer.mergeNewParams({styles:record.data.name});
+                                     layer.mergeNewParams({styles:record.data.name});
                                      descripcionEstiloField.setValue(styleabstract[record.data.name]);
                                  }
                              }
@@ -574,7 +554,7 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
                                  new Ext.form.Hidden({}),
                                  new GeoExt.LayerOpacitySlider({
                                      width: 230,
-                                     layer: leaf.layer,
+                                     layer: layer,
                                      plugins: new GeoExt.LayerOpacitySliderTip({template: '<div>Opacidad: {opacity}%</div>'})
                                  })                                                        
                              ]
@@ -597,9 +577,9 @@ handler.onPropiedadesButton = function(leaf, titulo, params){
  * @param {type} leaf
  * @returns {undefined} Esta función no devuelve resultados.
  */
-handler.onAtributosButton = function(leaf){
+handler.onAtributosButton = function(layer, titulo){
     
-    Ext.getCmp("featureGridPanel").setTitle(leaf.text);
+    Ext.getCmp("featureGridPanel").setTitle(titulo);
     if(app.isAttributesPanelHidden){        
         Ext.getCmp("featureGridPanel").show();
         Ext.getCmp("viewportPanel").doLayout();         
@@ -611,8 +591,8 @@ handler.onAtributosButton = function(leaf){
     Ext.getCmp("buttonNav").toggle(true);
     
     OpenLayers.Request.GET({
-        url: leaf.layer.url,
-        params: {service:"WFS", version:"1.0.0",request:"DescribeFeatureType",typeName:leaf.layer.params.LAYERS},
+        url: layer.url,
+        params: {service:"WFS", version:"1.0.0",request:"DescribeFeatureType",typeName:layer.params.LAYERS},
         callback: handler
     });
     
@@ -727,9 +707,9 @@ handler.onAtributosButton = function(leaf){
 
             app.wfsReconocerControl = new OpenLayers.Control.GetFeature({
                 protocol: new OpenLayers.Protocol.WFS({
-                    url: leaf.layer.url,
+                    url: layer.url,
                     version: "1.1.0",
-                    featureType: leaf.layer.params.LAYERS.substr(leaf.layer.params.LAYERS.indexOf(":") + 1),
+                    featureType: layer.params.LAYERS.substr(layer.params.LAYERS.indexOf(":") + 1),
                     srsName: 'EPSG:900913',
                     maxFeatures:100
                 }),
@@ -1058,18 +1038,22 @@ handler.onAgregarCapasButton = function(capabilitiesGridPanel, capabilitiesCombo
                 {isBaseLayer: false, visibility: false, singleTile: false}
             ));   
                 
-            if(!app.rootnode.contains(app.otrosnode)){
-                app.rootnode.appendChild(app.otrosnode);
+            if(app.otrosnode == null){
                 
-            var categoria = document.querySelectorAll(".categoria4");
-            for(var x = 0; x < categoria.length; x++){
-                var ct = categoria[x].parentNode.childNodes[1];
-                ct.className = ct.className + " categoria4sub";
-            }                  
+                app.otrosnode = createNode("WMS", "categoria4", app.rootnode);
+                
+//                app.rootnode.appendChild(app.otrosnode);
+//                
+//                var categoria = document.querySelectorAll(".categoria4");
+//                for(var x = 0; x < categoria.length; x++){
+//                    var ct = categoria[x].parentNode.childNodes[1];
+//                    ct.className = ct.className + " categoria4sub";
+//                }                  
                 
             }    
                 
-            app.otrosnode.appendChild(createLeaf(nombrecapa));    
+            createLeaf(nombrecapa, app.otrosnode);      
+            app.otrosnode.collapse();
             app.otrosnode.expand();
 
             app.map.raiseLayer(app.map.getLayersByName("wfsLayer")[0],1);
@@ -1125,5 +1109,135 @@ handler.onGetFeatureInfo = function(e){
             items: info
         })
     }).show();      
+    
+};
+
+handler.onNodeExpand = function(node){
+  
+    node.eachChild(function(childNode){
+        
+        if(childNode.isLeaf()){            
+                           
+            var fc = childNode.getUI().getEl().firstChild;
+            
+            if(fc.getElementsByClassName("newDiv").length == 0){
+                
+                
+                var delete1 = fc.childNodes[0];
+                var delete2 = fc.childNodes[1];
+                fc.removeChild(delete1);
+                fc.removeChild(delete2);
+
+                var newDiv = document.createElement("div");
+                newDiv.className = "newDiv";
+                
+                var v3 = fc.childNodes[3];
+                fc.insertBefore(newDiv,fc.childNodes[3]);
+
+                fc.childNodes[0].style.float="left";         //Chrome
+                fc.childNodes[0].style.cssFloat="left";      //Firefox
+                fc.childNodes[0].style.styleFloat="left";    //IE   
+                fc.childNodes[1].style.float="left";         //Chrome
+                fc.childNodes[1].style.cssFloat="left";      //Firefox
+                fc.childNodes[1].style.styleFloat="left";    //IE   
+                fc.childNodes[2].style.float="left";         //Chrome
+                fc.childNodes[2].style.cssFloat="left";      //Firefox
+                fc.childNodes[2].style.styleFloat="left";    //IE   
+                fc.childNodes[3].style.float="right";         //Chrome
+                fc.childNodes[3].style.cssFloat="right";      //Firefox
+                fc.childNodes[3].style.styleFloat="right";    //IE   
+                fc.childNodes[4].style.clear="both";    //IE   
+
+                newDiv.style.display="inline-block";
+                fc.style.width = "96.4%";
+                fc.style.display="inline-block";
+                fc.style.marginRight="5px";
+                fc.getElementsByClassName("x-tree-node-anchor")[0].style.width = "210px";
+                fc.getElementsByClassName("x-tree-node-anchor")[0].firstChild.style.width = "200px";
+
+                var myButton = new Ext.Button({
+                    menu: new Ext.menu.Menu({
+                        shadow: false,
+                        items: [
+                            {
+                                text: 'Propiedades de la capa',
+                                icon: "img/information2.png",
+                                handler: function(){handler.onPropiedadesButton(childNode.layer);}
+                            },
+                            {
+                                text: 'Zoom a la capa',
+                                icon: "img/magnifier.png",
+                                handler: function(){handler.onZoomALaCapaButton(childNode.layer);}
+                            },
+                            {
+                                text: 'Consultar atributos de la capa',
+                                icon: "img/table.png",
+                                handler: function(){handler.onAtributosButton(childNode.layer, childNode.text);}
+                            },
+                            {
+                                text: 'Eliminar capa',
+                                icon: "img/minus-circle.png",
+                                handler: function(){
+                                    childNode.remove();
+                                    app.map.removeLayer(childNode.layer);
+                                }
+                            }  
+                        ]
+                    }),
+                    renderTo: newDiv
+                });  
+
+                myButton.on('click',function(){
+                    childNode.select();
+                });
+
+                var buttonEl = myButton.getEl();
+                var buttonText = buttonEl.dom.getElementsByClassName(' x-btn-text');
+                buttonText[0].textContent = '';
+
+                if(navigator.appVersion.indexOf("Chrome") != -1){
+                    buttonText[0].style.marginRight = '1px';
+                }
+
+                buttonText[0].parentNode.style.marginTop = '-3px';
+                buttonText[0].parentNode.style.marginBottom = '-3px';
+
+            }
+
+        }
+    });            
+
+};
+
+handler.onFullscreenButton = function(){
+  
+    if(app.fullscreen){
+        app.fullscreen = false;
+        if(!app.isLayerTreePanelHidden){
+            Ext.getCmp("layerTreePanel").show();
+        }else{
+            Ext.getCmp("ordenDeCapasTree").show();
+        }                
+        if(!app.isAttributesPanelHidden){
+            Ext.getCmp("featureGridPanel").show();
+        }
+        Ext.getCmp("banner").show();
+        Ext.getCmp("mapAtributesPanel").getTopToolbar().show();
+        if(app.configuracion.avanzado){
+            Ext.getCmp("mapPanel").getBottomToolbar().show();
+        }
+        Ext.getCmp("viewportPanel").doLayout();                         
+    }else{                
+        app.fullscreen = true;
+        Ext.getCmp("layerTreePanel").hide();
+        Ext.getCmp("ordenDeCapasTree").hide();
+        Ext.getCmp("featureGridPanel").hide();
+        Ext.getCmp("banner").hide();
+        Ext.getCmp("mapAtributesPanel").getTopToolbar().hide();
+        if(app.configuracion.avanzado){
+            Ext.getCmp("mapPanel").getBottomToolbar().hide();
+        }
+        Ext.getCmp("viewportPanel").doLayout();                
+    }    
     
 };

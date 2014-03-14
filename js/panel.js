@@ -54,10 +54,10 @@ panel.banner = function(){
     var banner = {
         region: 'north',
         id:"banner",
-        height: 35,
-        bodyStyle:"background: #000000",
+        height: 40,
+        bodyStyle:"background: #0d3251; background: -moz-linear-gradient(left,  #0d3251 0%, #207cca 99%); background: -webkit-gradient(linear, left top, right top, color-stop(0%,#0d3251), color-stop(99%,#207cca)); background: -webkit-linear-gradient(left,  #0d3251 0%,#207cca 99%); background: -o-linear-gradient(left,  #0d3251 0%,#207cca 99%); background: -ms-linear-gradient(left,  #0d3251 0%,#207cca 99%); background: linear-gradient(to right,  #0d3251 0%,#207cca 99%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0d3251', endColorstr='#207cca',GradientType=1 ); ", 
         border:false,
-        html: '<div align=left><img src="img/banner-dgeyc.jpg" alt="banner" style="height: 35px"></div>'
+        html: '<div align=left><img src="img/banner-dgeyc.png" alt="banner" style="height: 40px"></div>'
     };
     
     return banner;
@@ -166,7 +166,7 @@ panel.layerTreePanel = function(){
         plugins: [
             new GeoExt.plugins.TreeNodeComponent()
         ],         
-        bodyCfg : { style: {'background':'#F3F3F3;'} },
+        bodyCfg : { style: {'background':'#F3F3F3; padding-right: 2px; padding-left:2px'} },
         id: "layerTreePanel",
         root: app.rootnode,
         rootVisible: false,
@@ -235,7 +235,6 @@ panel.featureGridPanel = function(){
         sm: new GeoExt.grid.FeatureSelectionModel(),
         columns: [],
         tbar: toolbar.featureGridPanelTopBar()
-//        bbar: toolbar.featureGridPanelBottomBar()
     });  
     
     return featureGridPanel;

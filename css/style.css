@@ -43,6 +43,10 @@
    background:transparent url(../img/printer.png) no-repeat 0 0;
 }
 
+.propiedadesIcon{
+   background:transparent url(../img/information2.png) no-repeat 0 0;
+}
+
 .mapIcon{
    background:transparent url(../img/map.png) no-repeat 0 0;
 }
@@ -133,6 +137,10 @@
 
 .layerNodeIcon{
    background:transparent url(../img/layers3.png) no-repeat 0 0;
+}
+
+.leafToolbar{
+    background-color: rgba(255, 255, 255,0.3);
 }
 
 .legend{

@@ -24,6 +24,14 @@
  */
 var app = {};
 
+app.subCategorias = {
+    "categoria1":"categoria1sub",
+    "categoria2":"categoria2sub",
+    "categoria3":"categoria3sub",
+    "categoria4":"categoria4sub",
+    "categoria5":"categoria5sub",
+    "none":"none"
+};
 /**
  * Límites para la máxima extensión del mapa. (west, south, east, north).
  * @type OpenLayers.Bounds
@@ -71,62 +79,19 @@ app.wfsSelectControl = null;
  * Nodo raíz del árbol de capas.
  * @type Ext.tree.TreeNode
  */
-app.rootnode = new Ext.tree.TreeNode({
-   text: "Capas",
-   icon: "img/folder.png",
-   leaf:false,
-   expanded: false
-}); 
+app.rootnode = new Ext.tree.TreeNode(); 
 
 /**
  * Nodo de capas base.
  * @type Ext.tree.TreeNode
  */
-app.capasbasenode = new Ext.tree.TreeNode({
-    text: "Capas base",
-    icon: "img/folder.png",
-    leaf: false,
-    cls: 'categoria1',
-    listeners:{
-        click: function(leaf, event){
-            Ext.getCmp("treePanelTopbarEliminar").disable();
-            Ext.getCmp("treePanelTopbarPropiedades").disable();
-            Ext.getCmp("treePanelTopbarAtributos").disable();  
-            Ext.getCmp("treePanelTopbarZoomCapa").disable();  
-        },
-        beforecollapse: function(leaf, event){
-            this.setIcon("img/folder.png");
-        },
-        beforeexpand: function(leaf, event){
-            this.setIcon("img/folder-open.png");
-        }
-    }        
-}); 
+app.capasbasenode = null; 
 
 /**
  * Nodo de otras capas definidas por el usuario.
  * @type Ext.tree.TreeNode
  */
-app.otrosnode = new Ext.tree.TreeNode({
-   text: "WMS",
-   icon: "img/folder.png",
-   leaf:false,
-   cls: 'categoria4',
-   listeners:{
-        click: function(leaf, event){
-            Ext.getCmp("treePanelTopbarEliminar").disable();
-            Ext.getCmp("treePanelTopbarPropiedades").disable();
-            Ext.getCmp("treePanelTopbarAtributos").disable();  
-            Ext.getCmp("treePanelTopbarZoomCapa").disable();  
-        },
-        beforecollapse: function(leaf, event){
-            this.setIcon("img/folder.png");
-        },
-        beforeexpand: function(leaf, event){
-            this.setIcon("img/folder-open.png");
-        }
-   }   
-}); 
+app.otrosnode = null;        
 
 /**
  * Store para exportar a excel el contenido del gridPanel de atributos.
@@ -184,20 +149,13 @@ OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
  */
 Ext.onReady(function() {
     
-    app.iniciar();   
-    
-});
-
-app.iniciar = function(){
-    
     Ext.QuickTips.init();         
     app.crearMapa();
-    app.agregarControles();
     app.agregarCapas();
     app.generarViewport();   
-    app.configuracionFinal();    
+    app.configuracionFinal();   
     
-};
+});
 
 /**
  * Crea el mapa de la aplicación. 
@@ -209,7 +167,10 @@ app.crearMapa = function(){
     app.map = new OpenLayers.Map(
         "divMapa",
         {
-            controls: [],
+            controls: [
+                new OpenLayers.Control.NavigationHistory(),
+                new OpenLayers.Control.Navigation({mouseWheelOptions: {interval: 100}})
+            ],
             projection: app.projection900913,
             displayProjection: app.projection4326, 
             restrictedExtent: app.max_bounds.clone().transform(app.projection4326, app.projection900913),  
@@ -220,23 +181,6 @@ app.crearMapa = function(){
 };
 
 /**
- * Agrega controles básicos al mapa.
- * @returns {undefined} Esta función no devuelve resultados.
- */
-app.agregarControles = function(){
-    
-    app.map.addControl(new OpenLayers.Control.NavigationHistory());
-    app.map.addControl(new OpenLayers.Control.Navigation({mouseWheelOptions: {interval: 100}}));    
-    app.map.addControl(new OpenLayers.Control.WMSGetFeatureInfo({
-        queryVisible: true,
-        drillDown: true,
-        infoFormat: "application/vnd.ogc.gml",
-        maxFeatures: 20,
-        eventListeners: {"getfeatureinfo": function(e){handler.onGetFeatureInfo(e);}}
-    })); 
-};
-
-/**
  * Agrega capas base y capas vectoriales al mapa. Carga las capas de superposición definidas en la configuración.
  * @returns {undefined} Esta función no devuelve resultados.
  */
@@ -244,12 +188,7 @@ app.agregarCapas = function(){
     
     // Capas Base
     //NOTA: para OSM zoomOffset debe ser igual que el zoom menor definido en app.resolutionsOSM
-    app.map.addLayer(new OpenLayers.Layer.WMS(
-        "IGN", 
-        "http://idedgeyc.chubut.gov.ar/geoserver/wms", 
-        {layers: "rural:basemap", transparent: 'false', format: 'image/jpeg', tiled: 'true'}, 
-        {isBaseLayer: true, visibility: false, singleTile: false, displayInLayerSwitcher: false, zoomOffset: 1, resolutions: app.resolutionsOSM}
-    ));   
+    app.map.addLayer(new OpenLayers.Layer.WMS("IGN", "http://idedgeyc.chubut.gov.ar/geoserver/wms", {layers: "rural:basemap", transparent: 'false', format: 'image/jpeg', tiled: 'true'}, {isBaseLayer: true, visibility: false, singleTile: false, displayInLayerSwitcher: false, zoomOffset: 1, resolutions: app.resolutionsOSM}));   
     app.map.addLayer(new OpenLayers.Layer.OSM("OpenStreetMap",null,{zoomOffset: 6, resolutions: app.resolutionsOSM, isBaseLayer:true, sphericalMercator: true}));    
     app.map.addLayer(new OpenLayers.Layer.Google("Google Streets", {minZoomLevel: 6, maxZoomLevel: 19}));
     app.map.addLayer(new OpenLayers.Layer.Google("Google Terrain",{type: google.maps.MapTypeId.TERRAIN, minZoomLevel: 6, maxZoomLevel: 19}));
@@ -262,7 +201,17 @@ app.agregarCapas = function(){
     app.map.addLayer(new OpenLayers.Layer.OSM("MapQuest Aerial",["http://otile1.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile2.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile3.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg","http://otile4.mqcdn.com/tiles/1.0.0/sat/${z}/${x}/${y}.jpg"],{zoomOffset: 6, resolutions: app.resolutionsMapQuestAerial, isBaseLayer:true, sphericalMercator: true}));            
     app.map.addLayer(new OpenLayers.Layer("Blank",{isBaseLayer: true}));
 
-    // Vector layer para el localizador
+    //Agrega las capas definidas en config.capas
+    for(var x = 0; x < config.capas.length; x++){        
+        app.map.addLayer(new OpenLayers.Layer.WMS(
+            config.capas[x].title, 
+            config.capas[x].server, 
+            config.capas[x].params, 
+            config.capas[x].options
+        ));    
+    }
+    
+    // Agrega el vector layer para el localizador
     app.map.addLayer(new OpenLayers.Layer.Vector("Location", {
         styleMap: new OpenLayers.Style({
             externalGraphic: "http://openlayers.org/api/img/marker.png",
@@ -272,46 +221,25 @@ app.agregarCapas = function(){
         }),
         displayInLayerSwitcher: false
     }));   
-            
-    var symbolizer = OpenLayers.Util.applyDefaults(
-        {
-         fillColor: "blue", 
-         fillOpacity: 0.2, 
-         strokeColor: "blue"
-        },
-        OpenLayers.Feature.Vector.style["default"]
-    );
-        
-    var select = {
-        fillColor: "blue",
-        fillOpacity: 0.5
-    };
-        
-    var styleMap = new OpenLayers.StyleMap({
-        "default": symbolizer, 
-        "select": select
-    }); 
     
-    // Vector layer para las consultas WFS            
+    // Agrega el vector layer para las consultas WFS            
     app.map.addLayer(new OpenLayers.Layer.Vector("wfsLayer", {
         displayInLayerSwitcher: false,
-        styleMap: styleMap
-    }));
-
-    // Importa las capas definidas en app.tree y el orden definido en app.index
-    app.rootnode.appendChild(app.capasbasenode);
-    app.capasbasenode.appendChild(capaBase("IGN","IGN","img/ign.png"));
-    app.capasbasenode.appendChild(capaBase("OpenStreetMap","OpenStreetMap","img/osm.png"));
-    app.capasbasenode.appendChild(capaBase("Google Streets","Google Streets","img/google.png"));
-    app.capasbasenode.appendChild(capaBase("Google Terrain","Google Terrain","img/google.png"));
-    app.capasbasenode.appendChild(capaBase("Google Satellite","Google Satellite","img/google.png"));
-    app.capasbasenode.appendChild(capaBase("Google Hybrid","Google Hybrid","img/google.png"));
-    app.capasbasenode.appendChild(capaBase("Bing Road","Bing Road","img/bing.png"));
-    app.capasbasenode.appendChild(capaBase("Bing Aerial","Bing Aerial","img/bing.png"));
-    app.capasbasenode.appendChild(capaBase("Bing Hybrid","Bing Hybrid","img/bing.png"));
-    app.capasbasenode.appendChild(capaBase("MapQuest","MapQuest","img/mapQuest.png"));
-    app.capasbasenode.appendChild(capaBase("MapQuest Aerial","MapQuest Aerial","img/mapQuest.png"));
-    app.capasbasenode.appendChild(capaBase("Sin capa base","Blank","img/prohibition.png")); 
+        styleMap: new OpenLayers.StyleMap({
+            "default": OpenLayers.Util.applyDefaults(
+                {
+                 fillColor: "blue", 
+                 fillOpacity: 0.2, 
+                 strokeColor: "blue"
+                },
+                OpenLayers.Feature.Vector.style["default"]
+            ), 
+            "select": {
+                fillColor: "blue",
+                fillOpacity: 0.5
+            }
+        })
+    }));    
         
 };
 
@@ -337,22 +265,14 @@ app.generarViewport = function(){
  */
 app.configuracionFinal = function(){ 
 
-    var scalelinediv = document.getElementById('scalelinediv');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(scalelinediv);
-    var minimapcontainer = document.getElementById('minimapcontainer');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(minimapcontainer);
-    var rosa = document.getElementById('rosa');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(rosa);
-    var fullscreen = document.getElementById('fullscreen');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(fullscreen);
-    var titulodiv = document.getElementById('titulodiv');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(titulodiv);
-    var subtitulodiv = document.getElementById('subtitulodiv');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(subtitulodiv);
-    var legenddiv = document.getElementById('legenddiv');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(legenddiv);
-    var statusbar = document.getElementById('statusbar');
-    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(statusbar);
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('scalelinediv'));   
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('minimapcontainer'));
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('rosa'));
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('fullscreen'));
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('titulodiv'));
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('subtitulodiv'));
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('legenddiv'));
+    document.getElementById('mapPanel').firstChild.firstChild.firstChild.appendChild(document.getElementById('statusbar'));
 
     // Agrego el control de posición del mouse 
     app.map.addControl(new OpenLayers.Control.MousePosition({
@@ -397,55 +317,20 @@ app.configuracionFinal = function(){
         height: "29px",
         width: "29px",
         renderTo: document.getElementById("fullscreen"),
-        handler: function(){
-            if(app.fullscreen){
-                app.fullscreen = false;
-                if(!app.isLayerTreePanelHidden){
-                    Ext.getCmp("layerTreePanel").show();
-                }else{
-                    Ext.getCmp("ordenDeCapasTree").show();
-                }                
-                if(!app.isAttributesPanelHidden){
-                    Ext.getCmp("featureGridPanel").show();
-                }
-                Ext.getCmp("banner").show();
-                Ext.getCmp("mapAtributesPanel").getTopToolbar().show();
-                if(app.configuracion.avanzado){
-                    Ext.getCmp("mapPanel").getBottomToolbar().show();
-                }
-                Ext.getCmp("viewportPanel").doLayout();                         
-            }else{                
-                app.fullscreen = true;
-                Ext.getCmp("layerTreePanel").hide();
-                Ext.getCmp("ordenDeCapasTree").hide();
-                Ext.getCmp("featureGridPanel").hide();
-                Ext.getCmp("banner").hide();
-                Ext.getCmp("mapAtributesPanel").getTopToolbar().hide();
-                if(app.configuracion.avanzado){
-                    Ext.getCmp("mapPanel").getBottomToolbar().hide();
-                }
-                Ext.getCmp("viewportPanel").doLayout();                
-            }
-            
-        }
+        handler: function(){handler.onFullscreenButton();}
     });        
     
-    var nombre = "Dirección General de Estadística y Censos";
-    var server = "http://idedgeyc.chubut.gov.ar/geoserver/wms";    
     var initmask = new Ext.LoadMask(Ext.getBody(), {msg:"Cargando..."});
     initmask.show();
     
     new GeoExt.data.WMSCapabilitiesStore({  
-        url: getCapabilitiesUrl(server),
+        url: getCapabilitiesUrl("http://idedgeyc.chubut.gov.ar/geoserver/wms"),
         autoLoad: true,
         listeners:{           
             load: function(){                      
-                app.capabilities[server] = this;
-                app.wmsServerStore.loadData([[nombre,server]],true);
-                restoreLayers(config.capas);
-                restoreTree(app.rootnode,config.tree);
-                
-                app.colorTree();
+                app.capabilities["http://idedgeyc.chubut.gov.ar/geoserver/wms"] = this;
+                app.wmsServerStore.loadData([["Dirección General de Estadística y Censos","http://idedgeyc.chubut.gov.ar/geoserver/wms"]],true);
+                loadTree();           
                 initmask.hide();
             },
             exception: function(){
@@ -454,27 +339,5 @@ app.configuracionFinal = function(){
             }             
         }
     });  
-     
-};
-
-app.colorTree = function(){ 
     
-    var categorias = new Array("categoria1","categoria2","categoria3","categoria4","categoria5");
-    var subCategorias = new Array(" categoria1sub"," categoria2sub"," categoria3sub"," categoria4sub"," categoria5sub");
-    
-    for(var x = 0; x < app.rootnode.childNodes.length; x++){
-       var nodo = app.rootnode.childNodes[x];
-       app.rootnode.childNodes[x].setCls(categorias[x]);
-    };
-    
-    for(var j = 0; j < categorias.length; j++){
-        
-        var categoria = document.querySelectorAll("."+categorias[j]);
-        for(var x = 0; x < categoria.length; x++){
-            var ct = categoria[x].parentNode.childNodes[1];
-            ct.className = ct.className + subCategorias[j];
-        }        
-                
-    }
-
 };
